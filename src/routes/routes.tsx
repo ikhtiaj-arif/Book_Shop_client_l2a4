@@ -11,6 +11,8 @@ import Login from "../pages/Login"
 import AllProducts from "../pages/Products/AllProducts"
 import Register from "../pages/Register"
 import UserDashboard from "../pages/User/UserDashboard"
+import ProductDetails from "../pages/Products/ProductDetails"
+import CheckoutPage from "../pages/User/Checkout"
 
 const router = createBrowserRouter([
     {
@@ -30,6 +32,12 @@ const router = createBrowserRouter([
                 element: <AllProducts />
             },
             {
+                path: "/products/:id", element: <ProductDetails />
+            },
+            {
+                path: "/checkout", element: <CheckoutPage />
+            },
+            {
                 path: '/user',
                 element:
                     <RouteProtector>
@@ -44,7 +52,7 @@ const router = createBrowserRouter([
                     </RouteProtector>,
                 children: [
                     {
-                      
+
                         index: true,
                         element: <RouteProtector>
                             <AdminDashboard />
