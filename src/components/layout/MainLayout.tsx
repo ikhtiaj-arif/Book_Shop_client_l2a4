@@ -6,6 +6,8 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { currentUser, logOut } from '../../redux/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 
+import Sidebar from './Sidebar';
+
 const { Header, Content } = Layout;
 
 const MainLayout = () => {
@@ -27,7 +29,9 @@ const MainLayout = () => {
 
     return (
         <Layout style={{ height: "100vh" }}>
+            <Sidebar />
             <Layout>
+
                 {/* HEADER */}
                 <Header
                     style={{
@@ -39,15 +43,7 @@ const MainLayout = () => {
                         color: "#fff",
                     }}
                 >
-                    <div
-                        style={{
-                            fontSize: "20px",
-                            fontWeight: "bold",
-                            color: "#fff",
-                        }}
-                    >
-                        My App
-                    </div>
+
 
                     {/* Hamburger Menu for Mobile */}
                     <MenuOutlined

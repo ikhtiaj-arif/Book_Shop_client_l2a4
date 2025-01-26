@@ -1,0 +1,17 @@
+/* Banner.css */
+.banner-container {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.banner-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 500px; /* Adjust the height of each banner */
+}
+
+.ant-carousel .slick-slide {
+  height: 100%; /* Ensures full-height for carousel items */
+}
