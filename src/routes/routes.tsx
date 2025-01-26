@@ -3,6 +3,9 @@ import App from "../App"
 import About from "../pages/About"
 import Login from "../pages/Login"
 import Register from "../pages/Register"
+import AdminDashboard from "../pages/Admin/AdminDashboard"
+import RouteProtector from "../components/layout/RouteProtector"
+import UserDashboard from "../pages/User/UserDashboard"
 
 const router = createBrowserRouter([
     {
@@ -12,6 +15,20 @@ const router = createBrowserRouter([
             {
                 path: '/about',
                 element: <About />
+            },
+            {
+                path: '/user',
+                element:
+                    <RouteProtector>
+                        <UserDashboard />
+                    </RouteProtector>
+            },
+            {
+                path: '/admin',
+                element:
+                    <RouteProtector>
+                        <AdminDashboard />
+                    </RouteProtector>
             },
         ]
     },
@@ -24,6 +41,8 @@ const router = createBrowserRouter([
         path: '/register',
         element: <Register />
     },
+
+
 
 
 ])
