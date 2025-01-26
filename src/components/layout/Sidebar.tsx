@@ -1,105 +1,68 @@
-import { Layout, Menu } from 'antd';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import { currentUser } from '../../redux/features/auth/authSlice';
-import { useAppSelector } from '../../redux/hooks';
-
-const { Sider } = Layout;
+import { useNavigate } from "react-router-dom";
+import { X } from "lucide-react"; // Close icon for mobile
+import { currentUser } from "../../redux/features/auth/authSlice";
+import { useAppSelector } from "../../redux/hooks";
 
 const userRole = {
-    ADMIN: 'admin',
-    USER: 'user',
+  ADMIN: "admin",
+  USER: "user",
 };
 
-const Sidebar = () => {
-    const user = useAppSelector(currentUser);
-    const navigate = useNavigate(); // Initialize the navigate function
+const Sidebar = ({ isOpen, toggleSidebar }) => {
+  const user = useAppSelector(currentUser);
+  const navigate = useNavigate();
 
-    // If there's no user, don't render the sidebar
-    if (!user) {
-        return null;
-    }
+  if (!user) return null; // Do not render the sidebar if no user
 
-    // Generate Sidebar items based on user role
-    const sidebarItems = user.role === userRole.ADMIN ? [
-        {
-            key: '1',
-            label: 'Admin Dashboard',
-            onClick: () => navigate('/admin') // Navigate to admin dashboard
-        },
-        {
-            key: '2',
-            label: 'Manage Products',
-            onClick: () => navigate('/admin/products') // Navigate to manage products page
-        },
-        {
-            key: '3',
-            label: 'Orders',
-            onClick: () => navigate('/admin/orders') // Navigate to orders page
-        },
-        {
-            key: '4',
-            label: 'Users',
-            onClick: () => navigate('/admin/users') // Navigate to orders page
-        },
-    ] : [
-        {
-            key: '1',
-            label: 'User Dashboard',
-            onClick: () => navigate('/user/dashboard') // Navigate to user dashboard
-        },
-        {
-            key: '2',
-            label: 'Profile',
-            onClick: () => navigate('/user/profile') // Navigate to user profile page
-        },
-        {
-            key: '3',
-            label: 'Orders',
-            onClick: () => navigate('/user/orders') // Navigate to user orders page
-        },
-    ];
+  const sidebarItems =
+    user?.role === userRole.ADMIN
+      ? [
+          { key: "1", label: "Admin Dashboard", path: "/admin" },
+          { key: "2", label: "Manage Products", path: "/admin/products" },
+          { key: "3", label: "Orders", path: "/admin/orders" },
+          { key: "4", label: "Users", path: "/admin/users" },
+        ]
+      : [
+          { key: "1", label: "User Dashboard", path: "/user/dashboard" },
+          { key: "2", label: "Profile", path: "/user/profile" },
+          { key: "3", label: "Orders", path: "/user/orders" },
+        ];
 
-    return (
-        <Sider
-            style={{
-                height: '100vh',
-                position: 'sticky',
-                top: '0',
-                left: '0',
+  return (
+    <aside
+      className={`fixed lg:sticky top-0 left-0 h-full bg-gray-900 text-white transition-transform transform ${
+        isOpen ? "translate-x-0" : "-translate-x-full"
+      } lg:translate-x-0 w-64 z-40`}
+    >
+      {/* Sidebar Header */}
+      <div className="h-16 flex items-center justify-between px-4 border-b border-gray-700">
+        <span className="text-xl font-bold">
+          {user?.role === userRole.ADMIN ? "Admin Panel" : "User Panel"}
+        </span>
+        {/* Close button for mobile */}
+        <X
+          className="lg:hidden text-2xl cursor-pointer"
+          onClick={toggleSidebar}
+        />
+      </div>
+
+      {/* Sidebar Items */}
+      <nav className="flex flex-col p-4 gap-2">
+        {sidebarItems.map((item) => (
+          <button
+            key={item.key}
+            onClick={() => {
+              navigate(item.path);
+              toggleSidebar(); // Close the sidebar on mobile
             }}
-            breakpoint="lg"
-            collapsedWidth="0"
-            onBreakpoint={(broken) => {
-                console.log(broken);
-            }}
-            onCollapse={(collapsed, type) => {
-                console.log(collapsed, type);
-            }}
-        >
-            <div
-                style={{
-                    color: 'white',
-                    textAlign: 'center',
-                    height: '4rem',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}
-            >
-
-            </div>
-            <Menu
-                theme="dark"
-                mode="inline"
-                defaultSelectedKeys={['1']}  // Default selected key
-                items={sidebarItems.map(item => ({
-                    key: item.key,
-                    label: item.label,
-                    onClick: item.onClick, // Handle click with the navigation function
-                }))}
-            />
-        </Sider>
-    );
+            className="w-full text-left px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+          >
+            {item.label}
+          </button>
+        ))}
+      </nav>
+    </aside>
+  );
 };
 
 export default Sidebar;

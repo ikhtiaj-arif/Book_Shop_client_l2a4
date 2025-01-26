@@ -1,107 +1,97 @@
+
 import { MenuOutlined } from '@ant-design/icons';
-import { Button, Layout } from 'antd';
 import { useState } from 'react';
 import { FaUserCheck } from "react-icons/fa";
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { currentUser, logOut } from '../../redux/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 
+
+
+
+import ThemeToggle from "../ui/mode-toggle";
 import Sidebar from './Sidebar';
 
-const { Header, Content } = Layout;
+
+
 
 const MainLayout = () => {
-    const navigate = useNavigate();
-    const user = useAppSelector(currentUser)
-    const [drawerVisible, setDrawerVisible] = useState(false);
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
+    const user = useAppSelector(currentUser);
+    const navigate = useNavigate()
 
-    const handleNavigate = (path) => {
-        navigate(path);
-        setDrawerVisible(false); // Close the drawer after navigation
-    };
+    const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
     const dispatch = useAppDispatch()
     const handleLogout = () => {
         dispatch(logOut())
         navigate('/login');
     }
 
-    console.log(user);
 
     return (
-        <Layout style={{ height: "100vh" }}>
-            <Sidebar />
-            <Layout>
+        <div className="flex h-screen">
+            {/* Sidebar */}
+            {/* <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} /> */}
 
-                {/* HEADER */}
-                <Header
-                    style={{
-                        padding: "0 16px",
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center",
-                        background: "#001529", // Ant Design default primary color
-                        color: "#fff",
-                    }}
-                >
+            {/* Overlay for Mobile Sidebar */}
+            {isSidebarOpen && (
+                <div
+                    className="fixed inset-0 bg-background bg-opacity-50 z-30 lg:hidden"
+                    onClick={toggleSidebar}
+                ></div>
+            )}
 
-
+            {/* Main Layout */}
+            <div className="flex flex-1 flex-col ">
+                {/* Header */}
+                <header className="flex items-center justify-between bg-gray-900 text-white px-4 py-2 shadow-md lg:ml-0">
                     {/* Hamburger Menu for Mobile */}
                     <MenuOutlined
-                        style={{
-                            fontSize: "24px",
-                            cursor: "pointer",
-                            display: "none", // Hide by default
-                        }}
-                        className="mobile-menu-icon"
-                        onClick={() => setDrawerVisible(true)}
+                        className="block lg:hidden cursor-pointer text-2xl"
+                        onClick={toggleSidebar}
                     />
 
-                    {/* Buttons for Desktop */}
-                    <div className="desktop-menu" style={{ display: "flex", gap: "12px" }}>
-                        <Button type="link" onClick={() => navigate('/')} style={{ color: "#fff" }}>
+                    {/* Desktop Menu */}
+                    <div className="hidden lg:flex items-center gap-4">
+                        <Link to="/" className="text-white hover:text-gray-300">
                             Home
-                        </Button>
-                        <Button type="link" onClick={() => navigate('/about')} style={{ color: "#fff" }}>
+                        </Link>
+                        <Link to="/about" className="text-white hover:text-gray-300">
                             About
-                        </Button>
-                        {
-                            user ? <FaUserCheck onClick={() => navigate(`${user?.role}`)} style={{
-                                fontSize: "20px",
-                                margin: 'auto 0',
-                                cursor: "pointer",
-
-                            }} /> :
-                                <Button type="link" onClick={() => navigate('/login')} style={{ color: "#fff" }}>
-                                    Login
-                                </Button>
-                        }
-                        <Button type="link" onClick={handleLogout} style={{ color: "#fff" }}>
+                        </Link>
+                        {user ? (
+                            <FaUserCheck
+                                onClick={() => navigate(`${user?.role}`)}
+                                className="text-xl cursor-pointer"
+                            />
+                        ) : (
+                            <Link to="/login" className="text-white hover:text-gray-300">
+                                Login
+                            </Link>
+                        )}
+                        <Link
+                            to="#"
+                            onClick={handleLogout}
+                            className="text-white hover:text-gray-300"
+                        >
                             Logout
-                        </Button>
-                        <Button type="link" onClick={() => navigate('/register')} style={{ color: "#fff" }}>
+                        </Link>
+                        <Link to="/register" className="text-white hover:text-gray-300">
                             Register
-                        </Button>
+                        </Link>
+                        <ThemeToggle />
                     </div>
-                </Header>
+                </header>
 
 
-
-                {/* CONTENT */}
-                <Content style={{ margin: '24px 16px 0', overflow: "auto" }}>
-                    <div
-                        style={{
-                            padding: "24px",
-                            background: "#fff",
-                            minHeight: "100%",
-                            borderRadius: "8px",
-                            boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-                        }}
-                    >
+                {/* Main Content */}
+                <main className="flex-1 overflow-auto p-6 bg-background">
+                    <div className="bg-white rounded-lg  shadow-md">
                         <Outlet />
                     </div>
-                </Content>
-            </Layout>
-        </Layout>
+                </main>
+            </div>
+        </div>
     );
 };
 

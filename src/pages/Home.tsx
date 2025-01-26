@@ -1,5 +1,4 @@
 import { Footer } from 'antd/es/layout/layout';
-import Banner from './Banner';
 import FeaturedProducts from './Products/FeaturedProducts';
 import Testimonials from './Testimonials';
 
@@ -15,10 +14,10 @@ const Home = () => {
     ];
     return (
         <div>
-            <Banner />
-            <FeaturedProducts products={products} />
+            {/* <Banner /> */}
+            {/* <FeaturedProducts products={products} />
             <Testimonials />
-            <Footer />
+            <Footer /> */}
         </div>
     );
 };
