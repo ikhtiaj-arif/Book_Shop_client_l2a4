@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 
 import { Content, Header } from 'antd/es/layout/layout';
 import { Outlet, useNavigate } from 'react-router-dom';
-import Sidebar from './Sidebar';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { currentUser, logOut } from '../../redux/features/auth/authSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import Sidebar from './Sidebar';
 
 // const { Header, Content } = Layout;
 
@@ -135,60 +135,42 @@ const MainLayout = () => {
     //   </Layout>
     // </Layout>
     <Layout>
-      <Header style={{ display: 'flex', alignItems: 'center', position: 'fixed', width: '100%', zIndex: '1' }}>
-
-        <div className="demo-logo" />
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          style={{ flex: 1, minWidth: 0 }}
-        >
-          <div className="desktop-menu" style={{ display: "flex", gap: "12px" }}>
-            <Button type="link" onClick={() => navigate('/')} style={{ color: "#fff" }}>
-              Home
-            </Button>
-            <Button type="link" onClick={() => navigate('/about')} style={{ color: "#fff" }}>
-              About
-            </Button>
-
-            <Button type="link" onClick={() => navigate('/register')} style={{ color: "#fff" }}>
-              Register
-            </Button>
-
-
-            {user ? <Button
+    <Header className="custom-header">
+      <div className="demo-logo" />
+      <Menu theme="dark" mode="horizontal" className="custom-menu">
+        <div className="desktop-menu">
+          <Button type="link" onClick={() => navigate('/')}>
+            Home
+          </Button>
+          <Button type="link" onClick={() => navigate('/about')}>
+            About
+          </Button>
+          <Button type="link" onClick={() => navigate('/register')}>
+            Register
+          </Button>
+          {user ? (
+            <Button
               type="text"
               icon={<UserOutlined />}
               onClick={() => setCollapsed(!collapsed)}
-              style={{
-                fontSize: '16px',
-                color: 'white'
-              }}
-            /> :
-              <Button type="link" onClick={() => navigate('/login')} style={{ color: "#fff" }}>
-                Login
-              </Button>
-            }
-          </div>
-        </Menu>
-      </Header>
-      <Content style={{ padding: '0 ' }}>
-
-        <Layout
-          style={{ height: '100vh', background: colorBgContainer, borderRadius: borderRadiusLG }}
-        >
-          {
-            user &&
-            <Sidebar collapsed={collapsed} />
-          }
-          <Content style={{ padding: '0', height: 'screen', overflowY: 'scroll', marginTop: '63px' }}>
-            <Outlet />
-
-          </Content>
-        </Layout>
-      </Content>
-
-    </Layout>
+            />
+          ) : (
+            <Button type="link" onClick={() => navigate('/login')}>
+              Login
+            </Button>
+          )}
+        </div>
+      </Menu>
+    </Header>
+    <Content>
+      <Layout className="custom-content-layout">
+        {user && <Sidebar collapsed={collapsed} />}
+        <Content className="custom-content">
+          <Outlet />
+        </Content>
+      </Layout>
+    </Content>
+  </Layout>
 
   );
 };

@@ -68,44 +68,56 @@ const Sidebar = ({ collapsed }) => {
   return (
 
 
-    <Sider width={160} collapsedWidth={50} style={{ marginTop: '63px' }} trigger={null} collapsible collapsed={collapsed}>
-      <div className="demo-logo-vertical" />
-      <Menu
-        // style={{width:' 100px'}}
-        theme="dark"
-        mode="inline"
-        defaultSelectedKeys={['1']}
-        items={[
-          {
-            key: '1',
-            icon: <UserOutlined />,
-            label: 'nav 1',
-          },
-          {
-            key: '2',
-            icon: <VideoCameraOutlined />,
-            label: 'nav 2',
-          },
-          {
-            key: '3',
-            icon: <UploadOutlined />,
-            label: 'nav 3',
-          },
-        ]}
-
-
-
-      //         items={sidebarItems.map(item => ({
-      //             key: item.key,
-      //             label: item.label,
-      //             onClick: item.onClick, // Handle click with the navigation function
-      //         }))}
-
-      />
-      <Button type="link" onClick={handleLogout} style={{ color: "#fff" }}>
-        Logout
-      </Button>
-    </Sider>
+    <Sider
+    width={160}
+    collapsedWidth={50}
+    style={{
+      marginTop: '63px',
+      backgroundColor: 'var(--background-color)', // Use primary color for Sider background
+    }}
+    trigger={null}
+    collapsible
+    collapsed={collapsed}
+  >
+    <div className="demo-logo-vertical" />
+    <Menu
+      theme="dark"
+      mode="inline"
+      defaultSelectedKeys={['1']}
+      style={{
+        backgroundColor: 'var(--background-color)', // Ensure Menu matches Sider color
+        color: 'var(--text-color)', // Use text color for Menu items
+      }}
+      items={[
+        {
+          key: '1',
+          icon: <UserOutlined style={{ color: 'var(--text-color)' }} />, // Apply text color to icons
+          label: <span style={{ color: 'var(--text-color)' }}>Nav 1</span>, // Use text color for label
+        },
+        {
+          key: '2',
+          icon: <VideoCameraOutlined style={{ color: 'var(--text-color)' }} />,
+          label: <span style={{ color: 'var(--text-color)' }}>Nav 2</span>,
+        },
+        {
+          key: '3',
+          icon: <UploadOutlined style={{ color: 'var(--text-color)' }} />,
+          label: <span style={{ color: 'var(--text-color)' }}>Nav 3</span>,
+        },
+      ]}
+    />
+    <Button
+      type="link"
+      onClick={handleLogout}
+      style={{
+        color: 'var(--text-color)', // Use text color for logout button
+        marginTop: '16px',
+        width: '100%',
+      }}
+    >
+      Logout
+    </Button>
+  </Sider>
   );
 };
 
