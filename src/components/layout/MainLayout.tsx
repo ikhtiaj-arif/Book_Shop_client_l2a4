@@ -158,11 +158,11 @@ const MainLayout: React.FC = () => {
         <Layout>
           {user && <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />}
           <Content
-            className="h-screen overflow-y-auto"
+            className="h-screen overflow-y-auto p-2 md:p-6 rounded-md"
             style={{
               marginTop: '64px', // Offset content by the height of the header
               // marginLeft: user && !collapsed ? '200px' : '0', // Adjust margin based on sidebar visibility
-              padding: '24px',
+              // padding: '24px',
               backgroundColor: colorBgContainer,
               borderRadius: borderRadiusLG,
               boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',

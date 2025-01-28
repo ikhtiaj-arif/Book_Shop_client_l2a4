@@ -1,6 +1,7 @@
-import { Button, Card, Col, Divider, Row, Typography } from 'antd';
+import { Card, Col, Divider, Row, Typography } from 'antd';
 import CryptoJS from 'crypto-js';
 import { useNavigate, useParams } from 'react-router-dom';
+import TButton from '../../components/buttons/TButton';
 import { useGetProductByIdQuery } from '../../redux/features/products/products.api';
 
 const { Title, Text } = Typography;
@@ -10,120 +11,91 @@ const ProductDetails = () => {
   const navigate = useNavigate();
 
   const { data: productData, isLoading, isError } = useGetProductByIdQuery(id);
-  const product = productData?.data
+  const product = productData?.data;
 
   if (isLoading) return <p>Loading...</p>;
   if (isError || !product) return <p>Product not found.</p>;
 
-
-
-  // // Find the product based on the product ID from the URL
-  // const product = products.find((prod) => prod.id === parseInt(id));
-
-  if (!product) {
-    return <Text>Product not found</Text>;
-  }
-
   const handleBuyNow = () => {
-  
     // Encrypt product info
     const encryptedData = CryptoJS.AES.encrypt(
       JSON.stringify(product),
       'secret_key' // Use a secure key here
     ).toString();
-  
+
     // Save encrypted data to localStorage
     localStorage.setItem('checkoutProduct', encryptedData);
-  
+
     // Navigate to the checkout page
     navigate(`/checkout`);
   };
 
   return (
-    <div style={{ padding: '40px 20px', maxWidth: '1200px', margin: 'auto' }}>
+    <div className="bg-background py-12 px-6 max-w-7xl mx-auto">
       <Row gutter={[32, 32]} justify="center" align="middle">
         {/* Product Image */}
-        <Col xs={24} md={12}>
+        <Col xs={24} md={12} className="transition-transform transform hover:scale-105 duration-300 ease-in-out">
           <Card
             hoverable
             cover={
               <img
                 alt={product.name}
                 src={product.image || 'https://via.placeholder.com/400'}
-                style={{
-                  borderRadius: '8px',
-                  maxHeight: '400px',
-                  objectFit: 'cover',
-                }}
+                className="w-full h-full object-cover rounded-lg shadow-lg"
               />
             }
-            style={{
-              borderRadius: '8px',
-              overflow: 'hidden',
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-            }}
+            className="shadow-md rounded-lg"
           >
-            <Title level={3} style={{ textAlign: 'center' }}>
-              {product.title}
-            </Title>
+            <Title level={3} className="text-center text-text">{product.title}</Title>
           </Card>
         </Col>
 
         {/* Product Details */}
-        <Col xs={24} md={12}>
-          <Card
-            bordered
-            style={{
-              borderRadius: '8px',
-              boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-              padding: '20px',
-            }}
-          >
-            <Title level={3}>Product Details</Title>
-            <Divider />
-            <div style={{ marginBottom: '16px' }}>
-              <Text strong>Price: </Text>
-              <Text style={{ fontSize: '18px', color: '#1890ff' }}>
-                ${product.price}
-              </Text>
+        <Col xs={24} md={12} className="bg-white rounded-lg shadow-lg p-6">
+          <Card bordered={false} className="h-full">
+            <Title level={3} className="text-text">Product Details</Title>
+            <Divider className="my-4" />
+
+            <div className="mb-4">
+              <Text strong className="text-text">Price: </Text>
+              <Text className="text-primary font-semibold text-lg">${product.price}</Text>
             </div>
-            <Divider />
-            <div style={{ marginBottom: '16px' }}>
-              <Text strong>Category: </Text>
-              <Text>{product.category}</Text>
+            <Divider className="my-4" />
+
+            <div className="mb-4">
+              <Text strong className="text-text">Category: </Text>
+              <Text className="text-text-accent">{product.category}</Text>
             </div>
-            <Divider />
-            <div style={{ marginBottom: '16px' }}>
-              <Text strong>Description: </Text>
-              <Text>{product.description}</Text>
+            <Divider className="my-4" />
+
+            <div className="mb-4">
+              <Text strong className="text-text">Description: </Text>
+              <Text className="text-text-accent">{product.description}</Text>
             </div>
-            <Divider />
-            <div style={{ marginBottom: '16px' }}>
-              <Text strong>Availability: </Text>
+            <Divider className="my-4" />
+
+            <div className="mb-4">
+              <Text strong className="text-text">Availability: </Text>
               <Text
-                style={{
-                  color: product.inStock ? 'green' : 'red',
-                  fontWeight: 'bold',
-                }}
+                className={`font-semibold ${product.inStock ? 'text-green-500' : 'text-red-500'}`}
               >
                 {product.inStock ? 'In Stock' : 'Out of Stock'}
               </Text>
             </div>
-            <Divider />
-            <Button
-              type="primary"
-              size="large"
-              disabled={!product.inStock}
-              onClick={handleBuyNow}
-              style={{
-                width: '100%',
-                borderRadius: '8px',
-                height: '48px',
-                fontSize: '16px',
-              }}
-            >
-              {product.inStock ? 'Buy Now' : 'Out of Stock'}
-            </Button>
+            <Divider className="my-4" />
+
+            {/* Buy Now Button */}
+            <div className="mt-auto">
+              <TButton
+                text={product.inStock ? 'Buy Now' : 'Out of Stock'}
+                onClick={handleBuyNow}
+                primaryColor="primary"
+                accentColor="accent"
+                disabled={!product.inStock}
+
+                className="w-full py-3 text-white rounded-lg shadow-md"
+              />
+            </div>
           </Card>
         </Col>
       </Row>
