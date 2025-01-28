@@ -1,57 +1,63 @@
 import { MenuOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Drawer, Input, Layout, Menu, MenuProps, theme } from 'antd';
+import { Button, Drawer, Layout, Menu, theme } from 'antd';
 import React, { useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
+import logo from '../../img/logo.png';
 import { currentUser } from '../../redux/features/auth/authSlice';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { useAppSelector } from '../../redux/hooks';
 import Sidebar from './Sidebar';
 
 const { Header, Content } = Layout;
-const { Search } = Input;
+
 
 const MainLayout: React.FC = () => {
   const user = useAppSelector(currentUser);
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
-  const [searchValue, setSearchValue] = useState<string>(''); // State for search input
-  const dispatch = useAppDispatch();
+
+  // const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  // Handle search
-  const onSearch: MenuProps['onSearch'] = (value) => {
-    console.log('Search Text:', value);
-    setSearchValue(''); // Clear search input after search
-  };
+
 
   return (
     <Layout className="h-[100vh] overflow-hidden">
       {/* Header */}
       <Header
-        className="bg-background fixed flex items-center w-full z-10 border-b-2"
+        className="fixed flex items-center shadow-lg h-22 left-0 right-0 w-full px-6 xl:px-10 z-10 border-b-2"
         style={{
           backgroundColor: colorBgContainer,
           borderRadius: borderRadiusLG,
-          padding: '0 24px',
-          height: '64px',
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-          left: 0, // Ensure the header is aligned to the left
-          right: 0, // Ensure the header spans the full width
+
         }}
       >
         {/* Logo */}
-        <div className="demo-logo bg-primary h-10 w-10 rounded-full" />
+        <div className='flex items-center gap-2'>
 
+          <img src={logo} className='h-10 w-10 ' alt="" />
+
+          <h1 className="text-xl md:text-2xl lg:text-3xl font-bold">
+
+            <span className="bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
+              Book
+            </span>{' '}
+            <span className="bg-gradient-to-r from-blue-500 to-cyan-400 bg-clip-text text-transparent">
+              Shop
+            </span>
+          </h1>
+
+        </div>
         {/* Mobile Menu Button */}
         <Button
           type="text"
           icon={<MenuOutlined />}
           onClick={() => setDrawerVisible(!drawerVisible)}
           className="md:hidden ml-auto"
-          style={{ color: '#1890ff' }} // Match the sidebar's primary color
+          style={{ color: '#44cad2' }}
         />
 
         {/* Desktop Menu */}
@@ -88,14 +94,7 @@ const MainLayout: React.FC = () => {
 
         {/* Search and Profile (Desktop Only) */}
         <div className="hidden md:flex items-center gap-4">
-          <Search
-            placeholder="input search text"
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            onSearch={onSearch}
-            className="w-[200px]"
-            style={{ borderRadius: '8px' }} // Match the sidebar's rounded corners
-          />
+
           {user ? (
             <Button
               type="text"
@@ -129,13 +128,7 @@ const MainLayout: React.FC = () => {
           {/* Search Bar */}
           <Menu.Item key="1" style={{ padding: '8px 16px' }}> {/* Add padding for better alignment */}
             <div style={{ display: 'flex', justifyContent: 'center' }}> {/* Center the search bar */}
-              <Search
-                placeholder="input search text"
-                value={searchValue}
-                onChange={(e) => setSearchValue(e.target.value)}
-                onSearch={onSearch}
-                style={{ width: '100%', borderRadius: '8px' }} // Full width and rounded corners
-              />
+
             </div>
           </Menu.Item>
 
