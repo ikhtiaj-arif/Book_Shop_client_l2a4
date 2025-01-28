@@ -1,196 +1,186 @@
-import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Layout, Menu, MenuProps, theme } from 'antd';
+import { MenuOutlined, UserOutlined } from '@ant-design/icons';
+import { Button, Drawer, Input, Layout, Menu, MenuProps, theme } from 'antd';
 import React, { useState } from 'react';
-
-import { SearchProps } from 'antd/es/input';
-import { Content, Header } from 'antd/es/layout/layout';
-import Search from 'antd/es/transfer/search';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
-import { currentUser, logOut } from '../../redux/features/auth/authSlice';
+import { currentUser } from '../../redux/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import Sidebar from './Sidebar';
 
-// const { Header, Content } = Layout;
+const { Header, Content } = Layout;
+const { Search } = Input;
 
-const MainLayout = () => {
-  //   const navigate = useNavigate();
-  const user = useAppSelector(currentUser)
-  //   const [drawerVisible, setDrawerVisible] = useState(false);
-
-  //   const handleNavigate = (path) => {
-  //     navigate(path);
-  //     setDrawerVisible(false); // Close the drawer after navigation
-  //   };
-  const dispatch = useAppDispatch()
-  const handleLogout = () => {
-    dispatch(logOut())
-    navigate('/login');
-  }
-
-  //   console.log(user);
-  const navigate = useNavigate()
+const MainLayout: React.FC = () => {
+  const user = useAppSelector(currentUser);
+  const [drawerVisible, setDrawerVisible] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
+  const [searchValue, setSearchValue] = useState<string>(''); // State for search input
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  const items2: MenuProps['items'] = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
-    (icon, index) => {
-      const key = String(index + 1);
-
-      return {
-        key: `sub${key}`,
-        icon: React.createElement(icon),
-        label: `subnav ${key}`,
-
-        children: new Array(4).fill(null).map((_, j) => {
-          const subKey = index * 4 + j + 1;
-          return {
-            key: subKey,
-            label: `option${subKey}`,
-          };
-        }),
-      };
-    },
-  );
-  const items1: MenuProps['items'] = ['1', '2', '3'].map((key) => ({
-    key,
-    label: `nav ${key}`,
-  }));
-
-  const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
+  // Handle search
+  const onSearch: MenuProps['onSearch'] = (value) => {
+    console.log('Search Text:', value);
+    setSearchValue(''); // Clear search input after search
+  };
 
   return (
-    // <Layout style={{ height: "100vh" }}>
-    //   {
-    //     user &&
-    //     <Sidebar  />
-    //   }
-    //   <Layout>
-
-    //     {/* HEADER */}
-    //     <Header
-    //       style={{
-    //         padding: "0 16px",
-    //         display: "flex",
-    //         justifyContent: "space-between",
-    //         alignItems: "center",
-    //         background: "#001529", // Ant Design default primary color
-    //         color: "#fff",
-    //       }}
-    //     >
-
-
-    //       {/* Hamburger Menu for Mobile */}
-    //       <MenuOutlined
-    //         style={{
-    //           fontSize: "24px",
-    //           cursor: "pointer",
-    //           display: "none", // Hide by default
-    //         }}
-    //         className="mobile-menu-icon"
-    //         onClick={() => setDrawerVisible(true)}
-    //       />
-
-    //       {/* Buttons for Desktop */}
-    //       <div className="desktop-menu" style={{ display: "flex", gap: "12px" }}>
-    //         <Button type="link" onClick={() => navigate('/')} style={{ color: "#fff" }}>
-    //           Home
-    //         </Button>
-    //         <Button type="link" onClick={() => navigate('/about')} style={{ color: "#fff" }}>
-    //           About
-    //         </Button>
-    //         {
-    //           user ? <FaUserCheck onClick={() => navigate(`${user?.role}`)} style={{
-    //             fontSize: "20px",
-    //             margin: 'auto 0',
-    //             cursor: "pointer",
-
-    //           }} /> :
-    //             <Button type="link" onClick={() => navigate('/login')} style={{ color: "#fff" }}>
-    //               Login
-    //             </Button>
-    //         }
-    //         <Button type="link" onClick={handleLogout} style={{ color: "#fff" }}>
-    //           Logout
-    //         </Button>
-    //         <Button type="link" onClick={() => navigate('/register')} style={{ color: "#fff" }}>
-    //           Register
-    //         </Button>
-    //       </div>
-    //     </Header>
-
-
-
-    //     {/* CONTENT */}
-    //     <Content style={{ margin: '24px 16px 0', overflow: "auto" }}>
-    //       <div
-    //         style={{
-    //           padding: "24px",
-    //           background: "#fff",
-    //           minHeight: "100%",
-    //           borderRadius: "8px",
-    //           boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-    //         }}
-    //       >
-    //         <Outlet />
-    //       </div>
-    //     </Content>
-    //   </Layout>
-    // </Layout>
-    <Layout className='h-[100vh]'>
-      <Header className="bg-background fixed flex  items-center w-full md:px-[50px] xl:px-[70px] 2xl:px-[156px]  z-10 border border-b-2">
+    <Layout className="h-[100vh] overflow-hidden">
+      {/* Header */}
+      <Header
+        className="bg-background fixed flex items-center w-full z-10 border-b-2"
+        style={{
+          backgroundColor: colorBgContainer,
+          borderRadius: borderRadiusLG,
+          padding: '0 24px',
+          height: '64px',
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+          left: 0, // Ensure the header is aligned to the left
+          right: 0, // Ensure the header spans the full width
+        }}
+      >
+        {/* Logo */}
         <div className="demo-logo bg-primary h-10 w-10 rounded-full" />
-        <Menu theme="dark" mode="horizontal" className="bg-background border-0 mx-auto">
-          <div className='flex items-center gap-10'>
-            <Link className="text-text hover:text-text-accent font-medium" to="/">
+
+        {/* Mobile Menu Button */}
+        <Button
+          type="text"
+          icon={<MenuOutlined />}
+          onClick={() => setDrawerVisible(!drawerVisible)}
+          className="md:hidden ml-auto"
+          style={{ color: '#1890ff' }} // Match the sidebar's primary color
+        />
+
+        {/* Desktop Menu */}
+        <Menu
+          theme="light"
+          mode="horizontal"
+          className="bg-background border-0 hidden md:flex flex-grow justify-center"
+          style={{ backgroundColor: 'transparent' }}
+        >
+          <div className="flex items-center gap-10">
+            <Link
+              className="text-text hover:text-text-accent font-medium"
+              to="/"
+              style={{ color: '#595959' }} // Match the sidebar's text color
+            >
               Home
             </Link>
-
-            <Link className="text-text hover:text-text-accent font-medium" to='/about'>
+            <Link
+              className="text-text hover:text-text-accent font-medium"
+              to="/about"
+              style={{ color: '#595959' }}
+            >
               About
             </Link>
-            <Link className="text-text hover:text-text-accent font-medium" to='/about'>
-              About
+            <Link
+              className="text-text hover:text-text-accent font-medium"
+              to="/contact"
+              style={{ color: '#595959' }}
+            >
+              Contact
             </Link>
-
-            {/* <Link className="text-text hover:text-text-accent font-medium" to='/register'>
-              Register
-            </Link> */}
-
           </div>
         </Menu>
-        <div className='flex items-center'>
 
+        {/* Search and Profile (Desktop Only) */}
+        <div className="hidden md:flex items-center gap-4">
           <Search
-
-            // addonBefore="https://"
-            placeholder="input search text "
+            placeholder="input search text"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onSearch={onSearch}
+            className="w-[200px]"
+            style={{ borderRadius: '8px' }} // Match the sidebar's rounded corners
           />
           {user ? (
             <Button
               type="text"
               icon={<UserOutlined />}
               onClick={() => setCollapsed(!collapsed)}
+              className="w-10 h-10 flex items-center justify-center"
+              style={{ color: '#1890ff' }} // Match the sidebar's primary color
             />
           ) : (
-            <Button type="link" onClick={() => navigate('/login')}>
+            <Button
+              type="link"
+              onClick={() => navigate('/login')}
+              style={{ color: '#1890ff' }} // Match the sidebar's primary color
+            >
               Login
             </Button>
           )}
         </div>
-
       </Header>
+
+      {/* Drawer for Mobile Menu */}
+      <Drawer
+        title="Menu"
+        placement="right"
+        onClose={() => setDrawerVisible(false)}
+        open={drawerVisible}
+        width={250}
+        style={{ backgroundColor: colorBgContainer, borderRadius: borderRadiusLG }}
+      >
+        <Menu mode="vertical" className="bg-background border-0">
+          {/* Search Bar */}
+          <Menu.Item key="1" style={{ padding: '8px 16px' }}> {/* Add padding for better alignment */}
+            <div style={{ display: 'flex', justifyContent: 'center' }}> {/* Center the search bar */}
+              <Search
+                placeholder="input search text"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+                onSearch={onSearch}
+                style={{ width: '100%', borderRadius: '8px' }} // Full width and rounded corners
+              />
+            </div>
+          </Menu.Item>
+
+          {/* Menu Items */}
+          <Menu.Item key="2" style={{ padding: '8px 16px' }}> {/* Consistent padding */}
+            <Link to="/" onClick={() => setDrawerVisible(false)} style={{ color: '#595959', textDecoration: 'none' }}>
+              Home
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="3" style={{ padding: '8px 16px' }}>
+            <Link to="/about" onClick={() => setDrawerVisible(false)} style={{ color: '#595959', textDecoration: 'none' }}>
+              About
+            </Link>
+          </Menu.Item>
+          {!user && (
+            <Menu.Item key="4" style={{ padding: '8px 16px' }}>
+              <Link to="/login" onClick={() => setDrawerVisible(false)} style={{ color: '#1890ff', textDecoration: 'none' }}>
+                Login
+              </Link>
+            </Menu.Item>
+          )}
+        </Menu>
+      </Drawer>
+
+      {/* Content */}
       <Content>
-        <Layout className="">
+        <Layout>
           {user && <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />}
-          <Content className=" h-screen mt-[65px] overflow-y-scroll overflow-x-hidden">
+          <Content
+            className="h-screen overflow-y-auto"
+            style={{
+              marginTop: '64px', // Offset content by the height of the header
+              // marginLeft: user && !collapsed ? '200px' : '0', // Adjust margin based on sidebar visibility
+              padding: '24px',
+              backgroundColor: colorBgContainer,
+              borderRadius: borderRadiusLG,
+              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+              transition: 'margin-left 0.2s', // Smooth transition for sidebar collapse
+            }}
+          >
             <Outlet />
           </Content>
         </Layout>
       </Content>
     </Layout>
-
   );
 };
 

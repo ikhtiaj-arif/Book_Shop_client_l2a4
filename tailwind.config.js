@@ -8,6 +8,7 @@ export default {
       
         colors: {
           'primary': '#44cad2',
+          'primary-fade': '#83dfe5',
           'primary-dark': '#5ab1b6',  // A darker shade of primary color
           'text': '#081e1f',
           'text-accent': '#555a5a',
