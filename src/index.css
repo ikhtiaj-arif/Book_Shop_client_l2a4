@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
   box-sizing: border-box;
   padding: 0;
@@ -10,20 +14,11 @@
   --secondary-color: #e8b48f;
   --accent-color: #d4df61;
 }
-.custom-header {
-  display: flex;
-  align-items: center;
-  position: fixed;
-  width: 100%;
-  z-index: 1;
-  background-color: var(--background-color);
-}
-
-.custom-menu {
-  flex: 1;
-  min-width: 0;
-  background-color: var(--background-color);
-}
+/* @layer components {
+  .btn-custom {
+    @apply bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary-dark;
+  }
+} */
 
 .desktop-menu {
   display: flex;
@@ -45,4 +40,10 @@
   height: 100vh;
   overflow-y: scroll;
   margin-top: 63px;
+}
+/* .ant-menu-item:hover {
+  @apply bg-accent text-background;
+} */
+.ant-menu-item-selected {
+  @apply bg-accent text-background;
 }

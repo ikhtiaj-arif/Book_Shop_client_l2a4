@@ -1,6 +1,5 @@
 // src/components/FeaturedProducts.js
-import React from 'react';
-import { Card, Button, Row, Col } from 'antd';
+import { Button, Card, Col, Row } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 const { Meta } = Card;
@@ -22,6 +21,7 @@ const FeaturedProducts = ({ products }) => {
         {displayProducts.map((product) => (
           <Col span={8} key={product.id}>
             <Card
+              className='bg-background'
               hoverable
               cover={<img alt={product.name} src={product.image} />}
               style={{ borderRadius: '8px' }}

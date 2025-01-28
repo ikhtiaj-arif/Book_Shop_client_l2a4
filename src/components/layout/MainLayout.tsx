@@ -2,8 +2,10 @@ import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/
 import { Button, Layout, Menu, MenuProps, theme } from 'antd';
 import React, { useState } from 'react';
 
+import { SearchProps } from 'antd/es/input';
 import { Content, Header } from 'antd/es/layout/layout';
-import { Outlet, useNavigate } from 'react-router-dom';
+import Search from 'antd/es/transfer/search';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { currentUser, logOut } from '../../redux/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import Sidebar from './Sidebar';
@@ -55,6 +57,8 @@ const MainLayout = () => {
     key,
     label: `nav ${key}`,
   }));
+
+  const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
 
   return (
     // <Layout style={{ height: "100vh" }}>
@@ -134,20 +138,35 @@ const MainLayout = () => {
     //     </Content>
     //   </Layout>
     // </Layout>
-    <Layout>
-    <Header className="custom-header">
-      <div className="demo-logo" />
-      <Menu theme="dark" mode="horizontal" className="custom-menu">
-        <div className="desktop-menu">
-          <Button type="link" onClick={() => navigate('/')}>
-            Home
-          </Button>
-          <Button type="link" onClick={() => navigate('/about')}>
-            About
-          </Button>
-          <Button type="link" onClick={() => navigate('/register')}>
-            Register
-          </Button>
+    <Layout className='h-[100vh]'>
+      <Header className="bg-background fixed flex  items-center w-full md:px-[50px] xl:px-[70px] 2xl:px-[156px]  z-10 border border-b-2">
+        <div className="demo-logo bg-primary h-10 w-10 rounded-full" />
+        <Menu theme="dark" mode="horizontal" className="bg-background border-0 mx-auto">
+          <div className='flex items-center gap-10'>
+            <Link className="text-text hover:text-text-accent font-medium" to="/">
+              Home
+            </Link>
+
+            <Link className="text-text hover:text-text-accent font-medium" to='/about'>
+              About
+            </Link>
+            <Link className="text-text hover:text-text-accent font-medium" to='/about'>
+              About
+            </Link>
+
+            {/* <Link className="text-text hover:text-text-accent font-medium" to='/register'>
+              Register
+            </Link> */}
+
+          </div>
+        </Menu>
+        <div className='flex items-center'>
+
+          <Search
+
+            // addonBefore="https://"
+            placeholder="input search text "
+          />
           {user ? (
             <Button
               type="text"
@@ -160,17 +179,17 @@ const MainLayout = () => {
             </Button>
           )}
         </div>
-      </Menu>
-    </Header>
-    <Content>
-      <Layout className="custom-content-layout">
-        {user && <Sidebar collapsed={collapsed} />}
-        <Content className="custom-content">
-          <Outlet />
-        </Content>
-      </Layout>
-    </Content>
-  </Layout>
+
+      </Header>
+      <Content>
+        <Layout className="">
+          {user && <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />}
+          <Content className=" h-screen mt-[65px] overflow-y-scroll overflow-x-hidden">
+            <Outlet />
+          </Content>
+        </Layout>
+      </Content>
+    </Layout>
 
   );
 };
