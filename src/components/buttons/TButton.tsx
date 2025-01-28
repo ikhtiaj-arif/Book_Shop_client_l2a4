@@ -4,34 +4,37 @@ import React from 'react';
 
 type CustomButtonProps = {
     text: string;
-    onClick: () => void;
+    onClick?: () => void;
     primaryColor?: string;
     accentColor?: string;
     className?: string;
-    disabled?: boolean
+    disabled?: boolean;
+    type?: "submit" | "reset" | "button" | undefined
+    htmlType?: string
 };
 const TButton: React.FC<CustomButtonProps> = ({
     text,
     onClick,
-    primaryColor = 'primary',
-    accentColor = 'accent',
     className = '',
     disabled = false,
-
+    type,
+    htmlType="",
     ...props
 }) => {
     return (
         <button
             onClick={onClick}
-            className={`w-full py-2 px-4 mt-auto text-white font-semibold rounded-lg shadow-md bg-gradient-to-r from-${primaryColor} to-${accentColor} hover:from-${primaryColor}-dark hover:to-${primaryColor}-fade transition-all ${className}`}
+            type={type}
+            htmlType={htmlType}
+            className={`w-full py-2 px-4 mt-auto text-white font-semibold rounded-lg shadow-md bg-gradient-to-r from-primary-dark to-accent hover:from-primary hover:to-secondary transition-all ${className}`}
             {...props}
             disabled={disabled}
         >
             {text}
         </button>
-
     );
 };
+
 
 {/* <button
 onClick={onClick}
