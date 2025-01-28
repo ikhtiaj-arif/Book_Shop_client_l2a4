@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import CustomButton from '../../components/buttons/TButton';
+import TButton from '../../components/buttons/TButton';
 
 interface ProductCardProps {
     product: {
@@ -53,11 +54,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
                 {/* View Details Button */}
                 <div className="mt-auto">
-                    <CustomButton
+                    <TButton
                         text="View Details"
                         onClick={() => navigate(`/products/${product._id}`)}
                         primaryColor="primary"
-                        accentColor="primary-dark"
+                        accentColor="primary-fade"
                     />
                 </div>
             </div>

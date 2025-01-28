@@ -6,13 +6,13 @@ import AdminDashboard from "../pages/Admin/AdminDashboard"
 import ManageOrders from "../pages/Admin/ManageOrders"
 import ManageProduct from "../pages/Admin/ManageProduct"
 import ManageUsers from "../pages/Admin/ManageUsers"
+import AuthPage from "../pages/AuthPage"
 import Home from "../pages/Home"
-import Login from "../pages/Login"
 import AllProducts from "../pages/Products/AllProducts"
-import Register from "../pages/Register"
-import UserDashboard from "../pages/User/UserDashboard"
 import ProductDetails from "../pages/Products/ProductDetails"
+import Register from "../pages/Register"
 import CheckoutPage from "../pages/User/Checkout"
+import UserDashboard from "../pages/User/UserDashboard"
 
 const router = createBrowserRouter([
     {
@@ -22,6 +22,14 @@ const router = createBrowserRouter([
             {
                 path: '/',
                 element: <Home />
+            },
+            {
+                path: '/login',
+                element: <AuthPage />
+            },
+            {
+                path: '/register',
+                element: <Register />
             },
             {
                 path: '/about',
@@ -84,14 +92,7 @@ const router = createBrowserRouter([
         ]
     },
 
-    {
-        path: '/login',
-        element: <Login />
-    },
-    {
-        path: '/register',
-        element: <Register />
-    },
+
 
 
 

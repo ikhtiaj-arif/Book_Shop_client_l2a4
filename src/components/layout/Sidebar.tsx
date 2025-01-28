@@ -75,10 +75,10 @@ const Sidebar: React.FC<React.PropsWithChildren<SidebarProps>> = ({ collapsed, s
                 flex items-center gap-3 p-2 rounded-lg cursor-pointer 
                 hover:bg-primary  transition-colors duration-200
                 ${collapsed ? 'justify-center' : ''}
-                ${isActive ? 'bg-primary-dark text-white hover:bg-primary' : 'text-text hover:bg-opacity-10'} // Apply active styles
+                ${isActive ? 'bg-primary-dark text-white hover:bg-primary' : 'text-text hover:bg-opacity-10'}
               `}
             >
-              <span className={`text-xl ${isActive ? 'text-white' : 'text-primary'}`}>{item.icon}</span>
+              <span className={`text-xl ${isActive ? 'text-white' : 'text-secondary'}`}>{item.icon}</span>
               {!collapsed && (
                 <span className="text-sm font-medium">{item.label}</span>
               )}

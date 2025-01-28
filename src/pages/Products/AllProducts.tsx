@@ -1,25 +1,19 @@
-import { Button, Input, Select, Slider, Spin } from 'antd';
+import { Input, Select, Slider, Spin } from 'antd';
+
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useGetAllProductsQuery } from '../../redux/features/products/products.api';
+import { IProduct } from '../../types/types';
 import ProductCard from './ProductCard';
 
 const { Search } = Input;
 const { Option } = Select;
 
-// Define Product type
-interface Product {
-    
-    _id: string;
-    title: string;
-    author: string;
-    price: number;
-    category: string;
-}
+
+
 
 const AllProducts: React.FC = () => {
     const { data: allProductData, isLoading } = useGetAllProductsQuery(undefined);
-   
+
 
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
@@ -34,7 +28,7 @@ const AllProducts: React.FC = () => {
         );
     }
 
-    const products: Product[] = allProductData?.data || [];
+    const products: IProduct[] = allProductData?.data || [];
     const categories = Array.from(new Set(products.map((p) => p.category)));
     const authors = Array.from(new Set(products.map((p) => p.author)));
 
@@ -54,9 +48,11 @@ const AllProducts: React.FC = () => {
     return (
         <div className="bg-background min-h-screen p-2 md:p-8">
             {/* Header Section */}
-            <div className="bg-primary text-white rounded-lg shadow-md p-6 mb-8">
+            <div className="bg-gradient-to-r from-primary-dark to-primary text-white rounded-lg shadow-md p-6 mb-8">
                 <h1 className="text-3xl font-bold">All Products</h1>
                 <p className="text-primary-fade">Discover and filter the books you love.</p>
+
+
             </div>
 
             {/* Search and Filters */}
@@ -109,7 +105,7 @@ const AllProducts: React.FC = () => {
             {/* Product Cards */}
             <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {filteredProducts.map((product) => (
-                     <ProductCard key={product._id} product={product} />
+                    <ProductCard key={product._id} product={product} />
                 ))}
             </div>
         </div>
