@@ -1,6 +1,6 @@
-import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
-import { Button, Layout, Menu } from 'antd';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { UploadOutlined, UserOutlined, VideoCameraOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Layout } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import { currentUser, logOut } from '../../redux/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 
@@ -13,98 +13,57 @@ const userRole = {
 
 const Sidebar = ({ collapsed }) => {
   const user = useAppSelector(currentUser);
-  const navigate = useNavigate(); // Initialize the navigate function
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
-  // If there's no user, don't render the sidebar
   if (!user) {
     return null;
   }
 
-  // Generate Sidebar items based on user role
-  const sidebarItems = user.role === userRole.ADMIN ? [
-    {
-      key: '1',
-      label: 'Admin Dashboard',
-      onClick: () => navigate('/admin') // Navigate to admin dashboard
-    },
-    {
-      key: '2',
-      label: 'Manage Products',
-      onClick: () => navigate('/admin/products') // Navigate to manage products page
-    },
-    {
-      key: '3',
-      label: 'Orders',
-      onClick: () => navigate('/admin/orders') // Navigate to orders page
-    },
-    {
-      key: '4',
-      label: 'Users',
-      onClick: () => navigate('/admin/users') // Navigate to orders page
-    },
-  ] : [
-    {
-      key: '1',
-      label: 'User Dashboard',
-      onClick: () => navigate('/user/dashboard') // Navigate to user dashboard
-    },
-    {
-      key: '2',
-      label: 'Profile',
-      onClick: () => navigate('/user/profile') // Navigate to user profile page
-    },
-    {
-      key: '3',
-      label: 'Orders',
-      onClick: () => navigate('/user/orders') // Navigate to user orders page
-    },
+  // Sidebar items based on user role
+  const sidebarItems = [
+    ...(user.role === userRole.ADMIN
+      ? [
+          { key: '1', label: 'Admin Dashboard', icon: <UserOutlined />, onClick: () => navigate('/admin') },
+          { key: '2', label: 'Manage Products', icon: <VideoCameraOutlined />, onClick: () => navigate('/admin/products') },
+          { key: '3', label: 'Orders', icon: <UploadOutlined />, onClick: () => navigate('/admin/orders') },
+          { key: '4', label: 'Users', icon: <UserOutlined />, onClick: () => navigate('/admin/users') },
+        ]
+      : [
+          { key: '1', label: 'User Dashboard', icon: <UserOutlined />, onClick: () => navigate('/user/dashboard') },
+          { key: '2', label: 'Profile', icon: <VideoCameraOutlined />, onClick: () => navigate('/user/profile') },
+          { key: '3', label: 'Orders', icon: <UploadOutlined />, onClick: () => navigate('/user/orders') },
+        ]),
+    { key: '5', label: 'Common Route', icon: <UploadOutlined />, onClick: () => navigate('/common') },
+    { key: '6', label: 'Logout', icon: <LogoutOutlined />, onClick: () => dispatch(logOut()) || navigate('/login') }, // Logout option
   ];
-  const dispatch = useAppDispatch()
-  const handleLogout = () => {
-    dispatch(logOut())
-    navigate('/login');
-  }
 
   return (
-
-
-    <Sider width={160} collapsedWidth={50} style={{ marginTop: '63px' }} trigger={null} collapsible collapsed={collapsed}>
-      <div className="demo-logo-vertical" />
-      <Menu
-        // style={{width:' 100px'}}
-        theme="dark"
-        mode="inline"
-        defaultSelectedKeys={['1']}
-        items={[
-          {
-            key: '1',
-            icon: <UserOutlined />,
-            label: 'nav 1',
-          },
-          {
-            key: '2',
-            icon: <VideoCameraOutlined />,
-            label: 'nav 2',
-          },
-          {
-            key: '3',
-            icon: <UploadOutlined />,
-            label: 'nav 3',
-          },
-        ]}
-
-
-
-      //         items={sidebarItems.map(item => ({
-      //             key: item.key,
-      //             label: item.label,
-      //             onClick: item.onClick, // Handle click with the navigation function
-      //         }))}
-
-      />
-      <Button type="link" onClick={handleLogout} style={{ color: "#fff" }}>
-        Logout
-      </Button>
+    <Sider
+      className="bg-background border rounded-md"
+      width={160}
+      collapsedWidth={50}
+      style={{
+        marginTop: '63px',
+        height: 'calc(100vh - 63px)',
+      }}
+      trigger={null}
+      collapsible
+      collapsed={collapsed}
+    >
+      {/* Custom Menu */}
+      <ul className="flex flex-col gap-4 p-4">
+        {sidebarItems.map((item) => (
+          <li
+            key={item.key}
+            onClick={item.onClick}
+            className="flex items-center gap-3 p-2 rounded-lg cursor-pointer hover:bg-accent transition"
+          >
+            <span className="text-secondary text-xl">{item.icon}</span>
+            {!collapsed && <span className="text-text">{item.label}</span>}
+          </li>
+        ))}
+      </ul>
     </Sider>
   );
 };

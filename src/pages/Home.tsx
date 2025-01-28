@@ -16,8 +16,11 @@ const Home = () => {
     return (
         <div>
             <Banner />
+            <div className='w-full bg-white md:px-[50px] xl:px-[60px] 2xl:px-[156px] mx-auto flex flex-col gap-y-20'>
+
             <FeaturedProducts products={products} />
             <Testimonials />
+            </div>
             <Footer />
         </div>
     );

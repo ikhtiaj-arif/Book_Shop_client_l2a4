@@ -2,11 +2,13 @@ import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/
 import { Button, Layout, Menu, MenuProps, theme } from 'antd';
 import React, { useState } from 'react';
 
+import { SearchProps } from 'antd/es/input';
 import { Content, Header } from 'antd/es/layout/layout';
-import { Outlet, useNavigate } from 'react-router-dom';
-import Sidebar from './Sidebar';
-import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import Search from 'antd/es/transfer/search';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { currentUser, logOut } from '../../redux/features/auth/authSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import Sidebar from './Sidebar';
 
 // const { Header, Content } = Layout;
 
@@ -55,6 +57,8 @@ const MainLayout = () => {
     key,
     label: `nav ${key}`,
   }));
+
+  const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
 
   return (
     // <Layout style={{ height: "100vh" }}>
@@ -134,60 +138,57 @@ const MainLayout = () => {
     //     </Content>
     //   </Layout>
     // </Layout>
-    <Layout>
-      <Header style={{ display: 'flex', alignItems: 'center', position: 'fixed', width: '100%', zIndex: '1' }}>
-
-        <div className="demo-logo" />
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          style={{ flex: 1, minWidth: 0 }}
-        >
-          <div className="desktop-menu" style={{ display: "flex", gap: "12px" }}>
-            <Button type="link" onClick={() => navigate('/')} style={{ color: "#fff" }}>
+    <Layout className='h-[100vh]'>
+      <Header className="bg-background fixed flex  items-center w-full md:px-[50px] xl:px-[70px] 2xl:px-[156px]  z-10 border border-b-2">
+        <div className="demo-logo bg-primary h-10 w-10 rounded-full" />
+        <Menu theme="dark" mode="horizontal" className="bg-background border-0 mx-auto">
+          <div className='flex items-center gap-10'>
+            <Link className="text-text hover:text-text-accent font-medium" to="/">
               Home
-            </Button>
-            <Button type="link" onClick={() => navigate('/about')} style={{ color: "#fff" }}>
+            </Link>
+
+            <Link className="text-text hover:text-text-accent font-medium" to='/about'>
               About
-            </Button>
+            </Link>
+            <Link className="text-text hover:text-text-accent font-medium" to='/about'>
+              About
+            </Link>
 
-            <Button type="link" onClick={() => navigate('/register')} style={{ color: "#fff" }}>
+            {/* <Link className="text-text hover:text-text-accent font-medium" to='/register'>
               Register
-            </Button>
+            </Link> */}
 
+          </div>
+        </Menu>
+        <div className='flex items-center'>
 
-            {user ? <Button
+          <Search
+
+            // addonBefore="https://"
+            placeholder="input search text "
+          />
+          {user ? (
+            <Button
               type="text"
               icon={<UserOutlined />}
               onClick={() => setCollapsed(!collapsed)}
-              style={{
-                fontSize: '16px',
-                color: 'white'
-              }}
-            /> :
-              <Button type="link" onClick={() => navigate('/login')} style={{ color: "#fff" }}>
-                Login
-              </Button>
-            }
-          </div>
-        </Menu>
+            />
+          ) : (
+            <Button type="link" onClick={() => navigate('/login')}>
+              Login
+            </Button>
+          )}
+        </div>
+
       </Header>
-      <Content style={{ padding: '0 ' }}>
-
-        <Layout
-          style={{ height: '100vh', background: colorBgContainer, borderRadius: borderRadiusLG }}
-        >
-          {
-            user &&
-            <Sidebar collapsed={collapsed} />
-          }
-          <Content style={{ padding: '0', height: 'screen', overflowY: 'scroll', marginTop: '63px' }}>
+      <Content>
+        <Layout className="">
+          {user && <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />}
+          <Content className=" h-screen mt-[65px] overflow-y-scroll overflow-x-hidden">
             <Outlet />
-
           </Content>
         </Layout>
       </Content>
-
     </Layout>
 
   );

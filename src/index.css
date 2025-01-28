@@ -1,5 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+}
+:root {
+  --primary-color: #7d6ea2;
+  --text-color: #0d0721;
+  --background-color: #fbf9f9;
+  --secondary-color: #e8b48f;
+  --accent-color: #d4df61;
+}
+/* @layer components {
+  .btn-custom {
+    @apply bg-primary text-white py-2 px-4 rounded-lg hover:bg-primary-dark;
+  }
+} */
+
+.desktop-menu {
+  display: flex;
+  gap: 12px;
+}
+
+.desktop-menu button {
+  color: var(--text-color);
+}
+
+.custom-content-layout {
+  height: 100vh;
+  background-color: var(--background-color);
+  border-radius: 8px; /* Optional border radius */
+}
+
+.custom-content {
+  padding: 0;
+  height: 100vh;
+  overflow-y: scroll;
+  margin-top: 63px;
+}
+/* .ant-menu-item:hover {
+  @apply bg-accent text-background;
+} */
+.ant-menu-item-selected {
+  @apply bg-accent text-background;
 }
