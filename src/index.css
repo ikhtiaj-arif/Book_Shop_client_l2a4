@@ -47,3 +47,18 @@
 .ant-menu-item-selected {
   @apply bg-accent text-background;
 }
+.custom-tabs .ant-tabs-tab {
+  font-size: 1.5rem; /* text-2xl */
+  font-weight: bold;
+  color: theme("colors.text"); /* Default text color */
+  transition: color 0.3s ease-in-out, border-bottom 0.3s ease-in-out;
+}
+
+.custom-tabs .ant-tabs-tab:hover {
+  color: theme("colors.primary"); /* Hover color to Tailwind primary */
+}
+
+.custom-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: theme("colors.primary") !important; /* Active tab text */
+ 
+}

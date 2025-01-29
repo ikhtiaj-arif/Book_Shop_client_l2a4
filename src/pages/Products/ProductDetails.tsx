@@ -1,18 +1,31 @@
-import { Card, Col, Divider, Row, Typography } from 'antd';
+import { Button, Card, Col, Divider, Input, Row, Tabs, Typography } from 'antd';
 import CryptoJS from 'crypto-js';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import QuantitySelector from '../../components/buttons/QuantitySelector';
 import TButton from '../../components/buttons/TButton';
 import dummyBG from '../../img/Bookshop-pana.png';
+import { currentUser } from '../../redux/features/auth/authSlice';
+import { addToCart } from '../../redux/features/cart/cartSlice';
 import { useGetProductByIdQuery } from '../../redux/features/products/products.api';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 
 const { Title, Text } = Typography;
 
 const ProductDetails = () => {
   const { id } = useParams(); // Extract 'id' from the route params
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector(currentUser)
+  const [selectedQuantity, setSelectedQuantity] = useState<number>(1);
+  const [activeTab, setActiveTab] = useState("details");
+  const [reviews, setReviews] = useState<string[]>([]);
+  const [newReview, setNewReview] = useState("");
 
   const { data: productData, isLoading, isError } = useGetProductByIdQuery(id);
   const product = productData?.data;
+
+  console.log(product);
 
   if (isLoading) return <p>Loading...</p>;
   if (isError || !product) return <p>Product not found.</p>;
@@ -31,8 +44,25 @@ const ProductDetails = () => {
     navigate(`/checkout`);
   };
 
+  const handleAddToCart = () => {
+    dispatch(addToCart({
+
+      product,
+      quantity: selectedQuantity,
+
+
+    }));
+  };
+
+  const handleAddReview = () => {
+    if (newReview.trim()) {
+      setReviews([...reviews, newReview]);
+      setNewReview("");
+    }
+  };
+
   return (
-    <div className="bg-background py-8 px-4 lg:px-8  mx-auto">
+    <div className="bg-white py-8 px-4 lg:px-8  mx-auto">
       {/* Heading Section */}
       <div className="bg-gradient-to-r from-primary-dark to-primary text-white rounded-lg shadow-md p-6 mb-8">
         <h1 className="text-3xl font-bold">Product Details</h1>
@@ -41,98 +71,132 @@ const ProductDetails = () => {
 
       <Row gutter={[32, 32]} justify="center" align="top">
         {/* Product Image */}
-        <Col xs={24} md={11} className="transition-transform transform  hover:scale-10 duration-300 ease-in-out">
+        <Col xs={24} md={11} className="">
           <Card
-            hoverable
+            style={{ border: 0 }}
             cover={
               <img
                 alt={product.title}
                 src={product.image || dummyBG}
-                className="w-full h-full object-cover rounded-lg shadow-lg"
+                className="w-full h-full max-w-[32rem] object-cover "
               />
             }
-            className="shadow-md rounded-lg"
+            className=""
           >
-
-            {/* <Text className="text-center text-text-accent">{product.author || 'Unknown Author'}</Text> */}
           </Card>
         </Col>
 
         {/* Product Details */}
-        <Col xs={24} md={11} className="bg-white  rounded-lg shadow-lg p-6">
-          <Card bordered={false} className="h-full">
-            <Title level={2} className="text-center text-text">{product.title}</Title>
+        <Col xs={24} md={11} className=" p-6">
+          <Card bordered={false} style={{ border: 0, boxShadow: 'none' }} className="h-full">
+            <p className="text-center font-bold text-3xl text-text">{product.title}</p>
+            <Text strong className="text-text">{product.author} </Text>
+            <div className="mb-4">
+
+              <Text className="text-text-accent">{product.category || ''}</Text>
+            </div>
             <Divider className="my-4" />
 
             {/* Price */}
-            <div className="mb-4">
-              <Text strong className="text-text">Price: </Text>
-              <Text className="text-primary font-semibold text-lg">${product.price}</Text>
-            </div>
-            <Divider className="my-4" />
 
-            {/* Category */}
-            <div className="mb-4">
-              <Text strong className="text-text">Category: </Text>
-              <Text className="text-text-accent">{product.category || 'N/A'}</Text>
-            </div>
-            <Divider className="my-4" />
 
-            {/* Description */}
-            <div className="mb-4 max-h-64 overflow-y-auto">
-              <Text strong className="text-text">Description: </Text>
-              <Text className="text-text-accent">{product.description || 'No description available.'}</Text>
-            </div>
-            <Divider className="my-4" />
 
-            {/* Author */}
-            <div className="mb-4">
-              <Text strong className="text-text">Author: </Text>
-              <Text className="text-text-accent">{product.author || 'Unknown'}</Text>
-            </div>
-            <Divider className="my-4" />
-
-            {/* Publisher */}
-            <div className="mb-4">
-              <Text strong className="text-text">Publisher: </Text>
-
-              <Text className="text-text-accent">XYZ Publisher</Text>
-            </div>
-            <Divider className="my-4" />
-
-            {/* Release Date */}
-            <div className="mb-4">
-              <Text strong className="text-text">Release Date: </Text>
-              <Text className="text-text-accent">January 1, 2023</Text>
-            </div>
-            <Divider className="my-4" />
 
             {/* Availability */}
-            <div className="mb-4">
-              <Text strong className="text-text">Availability: </Text>
+            <div className="mb-4 flex justify-between items-center">
+
+
+              <Text className="text-text font-semibold text-lg">${product.price}</Text>
               <Text
-                className={`font-semibold ${product.inStock ? 'text-green-500' : 'text-red-500'}`}
+                className={`font-semibold ${product.inStock ? 'text-primary' : 'text-red-500'}`}
               >
                 {product.inStock ? 'In Stock' : 'Out of Stock'}
               </Text>
             </div>
-            <Divider className="my-4" />
+            <div className="mb-4">
 
-            {/* Buy Now Button */}
-            <div className="mt-auto w-full max-w-[200px] mx-auto">
+
+
+              <QuantitySelector
+                className='w-24'
+                quantity={selectedQuantity}
+                maxQuantity={product.quantity}
+                onIncrease={() => setSelectedQuantity((prev) => Math.min(prev + 1, product.quantity))}
+                onDecrease={() => setSelectedQuantity((prev) => Math.max(prev - 1, 1))}
+                onChange={(value) => setSelectedQuantity(value)}
+              />
+            </div>
+
+            {/* Buttons */}
+            <div className="mt-auto w-full flex items-center space-x-4">
+
               <TButton
                 text={product.inStock ? 'Buy Now' : 'Out of Stock'}
                 onClick={handleBuyNow}
                 primaryColor="primary"
                 accentColor="accent"
                 disabled={!product.inStock}
-                className="w-full py-3 text-white rounded-lg shadow-md"
+                className="w-full max-w-[200px]  text-white rounded-lg shadow-md"
+              />
+              <TButton
+                text="Add to Cart"
+                onClick={handleAddToCart}
+                primaryColor="secondary"
+                accentColor="accent"
+                className="w-full max-w-[200px] text-white rounded-lg shadow-md"
               />
             </div>
           </Card>
         </Col>
       </Row>
+      {/* tabs section */}
+
+      {/* Tabs Section */}
+      <div className="mt-12">
+        <Tabs
+          activeKey={activeTab}
+          onChange={setActiveTab}
+        
+          tabBarStyle={{ fontSize: "1.5rem", fontWeight: "bold" }} // Tailwind equivalent: text-2xl font-bold
+          className="custom-tabs"
+        >
+          <Tabs.TabPane tab="Details" key="details">
+            <p className="text-2xl text-text">{product.description || "No details available for this product."}</p>
+          </Tabs.TabPane>
+
+          <Tabs.TabPane tab="Reviews" key="reviews">
+            {reviews.length > 0 ? (
+              <div className="space-y-4">
+                {reviews.map((review, index) => (
+                  <div key={index} className="p-4 bg-gray-100 rounded-lg shadow-sm">
+                    <p className="text-text">{review}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-2xl text-text">No reviews yet. Be the first to review!</p>
+            )}
+
+            {/* Add Review Section */}
+            <div className="mt-6">
+              <Input.TextArea
+                rows={3}
+                placeholder="Write your review..."
+                value={newReview}
+                onChange={(e) => setNewReview(e.target.value)}
+                className="mb-4"
+              />
+              <Button type="primary" onClick={handleAddReview}>
+                Submit Review
+              </Button>
+            </div>
+          </Tabs.TabPane>
+        </Tabs>
+
+      </div>
     </div>
+
+
   );
 };
 
