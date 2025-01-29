@@ -6,6 +6,7 @@ import logo from '../../img/logo.png';
 import { currentUser } from '../../redux/features/auth/authSlice';
 import { useAppSelector } from '../../redux/hooks';
 import Sidebar from './Sidebar';
+import CartButton from '../cart/CartButton';
 
 const { Header, Content } = Layout;
 
@@ -52,13 +53,17 @@ const MainLayout: React.FC = () => {
 
         </div>
         {/* Mobile Menu Button */}
+        <div className="md:hidden ml-auto flex items-center">
+
         <Button
           type="text"
           icon={<MenuOutlined />}
           onClick={() => setDrawerVisible(!drawerVisible)}
           className="md:hidden ml-auto"
           style={{ color: '#44cad2' }}
-        />
+          />
+          <CartButton />
+          </div>
 
         {/* Desktop Menu */}
         <Menu
@@ -112,6 +117,7 @@ const MainLayout: React.FC = () => {
               Login
             </Button>
           )}
+          <CartButton />
         </div>
       </Header>
 
@@ -158,7 +164,7 @@ const MainLayout: React.FC = () => {
         <Layout>
           {user && <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />}
           <Content
-            className="h-screen overflow-y-auto p-2 md:p-6 rounded-md"
+            className="h-screen overflow-y-auto p-2 md:p-6  rounded-md"
             style={{
               marginTop: '64px', // Offset content by the height of the header
               // marginLeft: user && !collapsed ? '200px' : '0', // Adjust margin based on sidebar visibility

@@ -12,10 +12,11 @@ import { IProduct } from '../../types/types';
 
 const CheckoutPage: React.FC = () => {
   const [product, setProduct] = useState<IProduct | null>(null);
-  const [quantity, setQuantity] = useState<number>(1);
+  const [selectedQuantity, setSelectedQuantity] = useState<number>(1);
   const navigate = useNavigate();
   const [placeOrder] = useCreateOrderMutation();
   const user = useAppSelector(currentUser);
+  const [createOrder, {isLoading}] = useCreateOrderMutation()
 
   const {
     register,
@@ -42,20 +43,20 @@ const CheckoutPage: React.FC = () => {
   const handlePlaceOrder = async () => {
     if (!product) return;
 
-    const totalPrice = quantity * product.price;
+    // const totalPrice = quantity * product.price;
 
-    const data = {
-      email: user?.email,
-      product: product._id,
-      quantity,
-      totalPrice,
-    };
+    // const data = {
+    //   email: user?.email,
+    //   product: product._id,
+    //   quantity,
+    //   totalPrice,
+    // };
 
+    console.log(data);
     try {
-      const res = await placeOrder(data).unwrap();
-      console.log(res);
-      navigate('/');
-      localStorage.removeItem('checkoutProduct');
+      // const res = await placeOrder(data).unwrap();
+      // navigate('/');
+      // localStorage.removeItem('checkoutProduct');
     } catch (err) {
       console.error('Order placement failed:', err);
     }
@@ -97,7 +98,7 @@ const CheckoutPage: React.FC = () => {
             </p>
             <div className="flex items-center gap-4 mb-4">
               <p className="text-text-accent font-medium">
-                Available Stock: <span className="text-accent">{product.inStock}</span>
+                Available Stock: <span className="text-accent">{product.quantity}</span>
               </p>
               <div className="flex items-center gap-2">
                 <label htmlFor="quantity" className="text-text font-medium">
@@ -107,14 +108,14 @@ const CheckoutPage: React.FC = () => {
                   id="quantity"
                   type="number"
                   min="1"
-                  max={product.inStock}
-                  value={quantity}
-                  onChange={(e) => setQuantity(Number(e.target.value))}
+                  max={product.quantity}
+                  value={selectedQuantity}
+                  onChange={(e) => setSelectedQuantity(Number(e.target.value))}
                   className="w-20 p-2 rounded-lg border border-text-accent focus:outline-none focus:ring-2 focus:ring-secondary focus:border-0"
                 />
               </div>
             </div>
-            {quantity > product.inStock && (
+            {selectedQuantity > product.quantity && (
               <p className="text-red-500 text-sm">
                 Quantity exceeds available stock.
               </p>
@@ -212,7 +213,7 @@ const CheckoutPage: React.FC = () => {
                 type="submit"
                 className="w-full md:w-1/3 py-3 mt-6 bg-primary hover:bg-primary-dark text-white font-semibold rounded-lg shadow-md transition-all"
                 disabled={
-                  quantity > product.inStock || quantity < 1 || Object.keys(errors).length > 0
+                  selectedQuantity > product.quantity || selectedQuantity < 1 || Object.keys(errors).length > 0
                 }
               />
             </div>
