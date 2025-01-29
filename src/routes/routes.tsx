@@ -13,6 +13,7 @@ import ProductDetails from "../pages/Products/ProductDetails"
 import Register from "../pages/Register"
 import CheckoutPage from "../pages/User/Checkout"
 import UserDashboard from "../pages/User/UserDashboard"
+import VerifyOrder from "../pages/User/VerifyOrder"
 
 const router = createBrowserRouter([
     {
@@ -44,6 +45,12 @@ const router = createBrowserRouter([
             },
             {
                 path: "/checkout", element: <CheckoutPage />
+            },
+            {
+                path: '/order/verify',
+                element: <RouteProtector>
+                    < VerifyOrder/>
+                </RouteProtector>,
             },
             {
                 path: '/user',
@@ -78,6 +85,7 @@ const router = createBrowserRouter([
                             <ManageOrders />
                         </RouteProtector>,
                     },
+                
                     {
                         path: 'products',
                         element: <RouteProtector>

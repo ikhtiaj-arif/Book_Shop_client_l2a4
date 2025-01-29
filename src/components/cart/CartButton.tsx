@@ -1,18 +1,23 @@
 import { Badge, Button, Drawer, Empty } from "antd";
 import { ShoppingCart } from "lucide-react";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { currentUser, TUser } from "../../redux/features/auth/authSlice";
 import { removeFromCart, updateQuantity, useCurrentCartProduct } from "../../redux/features/cart/cartSlice";
-import { useAppSelector } from "../../redux/hooks";
-import { IProduct } from "../../types/types";
+import { useCreateOrderMutation } from "../../redux/features/orders/order.api";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { processCart } from "../../utils/CartGenerator";
 import TButton from "../buttons/TButton";
 import CartItem from "./Cart";
+import { toast } from "sonner";
 
 
 const CartButton: React.FC = () => {
-    const cart = useAppSelector(useCurrentCartProduct) as IProduct[];
-    const dispatch = useDispatch();
+    const cart = useAppSelector(useCurrentCartProduct);
+    const user = useAppSelector(currentUser) as TUser;
+    const dispatch = useAppDispatch();
+    const [createOrder, { isLoading, isSuccess, data, isError, error }] = useCreateOrderMutation()
+
     const [isOpen, setIsOpen] = useState(false);
 
     const handleUpdateQuantity = (id: string, quantity: number) => {
@@ -24,8 +29,27 @@ const CartButton: React.FC = () => {
     };
 
     const confirmOrder = async () => {
-        console.log("Order confirmed!");
+        console.log("Order confirmed!", cart);
+        const data = await processCart(cart, user?.email)
+        const res = await createOrder({ products: data })
+        console.log(res);
     };
+
+    const toastId = 'cart'
+    useEffect(() => {
+        if (isLoading) toast.loading("Processing...", { id: toastId })
+        if (isSuccess) {
+
+
+            if (data?.data) {
+                setTimeout(() => {
+
+                    window.location.href = data.data
+                }, 1000)
+            }
+        }
+        if (isError) toast.error(JSON.stringify(error), { id: toastId })
+    }, [data?.data, data?.message, error, isError, isLoading, isSuccess])
 
     // Calculate subtotal
     const subtotal = cart.reduce((total, item) => total + item.price * item.orderQuantity, 0);
