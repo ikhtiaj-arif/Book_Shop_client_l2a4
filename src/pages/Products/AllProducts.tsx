@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useGetAllProductsQuery } from '../../redux/features/products/products.api';
 import { IProduct } from '../../types/types';
 import ProductCard from './ProductCard';
+import ServiceHeader from '../../components/ServiceHeader';
 
 const { Search } = Input;
 const { Option } = Select;
@@ -48,13 +49,8 @@ const AllProducts: React.FC = () => {
     return (
         <div className="bg-background rounded-lg p-2 md:p-4 min-h-screen ">
             {/* Header Section */}
-            <div className="bg-gradient-to-r from-primary-dark to-primary text-white rounded-lg shadow-md p-6 mb-8">
-                <h1 className="text-3xl font-bold">All Products</h1>
-                <p className="text-white">Discover and filter the books you love.</p>
-
-
-            </div>
-
+            <ServiceHeader title="All Products" text="Discover and filter the books you love." />
+        
             {/* Search and Filters */}
             <div className="max-w-6xl  mx-auto grid gap-4 grid-cols-1 md:grid-cols-4 mb-8">
                 <Search

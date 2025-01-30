@@ -1,6 +1,6 @@
 import { Button } from "antd";
 
-const CustomButton = ({ text, onClick, loading = false, disabled = false, type = "primary" }) => {
+const CustomButtonSM = ({ text, onClick, loading = false, disabled = false, type = "primary" }) => {
     return (
         <Button
             htmlType="submit"
@@ -11,7 +11,7 @@ const CustomButton = ({ text, onClick, loading = false, disabled = false, type =
                 color: 'white',
                 transition: 'background 0.3s ease',
             }}
-            className="w-full  py-2 h-10 px-4 text-[0.95rem] mt-auto font-semibold rounded-3xl shadow-md"
+            className="w-full py-1 h-6 px-4 text-[0.7rem] mt-auto font-medium rounded-lg shadow-md"
             onMouseOver={(e) => {
                 e.currentTarget.style.background = 'linear-gradient(to right, #44cad2, #5ab1b6)';
             }}
@@ -28,4 +28,4 @@ const CustomButton = ({ text, onClick, loading = false, disabled = false, type =
     );
 };
 
-export default CustomButton;
+export default CustomButtonSM;

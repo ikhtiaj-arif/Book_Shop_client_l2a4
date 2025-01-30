@@ -11,6 +11,7 @@ import { removeFromCart, updateQuantity, useCurrentCartProduct } from "../../red
 import { useCreateOrderMutation } from "../../redux/features/orders/order.api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { processCart } from "../../utils/CartGenerator";
+import ServiceHeader from "../../components/ServiceHeader";
 
 
 const { Title, Text } = Typography;
@@ -62,12 +63,8 @@ const handleRemoveItem = (id: string) => {
   return (
     <div className="bg-background rounded-lg p-2 md:p-4 min-h-screen ">
       {/* Header Section */}
-      <div className="bg-gradient-to-r from-primary-dark to-primary text-white rounded-lg shadow-md p-6 mb-8">
-        <h1 className="text-3xl font-bold">Checkout</h1>
-        <p className="text-white">Discover and filter the books you love.</p>
+      <ServiceHeader title="Checkout" text="Discover more about this book and make it yours today." />
 
-
-      </div>
 
       <Divider />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 max-w-6xl mx-auto">
