@@ -14,6 +14,7 @@ import Register from "../pages/Register"
 import CheckoutPage from "../pages/User/Checkout"
 import UserDashboard from "../pages/User/UserDashboard"
 import VerifyOrder from "../pages/User/VerifyOrder"
+import ViewOrders from "../pages/Orders/ViewOrders"
 
 const router = createBrowserRouter([
     {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
             {
                 path: "/checkout", element: <CheckoutPage />
             },
+            {
+                path: "/orders/:id", element: <ViewOrders />
+            },
+
             {
                 path: '/order/verify',
                 element: <RouteProtector>
@@ -80,7 +85,7 @@ const router = createBrowserRouter([
                         </RouteProtector>,
                     },
                     {
-                        path: 'orders',
+                        path: 'manage-orders',
                         element: <RouteProtector>
                             <ManageOrders />
                         </RouteProtector>,

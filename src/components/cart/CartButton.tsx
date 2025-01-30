@@ -1,7 +1,7 @@
 import { Badge, Button, Drawer, Empty } from "antd";
 import { ShoppingCart } from "lucide-react";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { currentUser, TUser } from "../../redux/features/auth/authSlice";
 import { removeFromCart, updateQuantity, useCurrentCartProduct } from "../../redux/features/cart/cartSlice";
 import { useCreateOrderMutation } from "../../redux/features/orders/order.api";
@@ -10,12 +10,15 @@ import { processCart } from "../../utils/CartGenerator";
 import TButton from "../buttons/TButton";
 import CartItem from "./Cart";
 import { toast } from "sonner";
+import CustomButton from "../buttons/CustomButton";
+import CustomButtonS from "../buttons/CustomButtonS";
 
 
 const CartButton: React.FC = () => {
     const cart = useAppSelector(useCurrentCartProduct);
     const user = useAppSelector(currentUser) as TUser;
     const dispatch = useAppDispatch();
+    const navigate = useNavigate()
     const [createOrder, { isLoading, isSuccess, data, isError, error }] = useCreateOrderMutation()
 
     const [isOpen, setIsOpen] = useState(false);
@@ -34,6 +37,17 @@ const CartButton: React.FC = () => {
         const res = await createOrder({ products: data })
         console.log(res);
     };
+    const handleOpenCheckout = () => {
+        if (user && user?.email) {
+            setIsOpen(false)
+            navigate('/checkout')
+        }
+        else {
+            toast.error('You need to login first!')
+            setIsOpen(false)
+            navigate('/login')
+        }
+    }
 
     const toastId = 'cart'
     useEffect(() => {
@@ -97,19 +111,9 @@ const CartButton: React.FC = () => {
                         {/* Checkout Actions - Stacked on Mobile */}
                         <div className="flex flex-col gap-4  mt-4">
 
-                            <TButton
-                                text="CHECKOUT"
 
-                                onClick={confirmOrder}
-                            >
-
-                            </TButton>
-                            <button className="w-full py-2 px-4 mt-auto text-primary font-semibold rounded-2xl shadow-md border border-primary transition-all">
-                                <Link to="/all-products">
-                                    CONTINUE SHOPPING
-
-                                </Link>
-                            </button>
+                            <CustomButton text="CHECKOUT" onClick={handleOpenCheckout} loading={isLoading} disabled={cart.length === 0} />
+                            <CustomButtonS text="CONTINUE SHOPPING" onClick={() => navigate("/products")} type="default" />
                         </div>
                     </div>
                 ) : (

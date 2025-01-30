@@ -60,5 +60,4 @@
 
 .custom-tabs .ant-tabs-tab-active .ant-tabs-tab-btn {
   color: theme("colors.primary") !important; /* Active tab text */
- 
 }
