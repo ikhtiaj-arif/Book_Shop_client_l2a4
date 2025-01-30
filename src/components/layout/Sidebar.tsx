@@ -1,9 +1,9 @@
 import { LogoutOutlined, UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
 import { Layout } from 'antd';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'; // Add useLocation
 import { currentUser, logOut } from '../../redux/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import { useState } from 'react';
 
 const { Sider } = Layout;
 interface SidebarProps {
@@ -33,15 +33,15 @@ const Sidebar: React.FC<React.PropsWithChildren<SidebarProps>> = ({ collapsed, s
       ? [
         { key: '1', label: 'Admin Dashboard', icon: <UserOutlined />, path: '/admin' },
         { key: '2', label: 'Manage Products', icon: <VideoCameraOutlined />, path: '/admin/products' },
-        { key: '3', label: 'Orders', icon: <UploadOutlined />, path: '/admin/orders' },
-        { key: '4', label: 'Users', icon: <UserOutlined />, path: '/admin/users' },
+        { key: '3', label: 'Manage Orders', icon: <UploadOutlined />, path: '/admin/manage-orders' },
+        { key: '4', label: 'Manage Users', icon: <UserOutlined />, path: '/admin/manage-users' },
       ]
       : [
         { key: '1', label: 'User Dashboard', icon: <UserOutlined />, path: '/user/dashboard' },
         { key: '2', label: 'Profile', icon: <VideoCameraOutlined />, path: '/user/profile' },
         { key: '3', label: 'Orders', icon: <UploadOutlined />, path: '/user/orders' },
       ]),
-    { key: '5', label: 'Common Route', icon: <UploadOutlined />, path: '/common' },
+    { key: '5', label: 'View Orders', icon: <UploadOutlined />, path: '/orders' },
     { key: '6', label: 'Logout', icon: <LogoutOutlined />, onClick: () => dispatch(logOut()) || navigate('/login') }, // Logout option
   ];
 

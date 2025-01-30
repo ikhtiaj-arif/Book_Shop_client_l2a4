@@ -2,16 +2,15 @@ import { Badge, Button, Drawer, Empty } from "antd";
 import { ShoppingCart } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { currentUser, TUser } from "../../redux/features/auth/authSlice";
 import { removeFromCart, updateQuantity, useCurrentCartProduct } from "../../redux/features/cart/cartSlice";
 import { useCreateOrderMutation } from "../../redux/features/orders/order.api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { processCart } from "../../utils/CartGenerator";
-import TButton from "../buttons/TButton";
-import CartItem from "./Cart";
-import { toast } from "sonner";
 import CustomButton from "../buttons/CustomButton";
-import CustomButtonS from "../buttons/CustomButtonS";
+import CustomButtonS from "../buttons/SecondaryBtn";
+import CartItem from "./Cart";
 
 
 const CartButton: React.FC = () => {

@@ -3,15 +3,15 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import CustomButton from "../../components/buttons/CustomButton";
-import CustomButtonS from "../../components/buttons/CustomButtonS";
+import CustomButtonS from "../../components/buttons/SecondaryBtn";
 import CartItem from "../../components/cart/Cart";
 import BSInput from "../../components/form/BSInput";
+import ServiceHeader from "../../components/ServiceHeader";
 import { currentUser, TUser } from "../../redux/features/auth/authSlice";
 import { removeFromCart, updateQuantity, useCurrentCartProduct } from "../../redux/features/cart/cartSlice";
 import { useCreateOrderMutation } from "../../redux/features/orders/order.api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { processCart } from "../../utils/CartGenerator";
-import ServiceHeader from "../../components/ServiceHeader";
 
 
 const { Title, Text } = Typography;
@@ -27,11 +27,11 @@ const CheckoutPage: React.FC = () => {
 
   const handleUpdateQuantity = (id: string, quantity: number) => {
     dispatch(updateQuantity({ id, quantity }));
-};
+  };
 
-const handleRemoveItem = (id: string) => {
+  const handleRemoveItem = (id: string) => {
     dispatch(removeFromCart(id));
-};
+  };
 
   const handleConfirmOrder = async (values: any) => {
     if (!agreeToTerms) {
@@ -87,7 +87,7 @@ const handleRemoveItem = (id: string) => {
             {cart.map((item) => (
               <CartItem
                 key={item._id}
-              
+
                 item={item}
                 onUpdateQuantity={handleUpdateQuantity}
                 onRemove={handleRemoveItem} />

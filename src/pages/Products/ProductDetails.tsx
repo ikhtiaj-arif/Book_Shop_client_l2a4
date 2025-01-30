@@ -3,14 +3,14 @@ import CryptoJS from 'crypto-js';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import CustomButton from '../../components/buttons/CustomButton';
-import CustomButtonS from '../../components/buttons/CustomButtonS';
 import QuantitySelector from '../../components/buttons/QuantitySelector';
+import CustomButtonS from '../../components/buttons/SecondaryBtn';
+import ServiceHeader from '../../components/ServiceHeader';
 import dummyBG from '../../img/Bookshop-pana.png';
 import { currentUser } from '../../redux/features/auth/authSlice';
 import { addToCart } from '../../redux/features/cart/cartSlice';
 import { useGetProductByIdQuery } from '../../redux/features/products/products.api';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
-import ServiceHeader from '../../components/ServiceHeader';
 
 const { Title, Text } = Typography;
 
@@ -76,7 +76,7 @@ const ProductDetails = () => {
   return (
     <div className="bg-background rounded-lg p-2 md:p-4 mx-auto">
       {/* Heading Section */}
-       <ServiceHeader title="Product Details" text="Discover more about this book and make it yours today." />
+      <ServiceHeader title="Product Details" text="Discover more about this book and make it yours today." />
 
       <div className='max-w-6xl mx-auto bg-white rounded-lg'>
         <Row gutter={[32, 32]} justify="center" align="top">

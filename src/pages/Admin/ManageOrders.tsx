@@ -1,8 +1,34 @@
-import { Table, Button, Space } from 'antd';
+import React from 'react';
+import { Table, Space, Modal, message } from 'antd';
+import { IoTrashBinSharp } from 'react-icons/io5';
+import CustomButtonSM from '../../components/buttons/CustomButtonSM';
 import { useGetOrdersQuery } from '../../redux/features/orders/order.api';
+import { useGetAllProductsQuery, useGetProductByIdQuery } from '../../redux/features/products/products.api';
 
-const ManageOrders = () => {
+// Define types for the order data
+interface Product {
+  product: string;
+  quantity: number;
+  _id: string;
+}
+
+interface Order {
+  _id: string;
+  user: string;
+  products: Product[];
+  totalPrice: number;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  transaction: {
+    id: string;
+    transactionStatus: string;
+  };
+}
+
+const ManageOrders: React.FC = () => {
   const { data: orderData, isLoading } = useGetOrdersQuery(undefined);
+  // const{data:allProducts} = useGetAllProductsQuery()
 
   if (isLoading) {
     return <>Loading...</>;
@@ -14,66 +40,68 @@ const ManageOrders = () => {
       title: 'Order ID',
       dataIndex: '_id',
       key: '_id',
-      render: (text) => <span style={{ wordBreak: 'break-word' }}>{text}</span>, // Wrap long text
+      render: (text: string) => <span style={{ wordBreak: 'break-word' }}>{text}</span>,
+    },
+ 
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      render: (text: string) => <span>{text}</span>,
     },
     {
-      title: 'Customer Email',
-      dataIndex: 'email',
-      key: 'email',
-    },
-    {
-      title: 'Product ID',
-      dataIndex: 'product',
-      key: 'product',
-    },
-    {
-      title: 'Quantity',
-      dataIndex: 'quantity',
-      key: 'quantity',
+      title: 'Products',
+      key: 'products',
+      render: (record: Order) => (
+        <ul>
+          {record.products.map((product) => (
+            <li key={product._id}>{`Product: ${product.product}, Quantity: ${product.quantity}`}</li>
+          ))}
+        </ul>
+      ),
     },
     {
       title: 'Total Price',
       dataIndex: 'totalPrice',
       key: 'totalPrice',
-      render: (text) => `$${text}`, // Format price
+      render: (text: number) => `$${text.toFixed(2)}`, // Format price
     },
     {
       title: 'Order Date',
-      dataIndex: 'created_at',
-      key: 'created_at',
-      render: (text) => new Date(text).toLocaleString(), // Format date
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      render: (text: string) => new Date(text).toLocaleString(), // Format date
     },
     {
       title: 'Actions',
       key: 'actions',
-      render: (_, record) => (
+      render: (_, record: Order) => (
         <Space>
-          <Button type="primary" size="small" onClick={() => handleView(record)}>
-            View
-          </Button>
-          <Button type="default" size="small" onClick={() => handleEdit(record)}>
-            Edit
-          </Button>
-          <Button type="text" size="small" onClick={() => handleDelete(record._id)}>
-            Delete
-          </Button>
+          <CustomButtonSM text="Edit" onClick={() => handleEdit(record)} />
+          <IoTrashBinSharp
+            className="text-red-500 cursor-pointer"
+            size={20}
+            onClick={() => handleDelete(record._id)}
+          />
         </Space>
       ),
     },
   ];
 
   // Event handlers for actions
-  const handleView = (record) => {
-    alert(`Viewing order: ${record._id}`);
-  };
-
-  const handleEdit = (record) => {
+  const handleEdit = (record: Order) => {
     alert(`Editing order: ${record._id}`);
+    // Add logic to edit the order here
   };
 
-  const handleDelete = (id) => {
-    alert(`Deleting order: ${id}`);
-    // Add logic to delete the order from backend here
+  const handleDelete = (id: string) => {
+    Modal.confirm({
+      title: 'Are you sure you want to delete this order?',
+      onOk: () => {
+        // Add logic to delete the order from backend here
+        message.success('Order deleted successfully');
+      },
+    });
   };
 
   return (
@@ -81,7 +109,7 @@ const ManageOrders = () => {
       <h1>Manage Orders</h1>
       <Table
         columns={columns}
-        dataSource={orderData?.data}
+        dataSource={orderData?.data} // Ensure this is the correct property that contains the orders
         rowKey="_id" // Use the `_id` field as the unique key for rows
         pagination={{
           pageSize: 5, // Set number of rows per page
