@@ -46,17 +46,17 @@ const AllProducts: React.FC = () => {
     });
 
     return (
-        <div className="bg-background min-h-screen p-2 md:p-8">
+        <div className="bg-background rounded-lg p-2 md:p-4 min-h-screen ">
             {/* Header Section */}
             <div className="bg-gradient-to-r from-primary-dark to-primary text-white rounded-lg shadow-md p-6 mb-8">
                 <h1 className="text-3xl font-bold">All Products</h1>
-                <p className="text-primary-fade">Discover and filter the books you love.</p>
+                <p className="text-white">Discover and filter the books you love.</p>
 
 
             </div>
 
             {/* Search and Filters */}
-            <div className="grid gap-4 grid-cols-1 md:grid-cols-4 mb-8">
+            <div className="max-w-6xl  mx-auto grid gap-4 grid-cols-1 md:grid-cols-4 mb-8">
                 <Search
                     placeholder="Search by title, author, or category"
                     allowClear
@@ -103,7 +103,7 @@ const AllProducts: React.FC = () => {
 
 
             {/* Product Cards */}
-            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="max-w-6xl  mx-auto pb-24 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {filteredProducts.map((product) => (
                     <ProductCard key={product._id} product={product} />
                 ))}

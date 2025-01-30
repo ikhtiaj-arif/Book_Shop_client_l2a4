@@ -2,8 +2,9 @@ import { Button, Card, Col, Divider, Input, Row, Tabs, Typography } from 'antd';
 import CryptoJS from 'crypto-js';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import CustomButton from '../../components/buttons/CustomButton';
+import CustomButtonS from '../../components/buttons/CustomButtonS';
 import QuantitySelector from '../../components/buttons/QuantitySelector';
-import TButton from '../../components/buttons/TButton';
 import dummyBG from '../../img/Bookshop-pana.png';
 import { currentUser } from '../../redux/features/auth/authSlice';
 import { addToCart } from '../../redux/features/cart/cartSlice';
@@ -62,101 +63,100 @@ const ProductDetails = () => {
   };
 
   return (
-    <div className="bg-white py-8 px-4 lg:px-8  mx-auto">
+    <div className="bg-background rounded-lg p-2 md:p-4 mx-auto">
       {/* Heading Section */}
       <div className="bg-gradient-to-r from-primary-dark to-primary text-white rounded-lg shadow-md p-6 mb-8">
         <h1 className="text-3xl font-bold">Product Details</h1>
-        <p className="text-primary-fade">Discover more about this book and make it yours today.</p>
+        <p className="text-white">Discover more about this book and make it yours today.</p>
       </div>
 
-      <Row gutter={[32, 32]} justify="center" align="top">
-        {/* Product Image */}
-        <Col xs={24} md={11} className="">
-          <Card
-            style={{ border: 0 }}
-            cover={
-              <img
-                alt={product.title}
-                src={product.image || dummyBG}
-                className="w-full h-full max-w-[32rem] object-cover "
-              />
-            }
-            className=""
-          >
-          </Card>
-        </Col>
+      <div className='max-w-6xl mx-auto bg-white rounded-lg'>
+        <Row gutter={[32, 32]} justify="center" align="top">
+          {/* Product Image */}
+          <Col xs={24} md={11} className="">
+            <Card
+              style={{ border: 0 }}
+              cover={
+                <img
+                  alt={product.title}
+                  src={product.image || dummyBG}
+                  className="w-full h-full max-w-[32rem] object-cover "
+                />
+              }
+              className=""
+            >
+            </Card>
+          </Col>
 
-        {/* Product Details */}
-        <Col xs={24} md={11} className=" p-6">
-          <Card bordered={false} style={{ border: 0, boxShadow: 'none' }} className="h-full">
-            <p className="text-center font-bold text-3xl text-text">{product.title}</p>
-            <Text strong className="text-text">{product.author} </Text>
-            <div className="mb-4">
+          {/* Product Details */}
+          <Col xs={24} md={11} className=" p-6">
+            <Card bordered={false} style={{ border: 0, boxShadow: 'none' }} className="h-full">
+              <p className="text-center font-bold text-3xl text-text">{product.title}</p>
+              <Text strong className="text-text">{product.author} </Text>
+              <div className="mb-4">
 
-              <Text className="text-text-accent">{product.category || ''}</Text>
-            </div>
-            <Divider className="my-4" />
+                <Text className="text-text-accent">{product.category || ''}</Text>
+              </div>
+              <Divider className="my-4" />
 
-            {/* Price */}
-
-
-
-
-            {/* Availability */}
-            <div className="mb-4 flex justify-between items-center">
-
-
-              <Text className="text-text font-semibold text-lg">${product.price}</Text>
-              <Text
-                className={`font-semibold ${product.inStock ? 'text-primary' : 'text-red-500'}`}
-              >
-                {product.inStock ? 'In Stock' : 'Out of Stock'}
-              </Text>
-            </div>
-            <div className="mb-4">
+              {/* Price */}
 
 
 
-              <QuantitySelector
-                className='w-24'
-                quantity={selectedQuantity}
-                maxQuantity={product.quantity}
-                onIncrease={() => setSelectedQuantity((prev) => Math.min(prev + 1, product.quantity))}
-                onDecrease={() => setSelectedQuantity((prev) => Math.max(prev - 1, 1))}
-                onChange={(value) => setSelectedQuantity(value)}
-              />
-            </div>
 
-            {/* Buttons */}
-            <div className="mt-auto w-full flex items-center space-x-4">
+              {/* Availability */}
+              <div className="mb-4 flex justify-between items-center">
 
-              <TButton
-                text={product.inStock ? 'Buy Now' : 'Out of Stock'}
-                onClick={handleBuyNow}
-                primaryColor="primary"
-                accentColor="accent"
-                disabled={!product.inStock}
-                className="w-full max-w-[200px]  text-white rounded-lg shadow-md"
-              />
-              <TButton
-                text="Add to Cart"
-                onClick={handleAddToCart}
-                primaryColor="secondary"
-                accentColor="accent"
-                className="w-full max-w-[200px] text-white rounded-lg shadow-md"
-              />
-            </div>
-          </Card>
-        </Col>
-      </Row>
+
+                <Text className="text-text font-semibold text-lg">${product.price}</Text>
+                <Text
+                  className={`font-semibold ${product.inStock ? 'text-primary' : 'text-red-500'}`}
+                >
+                  {product.inStock ? 'In Stock' : 'Out of Stock'}
+                </Text>
+              </div>
+              <div className="mb-4">
+
+
+
+                <QuantitySelector
+                  className='w-24'
+                  quantity={selectedQuantity}
+                  maxQuantity={product.quantity}
+                  onIncrease={() => setSelectedQuantity((prev) => Math.min(prev + 1, product.quantity))}
+                  onDecrease={() => setSelectedQuantity((prev) => Math.max(prev - 1, 1))}
+                  onChange={(value) => setSelectedQuantity(value)}
+                />
+              </div>
+
+              {/* Buttons */}
+              <div className="mt-auto w-full flex items-center space-x-4">
+
+                <CustomButton
+                  text={product.inStock ? 'Buy Now' : 'Out of Stock'}
+                  onClick={handleBuyNow}
+                  disabled={!product.inStock}
+                />
+                <CustomButtonS
+                  text="Add to Cart"
+                  onClick={handleAddToCart}
+                  type="default"
+
+                />
+              </div>
+            </Card>
+          </Col>
+        </Row>
+      </div>
+
       {/* tabs section */}
 
       {/* Tabs Section */}
-      <div className="mt-12">
+      <div className="mt-8 max-w-6xl mx-auto h-[70vh]">
         <Tabs
           activeKey={activeTab}
           onChange={setActiveTab}
-        
+
           tabBarStyle={{ fontSize: "1.5rem", fontWeight: "bold" }} // Tailwind equivalent: text-2xl font-bold
           className="custom-tabs"
         >

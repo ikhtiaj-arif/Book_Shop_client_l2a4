@@ -1,15 +1,18 @@
-import { Button, Card, Col, Row } from 'antd';
+import { Card, Col, Row } from 'antd';
 import { useState } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import BookShopInput from '../components/form/BookShopInput';
+import CustomButton from '../components/buttons/CustomButtonLogin';
+import BSInput from '../components/form/BSInputLogin';
 import PHForm from '../components/form/PHForm';
 import loginIllustration from '../img/Bookshop-pana.png';
 import { useLoginMutation, useRegistrationMutation } from '../redux/features/auth/authApi';
 import { setUser, TUser } from '../redux/features/auth/authSlice';
 import { useAppDispatch } from '../redux/hooks';
 import { verifyToken } from '../utils/verifyToken';
+import BSInputLogin from '../components/form/BSInputLogin';
+import CustomButtonLogin from '../components/buttons/CustomButtonLogin';
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true); // Toggle state
@@ -99,7 +102,7 @@ const AuthPage = () => {
               defaultValues={isLogin ? defaultLoginValues : defaultRegisterValues}
             >
               {!isLogin && (
-                <BookShopInput
+                <BSInput
                   placeholder='Enter your name'
                   type="text"
                   name="name"
@@ -107,27 +110,28 @@ const AuthPage = () => {
 
                 />
               )}
-              <BookShopInput
+              <BSInputLogin
                 placeholder='Enter your email'
                 type="text"
                 name="email"
                 label="Email"
 
               />
-              <BookShopInput
+              <BSInputLogin
                 placeholder='Enter your password'
                 type="password"
                 name="password"
                 label="Password"
 
               />
-              <Button
+              {/* <Button
                 htmlType="submit"
                 type="primary"
-                className="w-full py-2 h-12 px-4 mt-auto text-white font-semibold rounded-lg shadow-md bg-gradient-to-r from-primary-dark to-accent !hover:from-primary !hover:to-secondary transition-all"
+                className="w-full py-2 h-12 px-4 mt-auto text-white font-semibold rounded-lg shadow-md bg-gradient-to-r from-primary-dark to-primary hover:from-primary hover:to-primary-dark transition-all"
               >
                 {isLogin ? 'Login' : 'Register'}
-              </Button>
+              </Button> */}
+              <CustomButtonLogin isLogin={isLogin} />
             </PHForm>
             <div className="text-center mt-4">
               <p className="text-sm text-gray-600">
@@ -136,7 +140,7 @@ const AuthPage = () => {
                   : 'Already have an account?'}{' '}
                 <span
                   onClick={() => setIsLogin(!isLogin)}
-                  className="text-secondary font-medium cursor-pointer hover:underline"
+                  className="text-primary font-medium cursor-pointer hover:underline"
                 >
                   {isLogin ? 'Register here' : 'Login here'}
                 </span>
