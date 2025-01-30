@@ -1,6 +1,6 @@
 import { Button, Card, Col, Divider, Input, Row, Tabs, Typography } from 'antd';
 import CryptoJS from 'crypto-js';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import CustomButton from '../../components/buttons/CustomButton';
 import CustomButtonS from '../../components/buttons/CustomButtonS';
@@ -18,6 +18,8 @@ const ProductDetails = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector(currentUser)
+  const cart = useAppSelector((state) => state.cart.items);
+
   const [selectedQuantity, setSelectedQuantity] = useState<number>(1);
   const [activeTab, setActiveTab] = useState("details");
   const [reviews, setReviews] = useState<string[]>([]);
@@ -25,13 +27,24 @@ const ProductDetails = () => {
 
   const { data: productData, isLoading, isError } = useGetProductByIdQuery(id);
   const product = productData?.data;
+  const currentCartItem = cart.find(item => item._id === product?._id)
 
-  console.log(product);
+  console.log(currentCartItem);
+
+  useEffect(() => {
+    if (currentCartItem) setSelectedQuantity(currentCartItem?.orderQuantity as number)
+  }, [currentCartItem?.orderQuantity, currentCartItem])
 
   if (isLoading) return <p>Loading...</p>;
   if (isError || !product) return <p>Product not found.</p>;
 
   const handleBuyNow = () => {
+    // Add the product to the cart with selected quantity
+    dispatch(addToCart({
+      product,
+      quantity: selectedQuantity,
+    }));
+
     // Encrypt product info
     const encryptedData = CryptoJS.AES.encrypt(
       JSON.stringify(product),
@@ -47,11 +60,8 @@ const ProductDetails = () => {
 
   const handleAddToCart = () => {
     dispatch(addToCart({
-
       product,
       quantity: selectedQuantity,
-
-
     }));
   };
 

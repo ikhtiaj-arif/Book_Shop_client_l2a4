@@ -7,9 +7,9 @@ import CustomButtonS from "../../components/buttons/CustomButtonS";
 import CartItem from "../../components/cart/Cart";
 import BSInput from "../../components/form/BSInput";
 import { currentUser, TUser } from "../../redux/features/auth/authSlice";
-import { useCurrentCartProduct } from "../../redux/features/cart/cartSlice";
+import { removeFromCart, updateQuantity, useCurrentCartProduct } from "../../redux/features/cart/cartSlice";
 import { useCreateOrderMutation } from "../../redux/features/orders/order.api";
-import { useAppSelector } from "../../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { processCart } from "../../utils/CartGenerator";
 
 
@@ -22,6 +22,15 @@ const CheckoutPage: React.FC = () => {
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [createOrder, { isLoading, isSuccess, data, isError, error }] = useCreateOrderMutation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch()
+
+  const handleUpdateQuantity = (id: string, quantity: number) => {
+    dispatch(updateQuantity({ id, quantity }));
+};
+
+const handleRemoveItem = (id: string) => {
+    dispatch(removeFromCart(id));
+};
 
   const handleConfirmOrder = async (values: any) => {
     if (!agreeToTerms) {
@@ -79,7 +88,12 @@ const CheckoutPage: React.FC = () => {
         <Card title="Order Summary" className="shadow-sm mx-10">
           <div className="space-y-4">
             {cart.map((item) => (
-              <CartItem key={item._id} item={item} onUpdateQuantity={() => { }} onRemove={() => { }} />
+              <CartItem
+                key={item._id}
+              
+                item={item}
+                onUpdateQuantity={handleUpdateQuantity}
+                onRemove={handleRemoveItem} />
             ))}
           </div>
           <Divider />
