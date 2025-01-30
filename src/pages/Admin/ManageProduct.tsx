@@ -1,12 +1,33 @@
+import { UploadOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Form, Modal, Space, Table, Upload } from 'antd';
 import { useEffect, useState } from 'react';
+import { IoTrashBinSharp } from "react-icons/io5";
+import { toast } from 'sonner';
+import ServiceHeader from '../../components/ServiceHeader';
+import CustomButton from '../../components/buttons/CustomButton';
+import CustomButtonSM from '../../components/buttons/CustomButtonSM';
+import BSInput from '../../components/form/BSInput';
+import { useAddProductMutation, useDeleteProductMutation, useGetAllProductsQuery, useUpdateProductMutation } from '../../redux/features/products/products.api';
 
-import { Button, Form, Input, InputNumber, Modal, Space, Table } from 'antd';
-import { useAddProductMutation, useGetAllProductsQuery } from '../../redux/features/products/products.api';
+// Define product type
+interface Product {
+    _id: string;
+    title: string;
+    author: string;
+    price: number;
+    inStock: boolean;
+    category: string;
+    description: string;
+}
 
 const ManageProduct = () => {
     const { data: allProductData, isLoading } = useGetAllProductsQuery(undefined);
-    const [products, setProducts] = useState([]);
-    const [createProduct] = useAddProductMutation()
+    const [products, setProducts] = useState<Product[]>([]);
+
+    // Mutations
+    const [addProduct, { isLoading: isAdding }] = useAddProductMutation();
+    const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
+    const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
 
     useEffect(() => {
         if (allProductData?.data) {
@@ -15,43 +36,77 @@ const ManageProduct = () => {
     }, [allProductData]);
 
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [editingProduct, setEditingProduct] = useState(null);
+    const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+
+    const toastId = 'manageOrders'
 
     // Handle form submit for adding/updating a product
-    const handleFormSubmit = async (values) => {
+    const handleFormSubmit = async (values: Omit<Product, "_id">) => {
         const productData = {
             ...values,
-            description: values.description || '', // Add description field
-            inStock: values.inStock || false, // Handle checkbox boolean
+            description: values.description || '',
+            inStock: values.inStock || false,
         };
-        console.log(productData);
+
         try {
-            const response = await createProduct(productData)
+            if (editingProduct) {
+                // Updating an existing product
 
 
+                // const data = { id: editingProduct._id, data:productData }
+                // console.log(data);
+                // return
 
+                await updateProduct({ id: editingProduct._id, data: productData }).unwrap();
+                setProducts((prevProducts) =>
+                    prevProducts.map((prod) =>
+                        prod._id === editingProduct._id ? { ...prod, ...productData } : prod
+                    )
+                );
+                toast.success("Product updated successfully!", { id: toastId });
+            } else {
+                // Adding a new product
+                const newProduct = await addProduct(productData).unwrap();
+                setProducts((prevProducts) => [newProduct, ...prevProducts]);
+                toast.success("Product added successfully!", { id: toastId });
+            }
 
-            const newProduct = await response.json();
-
-            setProducts((prevProducts) => [newProduct, ...prevProducts]); // Add the new product to the list
-            setIsModalVisible(false); // Close the modal
-            setEditingProduct(null); // Reset editing state
-
+            setIsModalVisible(false);
+            setEditingProduct(null);
         } catch (error) {
-            console.error('Error adding product:', error);
+            console.error("Error saving product:", error);
+            toast.error("Failed to save product.", { id: toastId });
         }
     };
 
-
     // Handle Edit button click
-    const handleEdit = (record) => {
+    const handleEdit = (record: Product) => {
         setEditingProduct(record);
         setIsModalVisible(true);
     };
 
     // Handle Delete button click
-    const handleDelete = (id) => {
-        setProducts((prevProducts) => prevProducts.filter((product) => product._id !== id));
+    const handleDelete = (id: string) => {
+        Modal.confirm({
+            title: 'Are you sure you want to delete this product?',
+            content: 'This action cannot be undone.',
+            okText: 'Yes, Delete',
+            okType: 'danger',
+            cancelText: 'Cancel',
+            onOk: async () => {
+                try {
+                    // Call the delete mutation
+                    await deleteProduct(id).unwrap();
+                    // Update the state by removing the deleted product
+                    setProducts((prevProducts) => prevProducts.filter((product) => product._id !== id));
+                    // Show success message
+                    toast.success("Product deleted successfully!", { id: toastId });
+                } catch (error) {
+                    console.error("Error deleting product:", error);
+                    toast.error("Failed to delete product.", { id: toastId });
+                }
+            },
+        });
     };
 
     // Handle Add New Product button click
@@ -63,53 +118,27 @@ const ManageProduct = () => {
 
     // Table columns
     const columns = [
+        { title: "Title", dataIndex: "title", key: "title" },
+        { title: "Author", dataIndex: "author", key: "author" },
+        { title: "Price", dataIndex: "price", key: "price" },
         {
-            title: 'Title',
-            dataIndex: 'title',
-            key: 'title',
+            title: "Stock",
+            dataIndex: "inStock",
+            key: "inStock",
+            render: (inStock: boolean) => <Checkbox checked={inStock} disabled />,
         },
+        { title: "Category", dataIndex: "category", key: "category" },
         {
-            title: 'Author',
-            dataIndex: 'author',
-            key: 'author',
-        },
-        {
-            title: 'Price',
-            dataIndex: 'price',
-            key: 'price',
-            render: (text) => `$${text}`,
-        },
-        {
-            title: 'Category',
-            dataIndex: 'category',
-            key: 'category',
-        },
-        {
-            title: 'Quantity',
-            dataIndex: 'quantity',
-            key: 'quantity',
-        },
-        {
-            title: 'In Stock',
-            dataIndex: 'inStock',
-            key: 'inStock',
-            render: (text) => (text ? 'Yes' : 'No'),
-        },
-        {
-            title: 'Actions',
-            key: 'actions',
-            render: (_, record) => (
+            title: "Actions",
+            key: "actions",
+            render: (_, record: Product) => (
                 <Space>
-                    <Button type="primary" size="small" onClick={() => handleEdit(record)}>
-                        Edit
-                    </Button>
-                    <Button type="danger" size="small" onClick={() => handleDelete(record._id)}>
-                        Delete
-                    </Button>
+                    <CustomButtonSM text="Edit" onClick={() => handleEdit(record)} />
+                    <IoTrashBinSharp className="text-red-500 cursor-pointer" size={20} onClick={() => handleDelete(record._id)} />
                 </Space>
             ),
         },
-    ];
+    ]
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -117,10 +146,14 @@ const ManageProduct = () => {
 
     return (
         <div style={{ padding: '20px' }}>
-            <h1>Manage Products</h1>
-            <Button type="primary" style={{ marginBottom: '20px' }} onClick={handleAddNew}>
-                Add New Product
-            </Button>
+            <ServiceHeader title="Manage Products" text="Discover more about this book and make it yours today." />
+            <div className='w-full md:w-[12rem] mb-8'>
+
+
+                <CustomButton text={'Add New Product'} onClick={handleAddNew} />
+            </div>
+
+
             <Table
                 columns={columns}
                 dataSource={products}
@@ -139,49 +172,41 @@ const ManageProduct = () => {
                 <Form
                     layout="vertical"
                     onFinish={handleFormSubmit}
-                    initialValues={
-                        editingProduct || {
-                            title: '',
-                            author: '',
-                            price: 0,
-                            category: '',
-                            description: '',
-                            quantity: 0,
-                            inStock: false,
-                        }
-                    }
+                    initialValues={editingProduct || {
+                        title: '',
+                        author: '',
+                        price: 0,
+                        category: '',
+                        description: '',
+                        quantity: 0,
+                        inStock: false,
+                    }}
+                    key={editingProduct?._id} // Ensure re-render when editingProduct changes
                 >
-                    <Form.Item name="title" label="Title" rules={[{ required: true, message: 'Please enter the product title' }]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="author" label="Author" rules={[{ required: true, message: 'Please enter the author' }]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="price" label="Price" rules={[{ required: true, message: 'Please enter the price' }]}>
-                        <InputNumber min={0} style={{ width: '100%' }} />
-                    </Form.Item>
-                    <Form.Item name="category" label="Category" rules={[{ required: true, message: 'Please enter the category' }]}>
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        name="description"
-                        label="Description"
-                        rules={[{ required: true, message: 'Please enter the description' }]}
-                    >
-                        <Input.TextArea rows={4} />
-                    </Form.Item>
-                    <Form.Item name="quantity" label="Quantity" rules={[{ required: true, message: 'Please enter the quantity' }]}>
-                        <InputNumber min={0} style={{ width: '100%' }} />
-                    </Form.Item>
+                    <BSInput type="text" name="title" label="Title" placeholder="Enter product title" rules={[{ required: true, message: 'Please enter the product title' }]} />
+                    <BSInput type="text" name="author" label="Author" placeholder="Enter author name" rules={[{ required: true, message: 'Please enter the author' }]} />
+                    <BSInput type="number" name="price" label="Price" min={0} placeholder="Enter price" rules={[{ required: true, message: 'Please enter the price' }]} />
+                    <BSInput type="text" name="category" label="Category" placeholder="Enter category" rules={[{ required: true, message: 'Please enter the category' }]} />
+                    <BSInput type="text" name="description" label="Description" placeholder="Enter description" rules={[{ required: true, message: 'Please enter the description' }]} />
+                    <BSInput type="number" name="quantity" label="Quantity" min={0} placeholder="Enter quantity" rules={[{ required: true, message: 'Please enter the quantity' }]} />
                     <Form.Item name="inStock" valuePropName="checked" label="In Stock">
-                        <Input type="checkbox" />
+                        <Checkbox />
+                    </Form.Item>
+                    <Form.Item name="image" label="Product Image" valuePropName="fileList" getValueFromEvent={(e) => e?.fileList}>
+                        <Upload beforeUpload={() => false} listType="picture">
+                            <Button icon={<UploadOutlined />}>Upload Image</Button>
+                        </Upload>
                     </Form.Item>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" block>
-                            {editingProduct ? 'Update Product' : 'Add Product'}
-                        </Button>
+                        <div className='max-w-[20rem] mx-auto'>
+
+                            <CustomButton type="primary" htmlType="submit" block text={editingProduct ? 'Update Product' : 'Add Product'} />
+                        </div>
+
+
                     </Form.Item>
                 </Form>
+
 
             </Modal>
         </div>

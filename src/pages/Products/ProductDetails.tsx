@@ -10,6 +10,7 @@ import { currentUser } from '../../redux/features/auth/authSlice';
 import { addToCart } from '../../redux/features/cart/cartSlice';
 import { useGetProductByIdQuery } from '../../redux/features/products/products.api';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import ServiceHeader from '../../components/ServiceHeader';
 
 const { Title, Text } = Typography;
 
@@ -75,10 +76,7 @@ const ProductDetails = () => {
   return (
     <div className="bg-background rounded-lg p-2 md:p-4 mx-auto">
       {/* Heading Section */}
-      <div className="bg-gradient-to-r from-primary-dark to-primary text-white rounded-lg shadow-md p-6 mb-8">
-        <h1 className="text-3xl font-bold">Product Details</h1>
-        <p className="text-white">Discover more about this book and make it yours today.</p>
-      </div>
+       <ServiceHeader title="Product Details" text="Discover more about this book and make it yours today." />
 
       <div className='max-w-6xl mx-auto bg-white rounded-lg'>
         <Row gutter={[32, 32]} justify="center" align="top">
