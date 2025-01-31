@@ -1,5 +1,5 @@
 import { UploadOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Modal, Space, Table, Upload, UploadFile, UploadProps } from 'antd';
+import { Button, Checkbox, Col, Form, Modal, Row, Select, Space, Table, Upload, UploadFile, UploadProps } from 'antd';
 import { RcFile } from 'antd/es/upload';
 import { useEffect, useState } from 'react';
 import { IoTrashBinSharp } from "react-icons/io5";
@@ -47,7 +47,7 @@ const ManageProduct = () => {
     // Handle form submit for adding/updating a product
     const handleFormSubmit = async (values: Omit<Product, "_id">) => {
         try {
-            toast.loading("Uploading image...");
+            toast.loading("Uploading image...", { id: toastId });
 
             let imageUrl = editingProduct?.imageUrl || ""; // Keep existing image if not changed
 
@@ -137,9 +137,9 @@ const ManageProduct = () => {
         { title: "Price", dataIndex: "price", key: "price" },
         {
             title: "Stock",
-            dataIndex: "inStock",
-            key: "inStock",
-            render: (inStock: boolean) => <Checkbox checked={inStock} disabled />,
+            dataIndex: "quantity",
+            key: "quantity",
+
         },
         { title: "Category", dataIndex: "category", key: "category" },
         {
@@ -153,6 +153,7 @@ const ManageProduct = () => {
             ),
         },
     ]
+    const categories = ['Fiction', 'Science', 'SelfDevelopment', 'Poetry', 'Religious'];
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -195,34 +196,68 @@ const ManageProduct = () => {
                         quantity: 0,
                         inStock: false,
                     }}
-                    key={editingProduct?._id} // Ensure re-render when editingProduct changes
+                    key={editingProduct?._id}
                 >
-                    <BSInput type="text" name="title" label="Title" placeholder="Enter product title" rules={[{ required: true, message: 'Please enter the product title' }]} />
-                    <BSInput type="text" name="author" label="Author" placeholder="Enter author name" rules={[{ required: true, message: 'Please enter the author' }]} />
-                    <BSInput type="number" name="price" label="Price" min={0} placeholder="Enter price" rules={[{ required: true, message: 'Please enter the price' }]} />
-                    <BSInput type="text" name="category" label="Category" placeholder="Enter category" rules={[{ required: true, message: 'Please enter the category' }]} />
-                    <BSInput type="text" name="description" label="Description" placeholder="Enter description" rules={[{ required: true, message: 'Please enter the description' }]} />
-                    <BSInput type="number" name="quantity" label="Quantity" min={0} placeholder="Enter quantity" rules={[{ required: true, message: 'Please enter the quantity' }]} />
-                    <Form.Item name="inStock" valuePropName="checked" label="In Stock">
-                        <Checkbox />
-                    </Form.Item>
-                    <Form.Item name="image" label="Product Image" valuePropName="fileList" getValueFromEvent={(e) => e?.fileList}>
-                        <Upload
-                            beforeUpload={() => false} // Prevent auto-upload
-                            listType="picture"
-                            fileList={fileList}
-                            onChange={handleFileChange} // Handle file selection
-                        >
-                            <Button icon={<UploadOutlined />}>Upload Image</Button>
-                        </Upload>
-                    </Form.Item>
-                    <Form.Item>
-                        <div className='max-w-[20rem] mx-auto'>
+                    <Row gutter={[24, 0]}>
+                        {/* Left Column */}
+                        <Col xs={24} md={12}>
+                            <BSInput type="text" name="title" label="Title" placeholder="Enter product title" rules={[{ required: true, message: 'Please enter the product title' }]} />
+                        </Col>
+                        <Col xs={24} md={12}>
+                            <BSInput type="text" name="author" label="Author" placeholder="Enter author name" rules={[{ required: true, message: 'Please enter the author' }]} />
+                        </Col>
 
+                        <Col xs={24} md={12}>
+                            <BSInput type="number" name="price" label="Price" min={0} placeholder="Enter price" rules={[{ required: true, message: 'Please enter the price' }]} />
+                        </Col>
+                        <Col xs={24} md={12}>
+                            <Form.Item name="category" label="Category" rules={[{ required: true, message: 'Please select a category' }]}>
+                                <Select placeholder="Select category" className="w-full h-12 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:outline-none">
+                                    {categories.map((cat) => (
+                                        <Select.Option key={cat} value={cat}>
+                                            {cat}
+                                        </Select.Option>
+                                    ))}
+                                </Select>
+                            </Form.Item>
+                        </Col>
+
+                        <Col xs={24} md={12}>
+                            <BSInput type="textarea" name="description" label="Description" placeholder="Enter description" rules={[{ required: true, message: 'Please enter the description' }]} />
+                        </Col>
+                        <Col xs={24} md={12}>
+                            <BSInput type="number" name="quantity" label="Quantity" min={0} placeholder="Enter quantity" rules={[{ required: true, message: 'Please enter the quantity' }]} />
+                        </Col>
+
+                        <Col xs={24} md={12}>
+                            <Form.Item name="inStock" valuePropName="checked">
+                                <Checkbox>In Stock</Checkbox>
+                            </Form.Item>
+                        </Col>
+                        <Col xs={24} md={12}>
+                        
+                            <Form.Item name="image" label="" className='' valuePropName="fileList" getValueFromEvent={(e) => e?.fileList}>
+                        
+
+                                <Upload
+                                    beforeUpload={() => false}
+                                  
+                                    listType="picture"
+                                    fileList={fileList}
+                                    onChange={handleFileChange}
+                                    >
+                                    <Button className='h-12' icon={<UploadOutlined />}>Upload Image</Button>
+                                </Upload>
+                                 
+                            </Form.Item>
+                        </Col>
+                    </Row>
+
+
+                    <Form.Item>
+                        <div className="max-w-[20rem] mx-auto">
                             <CustomButton type="primary" htmlType="submit" block text={editingProduct ? 'Update Product' : 'Add Product'} />
                         </div>
-
-
                     </Form.Item>
                 </Form>
 

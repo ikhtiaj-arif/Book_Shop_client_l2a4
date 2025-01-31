@@ -14,9 +14,15 @@ const productManagementApi = baseApi.injectEndpoints({
           url: "/products",
           method: "GET",
           params: params,
+          
         };
+        
       },
+
+     providesTags: ['product']
     }),
+
+
     getProductById: builder.query({
       query: (id) => ({
         url: `/products/${id}`,
@@ -29,6 +35,7 @@ const productManagementApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags:  ['product'],
     }),
     updateProduct: builder.mutation({
       query: ({ id, data }) => ({
@@ -36,12 +43,14 @@ const productManagementApi = baseApi.injectEndpoints({
         method: "PUT",
         body: data,
       }),
+      invalidatesTags:  ['product'],
     }),
     deleteProduct: builder.mutation({
       query: (id) => ({
         url: `/products/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags:  ['product'],
     }),
   }),
 });

@@ -14,8 +14,6 @@ const { Option } = Select;
 
 const AllProducts: React.FC = () => {
     const { data: allProductData, isLoading } = useGetAllProductsQuery(undefined);
-
-
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
     const [selectedAuthor, setSelectedAuthor] = useState<string | undefined>(undefined);

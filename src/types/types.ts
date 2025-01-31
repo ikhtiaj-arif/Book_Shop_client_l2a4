@@ -7,7 +7,7 @@ export interface IProduct {
   quantity: number;
   inStock: boolean;
   description: string;
-  image: string;
+  imageUrl: string;
   // inStock:boolean
 }
 
