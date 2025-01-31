@@ -1,6 +1,9 @@
-import { Button } from "antd";
+import { Button, ButtonProps } from "antd";
+interface CustomButtonProps extends ButtonProps {
+    text: string;
+}
 
-const SecondaryBtnSM = ({ text, onClick, loading = false, disabled = false, type = "primary" }) => {
+const SecondaryBtnSM: React.FC<CustomButtonProps> = ({ text, onClick, loading = false, disabled = false, type = "primary" }) => {
     return (
         <Button
             htmlType="submit"

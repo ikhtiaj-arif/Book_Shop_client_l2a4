@@ -1,7 +1,7 @@
 import { Table } from 'antd';
 import { useParams } from 'react-router-dom';
-import { useViewOrdersQuery } from '../../redux/features/orders/order.api';
 import ServiceHeader from '../../components/ServiceHeader';
+import { useViewOrdersQuery } from '../../redux/features/orders/order.api';
 
 const ViewOrders = () => {
     const { id } = useParams()
@@ -14,7 +14,7 @@ const ViewOrders = () => {
             title: 'Transaction ID',
             dataIndex: ['transaction', 'id'],
             key: '_id',
-            render: (text) => <span style={{ wordBreak: 'break-word' }}>{text}</span>, // Wrap long text
+            render: (text?: string) => <span style={{ wordBreak: 'break-word' }}>{text}</span>, // Wrap long text
         },
         {
             title: 'Amount',
@@ -30,7 +30,7 @@ const ViewOrders = () => {
 
     return (
         <div style={{ padding: '20px' }}>
-               <ServiceHeader title="Orders History" text="Discover more about this book and make it yours today." />
+            <ServiceHeader title="My Orders" text="Discover more about this book and make it yours today." />
             <Table
                 columns={columns}
                 dataSource={orders}

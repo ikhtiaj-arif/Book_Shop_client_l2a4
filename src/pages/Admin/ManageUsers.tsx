@@ -1,25 +1,62 @@
-import { Modal, Space, Table, message } from 'antd';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { message, Modal, Skeleton, Space, Table } from 'antd';
 import React from 'react';
 import CustomButtonSM from '../../components/buttons/CustomButtonSM';
 import SecondaryBtnSM from '../../components/buttons/SecondaryBtnSm';
+import ServiceHeader from '../../components/ServiceHeader';
 import { currentUser } from '../../redux/features/auth/authSlice';
 import { useBlockUserMutation, useGetAllUsersQuery, useUnblockUserMutation } from '../../redux/features/user/userApi';
 import { useAppSelector } from '../../redux/hooks';
-import ServiceHeader from '../../components/ServiceHeader';
 
+// Define a TypeScript interface for User
+interface User {
+    _id: string;
+    name: string;
+    email: string;
+    role: string;
+    isBlocked: boolean;
+}
 
 const ManageUsers: React.FC = () => {
     const { data, isLoading } = useGetAllUsersQuery(undefined);
-    const [blockUser] = useBlockUserMutation();
-    const [unblockUser] = useUnblockUserMutation();
-    const user = useAppSelector(currentUser)
-    console.log(user);
+    const [blockUser, { isLoading: isBlocking }] = useBlockUserMutation();
+    const [unblockUser, { isLoading: isUnblocking }] = useUnblockUserMutation();
+    const user = useAppSelector(currentUser);
 
-    const userData = data?.data;
+    const userData: User[] = data?.data || [];
 
+    // Skeleton loader while fetching data
     if (isLoading) {
-        return <>Loading...</>;
+        return (
+            <div style={{ padding: '20px' }}>
+                <ServiceHeader title="Manage Users" text="Discover more about this book and make it yours today." />
+                <Skeleton active paragraph={{ rows: 5 }} />
+            </div>
+        );
     }
+
+    // Event handler for block/unblock users
+    const handleBlockUnblock = async (id: string, isBlocked: boolean) => {
+        Modal.confirm({
+            title: `Are you sure you want to ${isBlocked ? 'unblock' : 'block'} this user?`,
+            content: `This will change the user's status to ${isBlocked ? 'active' : 'blocked'}.`,
+            onOk: async () => {
+                try {
+                    if (isBlocked) {
+                        await unblockUser({ id }).unwrap();
+                        message.success('User unblocked successfully!');
+                    } else {
+                        await blockUser({ id }).unwrap();
+                        message.success('User blocked successfully!');
+                    }
+                } catch (error) {
+                    message.error(`Failed to ${isBlocked ? 'unblock' : 'block'} user.`);
+                 
+                }
+            },
+        });
+    };
 
     // Define table columns
     const columns = [
@@ -48,70 +85,42 @@ const ManageUsers: React.FC = () => {
             title: 'Status',
             dataIndex: 'isBlocked',
             key: 'isBlocked',
-            render: (isBlocked: boolean) => (
-                <span>{isBlocked ? 'Blocked' : 'Active'}</span>
-            ),
+            render: (isBlocked: boolean) => <span>{isBlocked ? 'Blocked' : 'Active'}</span>,
         },
         {
             title: 'Actions',
             key: 'actions',
-            render: (_, record: any) => (
+            render: (_: any, record: User) => (
                 <Space>
                     {/* Conditionally render Block/Unblock button based on the user's status */}
-                    {!record.isBlocked
-                        ? (
-                            <CustomButtonSM
-                                text=' Block'
-                                type=''
-                                disabled={user?.role === 'admin'}
-                                onClick={() => handleBlockUnblock(record._id, false)} // Pass false to block
-                            />
-
-
-                        ) : (
-                            <SecondaryBtnSM
-                                text="Unblock"
-                                type=''
-                                onClick={() => handleBlockUnblock(record._id, true)} // Pass true to unblock
-                            />
-
-                        )}
+                    {!record.isBlocked ? (
+                        <CustomButtonSM
+                            text="Block"
+                            type="default"
+                            disabled={user?.role !== 'superadmin' || isBlocking}
+                            onClick={() => handleBlockUnblock(record._id, false)}
+                        />
+                    ) : (
+                        <SecondaryBtnSM
+                            text="Unblock"
+                            type="default"
+                            disabled={isUnblocking}
+                            onClick={() => handleBlockUnblock(record._id, true)}
+                        />
+                    )}
                 </Space>
             ),
         },
     ];
 
-    // Event handler for block/unblock with confirmation and toast notifications
-    const handleBlockUnblock = (id: string, isBlocked: boolean) => {
-        Modal.confirm({
-            title: `Are you sure you want to ${isBlocked ? 'unblock' : 'block'} this user?`,
-            content: `This will change the user's status to ${isBlocked ? 'active' : 'blocked'}.`,
-            onOk: () => {
-                const action = isBlocked ? unblockUser : blockUser;
-                action({ id })
-                    .then(() => {
-                        message.success(`User ${isBlocked ? 'unblocked' : 'blocked'} successfully!`); // Toast on success
-                    })
-                    .catch((err) => {
-                        message.error(`Failed to ${isBlocked ? 'unblock' : 'block'} user`); // Toast on error
-                    });
-            },
-            onCancel: () => {
-                message.info('Action cancelled');
-            },
-        });
-    };
-
     return (
         <div style={{ padding: '20px' }}>
-               <ServiceHeader title="Manage Users" text="Discover more about this book and make it yours today." />
+            <ServiceHeader title="Manage Users" text="Discover more about this book and make it yours today." />
             <Table
                 columns={columns}
                 dataSource={userData}
-                rowKey="_id" // Use the `_id` field as the unique key for rows
-                pagination={{
-                    pageSize: 5, // Set number of rows per page
-                }}
+                rowKey="_id"
+                pagination={{ pageSize: 5 }}
                 bordered
             />
         </div>

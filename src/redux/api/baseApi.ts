@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // import {
 //   BaseQueryApi,
 //   BaseQueryFn,
@@ -44,7 +45,6 @@
 //   endpoints: () => ({}),
 // });
 
-
 import {
   BaseQueryApi,
   BaseQueryFn,
@@ -58,7 +58,7 @@ import { toast } from "sonner";
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:5000/api",
   credentials: "include",
-  prepareHeaders: (headers, { getState }) => {
+  prepareHeaders: (headers) => {
     // Retrieve access token from localStorage
     const token = localStorage.getItem("accessToken");
     if (token) {
@@ -83,7 +83,11 @@ const baseQueryWithRefreshToken: BaseQueryFn<
   const result = await baseQuery(args, api, extraOptions);
 
   if (result?.error?.status === 404) {
-    toast.error(result.error.data.message);
+    const errorMessage = (result.error.data as { message: string })?.message;
+    if (errorMessage) {
+      toast.error(errorMessage);
+    }
+    // toast.error(result.error.data as {message:string}).message;
   }
 
   return result;
@@ -92,5 +96,6 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithRefreshToken,
+  tagTypes: ["product"],
   endpoints: () => ({}),
 });

@@ -27,21 +27,21 @@ const Banner = () => {
                             borderRadius: '8px',
 
                             textAlign: 'center',
-                            color: '#44cad2',
+                            color: '#fff',
                         }}
                     >
-                        <Title level={2}>Free Shipping on Orders Above $50</Title>
+                        <Title level={2} style={{ color: '#fff'}} >Free Shipping on Orders Above $50</Title>
                         <Paragraph style={{ marginBottom: '20px' }}>
-                            Get free shipping when you spend over $50 on your next order.
+                            {/* Get free shipping when you spend over $50 on your next order. */}
                         </Paragraph>
-                        <div className='w-20 mx-auto'>
+                       
 
                             <TButton
                                 text="Shop Now"
                                 onClick={() => navigate('/products')}
                                 className=''
                             />
-                        </div>
+                     
 
 
                     </div>

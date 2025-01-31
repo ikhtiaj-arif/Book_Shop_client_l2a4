@@ -34,7 +34,7 @@ const CartItem: React.FC<CartItemProps> = ({ item, onUpdateQuantity, onRemove })
       <div className="flex items-center justify-between">
 
         <Link to={`/product/${item._id}`} className="w-20 h-20 flex-shrink-0 mr-4">
-          <img src={item.image || "/placeholder.jpg"} alt={item.title} className="w-full h-full object-cover rounded-md" />
+          <img src={item.imageUrl || "/placeholder.jpg"} alt={item.title} className="w-full h-full object-cover rounded-md" />
         </Link>
 
         <div className="w-full">

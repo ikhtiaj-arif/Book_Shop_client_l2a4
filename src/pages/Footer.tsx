@@ -1,83 +1,74 @@
-// src/components/Footer.js
-import React from 'react';
-import { Layout, Row, Col, Space, Typography, Button } from 'antd';
-import { FacebookOutlined, TwitterOutlined, InstagramOutlined, LinkedinOutlined } from '@ant-design/icons';
+import { FacebookFilled, InstagramOutlined, LinkedinFilled, TwitterOutlined } from "@ant-design/icons";
+import { Col, Layout, Row, Space, Typography } from "antd";
 
-const { Text } = Typography;
 const { Footer } = Layout;
+const { Title, Text } = Typography;
 
-const FooterComponent = () => {
+const BookStoreFooter = () => {
   return (
-    <Footer style={{ backgroundColor: '#001529', padding: '40px 50px' }}>
-      <Row gutter={[16, 16]} justify="space-between">
-        {/* Contact Information */}
-        <Col xs={24} sm={12} md={6}>
-          <div style={{ color: 'white' }}>
-            <h3>Contact Us</h3>
-            <Text style={{ display: 'block' }}>Email: support@example.com</Text>
-            <Text style={{ display: 'block' }}>Phone: +123 456 7890</Text>
-          </div>
-        </Col>
+    <Footer className="bg-gradient-to-r from-primary-dark to-primary text-white rounded-lg shadow-md p-10 " style={{}}>
+      <div className="container mx-auto px-6">
+        <Row gutter={[32, 32]} justify="center">
 
-        {/* Quick Links */}
-        <Col xs={24} sm={12} md={6}>
-          <div style={{ color: 'white' }}>
-            <h3>Quick Links</h3>
+          {/* Company Info */}
+          <Col xs={24} sm={12} md={8} lg={6}>
+            <Title level={4} style={{ color: "#fff" }}>📚 Book Haven</Title>
+            <Text style={{ color: "#fafafa" }}>
+              Your one-stop online bookstore. Discover new worlds, one page at a time.
+            </Text>
+          </Col>
+
+          {/* Quick Links */}
+          <Col xs={24} sm={12} md={6} lg={4}>
+            <Title level={5} style={{ color: "#fff" }}>Quick Links</Title>
             <Space direction="vertical">
-              <Button type="link" style={{ color: 'white' }} href="/">Home</Button>
-              <Button type="link" style={{ color: 'white' }} href="/products">Products</Button>
-              <Button type="link" style={{ color: 'white' }} href="/about">About Us</Button>
-              <Button type="link" style={{ color: 'white' }} href="/contact">Contact</Button>
+              <a href="#" style={{ color: "#fafafa" }}>Home</a>
+              <a href="#" style={{ color: "#fafafa" }}>Shop</a>
+              <a href="#" style={{ color: "#fafafa" }}>About Us</a>
+              <a href="#" style={{ color: "#fafafa" }}>Contact</a>
             </Space>
-          </div>
-        </Col>
+          </Col>
 
-        {/* Social Media */}
-        <Col xs={24} sm={12} md={6}>
-          <div style={{ color: 'white' }}>
-            <h3>Follow Us</h3>
-            <Space size="large">
-              <Button
-                icon={<FacebookOutlined />}
-                type="link"
-                href="https://facebook.com"
-                target="_blank"
-                style={{ color: 'white' }}
-              />
-              <Button
-                icon={<TwitterOutlined />}
-                type="link"
-                href="https://twitter.com"
-                target="_blank"
-                style={{ color: 'white' }}
-              />
-              <Button
-                icon={<InstagramOutlined />}
-                type="link"
-                href="https://instagram.com"
-                target="_blank"
-                style={{ color: 'white' }}
-              />
-              <Button
-                icon={<LinkedinOutlined />}
-                type="link"
-                href="https://linkedin.com"
-                target="_blank"
-                style={{ color: 'white' }}
-              />
+          {/* Categories */}
+          <Col xs={24} sm={12} md={6} lg={4}>
+            <Title level={5} style={{ color: "#fff" }}>Categories</Title>
+            <Space direction="vertical">
+              <a href="#" style={{ color: "#fafafa" }}>Fiction</a>
+              <a href="#" style={{ color: "#fafafa" }}>Science</a>
+              <a href="#" style={{ color: "#fafafa" }}>Self-Development</a>
+              <a href="#" style={{ color: "#fafafa" }}>Poetry</a>
+              <a href="#" style={{ color: "#fafafa" }}>Religious</a>
             </Space>
-          </div>
-        </Col>
+          </Col>
+
+          {/* Newsletter Subscription */}
+          <Col xs={24} sm={12} md={8} lg={6}>
+            <Title level={5} style={{ color: "#fff" }}>Stay Updated</Title>
+            <Text style={{ color: "#fafafa" }}>Subscribe for book deals & latest arrivals.</Text>
+            {/* <div style={{ marginTop: "10px", display: "flex" }}>
+              <Input placeholder="Enter your email" style={{ borderRadius: "5px 0 0 5px" }} />
+              <Button type="primary" style={{ borderRadius: "0 5px 5px 0" }}>Subscribe</Button>
+            </div> */}
+          </Col>
+        </Row>
+
+        {/* Social Media Links */}
+        <Row justify="center" style={{ marginTop: "30px" }}>
+          <Space size="large">
+            <a href="#" style={{ fontSize: "18px", color: "#fafafa" }}><FacebookFilled /></a>
+            <a href="#" style={{ fontSize: "18px", color: "#fafafa" }}><TwitterOutlined /></a>
+            <a href="#" style={{ fontSize: "18px", color: "#fafafa" }}><InstagramOutlined /></a>
+            <a href="#" style={{ fontSize: "18px", color: "#fafafa" }}><LinkedinFilled /></a>
+          </Space>
+        </Row>
 
         {/* Copyright */}
-        <Col xs={24} sm={12} md={6} style={{ textAlign: 'center', color: 'white' }}>
-          <Text>
-            &copy; {new Date().getFullYear()} Your Company. All Rights Reserved.
-          </Text>
-        </Col>
-      </Row>
+        <Text style={{ display: "block", textAlign: "center", marginTop: "20px", color: "#aaa" }}>
+          &copy; {new Date().getFullYear()} Book Haven. All rights reserved.
+        </Text>
+      </div>
     </Footer>
   );
 };
 
-export default FooterComponent;
+export default BookStoreFooter;

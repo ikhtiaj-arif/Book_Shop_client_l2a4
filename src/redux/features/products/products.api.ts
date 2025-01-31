@@ -1,12 +1,15 @@
 import { baseApi } from "../../api/baseApi";
-
+export type TQueryParam = {
+  name: string;
+  value: boolean | React.Key;
+};
 const productManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllProducts: builder.query({
       query: (args) => {
         const params = new URLSearchParams();
         if (args) {
-          args.forEach((element) => {
+          args.forEach((element:TQueryParam) => {
             params.append(element.name, element.value as string);
           });
         }
@@ -16,7 +19,10 @@ const productManagementApi = baseApi.injectEndpoints({
           params: params,
         };
       },
+
+      providesTags: ["product"],
     }),
+
     getProductById: builder.query({
       query: (id) => ({
         url: `/products/${id}`,
@@ -29,6 +35,7 @@ const productManagementApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["product"],
     }),
     updateProduct: builder.mutation({
       query: ({ id, data }) => ({
@@ -36,12 +43,14 @@ const productManagementApi = baseApi.injectEndpoints({
         method: "PUT",
         body: data,
       }),
+      invalidatesTags: ["product"],
     }),
     deleteProduct: builder.mutation({
       query: (id) => ({
         url: `/products/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["product"],
     }),
   }),
 });

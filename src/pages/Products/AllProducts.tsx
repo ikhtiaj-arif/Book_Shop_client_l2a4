@@ -1,33 +1,27 @@
-import { Input, Select, Slider, Spin } from 'antd';
+import { Card, Col, Input, Row, Select, Skeleton, Slider } from 'antd';
 
 import React, { useState } from 'react';
+import ServiceHeader from '../../components/ServiceHeader';
 import { useGetAllProductsQuery } from '../../redux/features/products/products.api';
 import { IProduct } from '../../types/types';
 import ProductCard from './ProductCard';
-import ServiceHeader from '../../components/ServiceHeader';
+
 
 const { Search } = Input;
 const { Option } = Select;
-
+// const { Title } = Typography;
 
 
 
 const AllProducts: React.FC = () => {
     const { data: allProductData, isLoading } = useGetAllProductsQuery(undefined);
 
-
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [selectedCategory, setSelectedCategory] = useState<string | undefined>(undefined);
     const [selectedAuthor, setSelectedAuthor] = useState<string | undefined>(undefined);
     const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
 
-    if (isLoading) {
-        return (
-            <div className="flex items-center justify-center h-screen">
-                <Spin size="large" />
-            </div>
-        );
-    }
+
 
     const products: IProduct[] = allProductData?.data || [];
     const categories = Array.from(new Set(products.map((p) => p.category)));
@@ -46,11 +40,37 @@ const AllProducts: React.FC = () => {
         return matchesSearch && matchesCategory && matchesAuthor && matchesPrice;
     });
 
+    if (isLoading) {
+        return (
+            <div className="bg-background rounded-lg p-2  md:p-4 min-h-screen ">
+                {/* Header Section */}
+                <ServiceHeader title="All Products" text="Discover and filter the books you love." />
+                <Row gutter={[24, 24]} justify="center" >
+                    {[...Array(6)].map((_, index) => (
+                        <Col xs={24} sm={12} md={8} lg={6} key={index}>
+                            <Card
+                                className="custom-card"
+                                style={{
+                                    borderRadius: "8px",
+                                    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+                                }}
+                                cover={<Skeleton.Image style={{ width: "100%", height: "220px" }} />}
+                            >
+                                <Skeleton active />
+                            </Card>
+                        </Col>
+                    ))}
+                </Row>
+
+            </div>
+        );
+    }
+
     return (
         <div className="bg-background rounded-lg p-2 md:p-4 min-h-screen ">
             {/* Header Section */}
             <ServiceHeader title="All Products" text="Discover and filter the books you love." />
-        
+
             {/* Search and Filters */}
             <div className="max-w-6xl  mx-auto grid gap-4 grid-cols-1 md:grid-cols-4 mb-8">
                 <Search
