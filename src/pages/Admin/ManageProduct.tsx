@@ -1,5 +1,6 @@
 import { UploadOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Modal, Space, Table, Upload } from 'antd';
+import { Button, Checkbox, Form, Modal, Space, Table, Upload, UploadFile, UploadProps } from 'antd';
+import { RcFile } from 'antd/es/upload';
 import { useEffect, useState } from 'react';
 import { IoTrashBinSharp } from "react-icons/io5";
 import { toast } from 'sonner';
@@ -8,6 +9,7 @@ import CustomButton from '../../components/buttons/CustomButton';
 import CustomButtonSM from '../../components/buttons/CustomButtonSM';
 import BSInput from '../../components/form/BSInput';
 import { useAddProductMutation, useDeleteProductMutation, useGetAllProductsQuery, useUpdateProductMutation } from '../../redux/features/products/products.api';
+import { handleImageUpload } from '../../utils/imageUrlGenerator';
 
 // Define product type
 interface Product {
@@ -18,8 +20,9 @@ interface Product {
     inStock: boolean;
     category: string;
     description: string;
+    imageUrl: string
 }
-
+// console.log("key", );
 const ManageProduct = () => {
     const { data: allProductData, isLoading } = useGetAllProductsQuery(undefined);
     const [products, setProducts] = useState<Product[]>([]);
@@ -37,26 +40,34 @@ const ManageProduct = () => {
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+    const [fileList, setFileList] = useState<UploadFile[]>([]);
 
     const toastId = 'manageOrders'
 
     // Handle form submit for adding/updating a product
     const handleFormSubmit = async (values: Omit<Product, "_id">) => {
-        const productData = {
-            ...values,
-            description: values.description || '',
-            inStock: values.inStock || false,
-        };
-
         try {
+            toast.loading("Uploading image...");
+
+            let imageUrl = editingProduct?.imageUrl || ""; // Keep existing image if not changed
+
+            // Upload new image if a file is selected
+            if (fileList.length > 0) {
+                imageUrl = await handleImageUpload(fileList[0].originFileObj as RcFile);
+                if (!imageUrl) throw new Error("Image upload failed");
+            }
+
+
+
+            const productData: Omit<Product, "_id"> = {
+                ...values,
+                imageUrl: imageUrl, // Save image URL
+                description: values.description || "",
+                inStock: values.inStock || false,
+            };
+
             if (editingProduct) {
-                // Updating an existing product
-
-
-                // const data = { id: editingProduct._id, data:productData }
-                // console.log(data);
-                // return
-
+                // Update existing product
                 await updateProduct({ id: editingProduct._id, data: productData }).unwrap();
                 setProducts((prevProducts) =>
                     prevProducts.map((prod) =>
@@ -65,7 +76,7 @@ const ManageProduct = () => {
                 );
                 toast.success("Product updated successfully!", { id: toastId });
             } else {
-                // Adding a new product
+                // Add a new product
                 const newProduct = await addProduct(productData).unwrap();
                 setProducts((prevProducts) => [newProduct, ...prevProducts]);
                 toast.success("Product added successfully!", { id: toastId });
@@ -77,6 +88,9 @@ const ManageProduct = () => {
             console.error("Error saving product:", error);
             toast.error("Failed to save product.", { id: toastId });
         }
+    };
+    const handleFileChange: UploadProps["onChange"] = ({ fileList }) => {
+        setFileList(fileList);
     };
 
     // Handle Edit button click
@@ -193,7 +207,12 @@ const ManageProduct = () => {
                         <Checkbox />
                     </Form.Item>
                     <Form.Item name="image" label="Product Image" valuePropName="fileList" getValueFromEvent={(e) => e?.fileList}>
-                        <Upload beforeUpload={() => false} listType="picture">
+                        <Upload
+                            beforeUpload={() => false} // Prevent auto-upload
+                            listType="picture"
+                            fileList={fileList}
+                            onChange={handleFileChange} // Handle file selection
+                        >
                             <Button icon={<UploadOutlined />}>Upload Image</Button>
                         </Upload>
                     </Form.Item>

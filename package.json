@@ -17,6 +17,7 @@
     "antd": "^5.23.2",
     "class-variance-authority": "^0.7.1",
     "crypto-js": "^4.2.0",
+    "dotenv": "^16.4.7",
     "jwt-decode": "^4.0.0",
     "less": "^4.2.2",
     "lucide-react": "^0.474.0",

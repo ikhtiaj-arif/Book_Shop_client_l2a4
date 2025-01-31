@@ -1,6 +1,6 @@
 import { Button } from "antd";
 
-const CustomButtonS = ({ text, onClick, loading = false, disabled = false, type = "primary" }) => {
+const SecondaryBtnSM = ({ text, onClick, loading = false, disabled = false, type = "primary" }) => {
     return (
         <Button
             htmlType="submit"
@@ -9,10 +9,10 @@ const CustomButtonS = ({ text, onClick, loading = false, disabled = false, type 
                 // background: 'linear-gradient(to right, #5ab1b6, #44cad2)',
                 borderColor: '#44cad2',
                 color: '#44cad2',
-                
+
                 transition: 'background 0.3s ease',
             }}
-            className="w-full py-2 h-10 px-4 text-[0.95rem] mt-auto font-semibold rounded-3xl shadow-md"
+            className="py-1 h-6 px-4 text-[0.7rem] mt-auto font-medium rounded-lg shadow-md"
             // onMouseOver={(e) => {
             //     e.currentTarget.style.background = 'linear-gradient(to right, #44cad2, #5ab1b6)';
             // }}
@@ -29,4 +29,4 @@ const CustomButtonS = ({ text, onClick, loading = false, disabled = false, type 
     );
 };
 
-export default CustomButtonS;
+export default SecondaryBtnSM;
