@@ -4,6 +4,7 @@ import { IoTrashBinSharp } from 'react-icons/io5';
 import CustomButtonSM from '../../components/buttons/CustomButtonSM';
 import { useGetOrdersQuery } from '../../redux/features/orders/order.api';
 import { useGetAllProductsQuery, useGetProductByIdQuery } from '../../redux/features/products/products.api';
+import ServiceHeader from '../../components/ServiceHeader';
 
 // Define types for the order data
 interface Product {
@@ -106,7 +107,7 @@ const ManageOrders: React.FC = () => {
 
   return (
     <div style={{ padding: '20px' }}>
-      <h1>Manage Orders</h1>
+         <ServiceHeader title="Manage Orders" text="Discover more about this book and make it yours today." />
       <Table
         columns={columns}
         dataSource={orderData?.data} // Ensure this is the correct property that contains the orders

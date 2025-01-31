@@ -31,17 +31,17 @@ const Sidebar: React.FC<React.PropsWithChildren<SidebarProps>> = ({ collapsed, s
   const sidebarItems = [
     ...(user.role === userRole.ADMIN
       ? [
-        { key: '1', label: 'Admin Dashboard', icon: <UserOutlined />, path: '/admin' },
+        { key: '1', label: 'Admin ', icon: <UserOutlined /> },
         { key: '2', label: 'Manage Products', icon: <VideoCameraOutlined />, path: '/admin/products' },
         { key: '3', label: 'Manage Orders', icon: <UploadOutlined />, path: '/admin/manage-orders' },
         { key: '4', label: 'Manage Users', icon: <UserOutlined />, path: '/admin/manage-users' },
       ]
       : [
-        { key: '1', label: 'User Dashboard', icon: <UserOutlined />, path: '/user/dashboard' },
-        { key: '2', label: 'Profile', icon: <VideoCameraOutlined />, path: '/user/profile' },
-        { key: '3', label: 'Orders', icon: <UploadOutlined />, path: '/user/orders' },
+        { key: '1', label: 'User ', icon: <UserOutlined /> },
+        { key: '2', label: 'Profile', icon: <VideoCameraOutlined />, path: `/user/profile/${user?.id}` },
+        // { key: '3', label: 'Orders', icon: <UploadOutlined />, path: '/user/orders' },
       ]),
-    { key: '5', label: 'View Orders', icon: <UploadOutlined />, path: '/orders' },
+    { key: '5', label: 'Orders History', icon: <UploadOutlined />, path: `/orders/${user?.id}` },
     { key: '6', label: 'Logout', icon: <LogoutOutlined />, onClick: () => dispatch(logOut()) || navigate('/login') }, // Logout option
   ];
 

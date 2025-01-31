@@ -26,7 +26,7 @@ const TButton: React.FC<CustomButtonProps> = ({
             onClick={onClick}
             type={type}
             
-            className={`w-full py-2 px-4 mt-auto  text-white font-semibold rounded-2xl shadow-md bg-gradient-to-r from-primary-dark to-primary hover:from-primary hover:to-primary-dark transition-all ${className}`}
+            className={`w-full py-2 px-4 mt-auto max-w-[18rem] text-white font-semibold rounded-2xl shadow-md bg-gradient-to-r from-primary-dark to-primary hover:from-primary hover:to-primary-dark transition-all ${className}`}
             {...props}
             disabled={disabled}
         >

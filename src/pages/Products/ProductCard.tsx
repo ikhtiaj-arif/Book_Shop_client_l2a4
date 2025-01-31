@@ -10,11 +10,14 @@ interface ProductCardProps {
         author: string;
         price: number;
         category: string;
-        image: string; // Add image URL
+        imageUrl: string; // Add image URL
         rating: number; // Add rating
         description: string; // Add description
     };
 }
+
+
+
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     const navigate = useNavigate();
@@ -24,7 +27,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             {/* Product Image */}
             <div className="relative h-48 overflow-hidden">
                 <img
-                    src={product.image}
+                    src={product.imageUrl}
                     alt={product.title}
                     className="w-full h-full object-cover"
                 />

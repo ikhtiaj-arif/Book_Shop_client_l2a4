@@ -5,6 +5,7 @@ import SecondaryBtnSM from '../../components/buttons/SecondaryBtnSm';
 import { currentUser } from '../../redux/features/auth/authSlice';
 import { useBlockUserMutation, useGetAllUsersQuery, useUnblockUserMutation } from '../../redux/features/user/userApi';
 import { useAppSelector } from '../../redux/hooks';
+import ServiceHeader from '../../components/ServiceHeader';
 
 
 const ManageUsers: React.FC = () => {
@@ -103,7 +104,7 @@ const ManageUsers: React.FC = () => {
 
     return (
         <div style={{ padding: '20px' }}>
-            <h1>Manage Users</h1>
+               <ServiceHeader title="Manage Users" text="Discover more about this book and make it yours today." />
             <Table
                 columns={columns}
                 dataSource={userData}
