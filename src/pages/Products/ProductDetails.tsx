@@ -1,4 +1,4 @@
-import { Button, Card, Col, Divider, Input, Row, Tabs, Typography } from 'antd';
+import { Card, Col, Divider, Input, Row, Tabs, Typography } from 'antd';
 import CryptoJS from 'crypto-js';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,18 +7,18 @@ import QuantitySelector from '../../components/buttons/QuantitySelector';
 import CustomButtonS from '../../components/buttons/SecondaryBtn';
 import ServiceHeader from '../../components/ServiceHeader';
 import dummyBG from '../../img/Bookshop-pana.png';
-import { currentUser } from '../../redux/features/auth/authSlice';
 import { addToCart } from '../../redux/features/cart/cartSlice';
 import { useGetProductByIdQuery } from '../../redux/features/products/products.api';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import ProductSkeleton from './ProductScelleton';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 const ProductDetails = () => {
   const { id } = useParams(); // Extract 'id' from the route params
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const user = useAppSelector(currentUser)
+  // const user = useAppSelector(currentUser)
   const cart = useAppSelector((state) => state.cart.items);
 
   const [selectedQuantity, setSelectedQuantity] = useState<number>(1);
@@ -72,6 +72,8 @@ const ProductDetails = () => {
       setNewReview("");
     }
   };
+
+  if (isLoading) return <ProductSkeleton />;
 
   return (
     <div className="bg-background rounded-lg p-2 md:p-4 mx-auto">
@@ -169,7 +171,7 @@ const ProductDetails = () => {
           className="custom-tabs"
         >
           <Tabs.TabPane tab="Details" key="details">
-            <p className="text-2xl text-text">{product.description || "No details available for this product."}</p>
+            <p className="text-lg text-text">{product.description || "No details available for this product."}</p>
           </Tabs.TabPane>
 
           <Tabs.TabPane tab="Reviews" key="reviews">
@@ -194,9 +196,9 @@ const ProductDetails = () => {
                 onChange={(e) => setNewReview(e.target.value)}
                 className="mb-4"
               />
-              <Button type="primary" onClick={handleAddReview}>
-                Submit Review
-              </Button>
+              <div className='w-[18rem] mx-auto'>
+                <CustomButton onClick={handleAddReview} text="Submit Review" />
+              </div>
             </div>
           </Tabs.TabPane>
         </Tabs>

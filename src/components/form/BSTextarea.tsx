@@ -5,7 +5,7 @@ type TextareaProps = {
     name: string;
     label?: string;
     placeholder?: string;
-    rules?: object;
+    rules?: object[];
 };
 
 const BSTextarea = ({ name, label, placeholder, rules }: TextareaProps) => {

@@ -1,6 +1,10 @@
 import { Button } from "antd";
 
-const CustomButtonLogin = ({ isLogin }) => {
+interface CustomButtonLoginProps {
+    isLogin: boolean;
+}
+
+const CustomButtonLogin: React.FC<CustomButtonLoginProps> = ({ isLogin }) => {
     return (
         <Button
             htmlType="submit"

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import CustomButton from '../../components/buttons/TButton';
 import TButton from '../../components/buttons/TButton';
 
 interface ProductCardProps {
@@ -11,7 +10,7 @@ interface ProductCardProps {
         price: number;
         category: string;
         imageUrl: string; // Add image URL
-        rating: number; // Add rating
+        // rating: number; // Add rating
         description: string; // Add description
     };
 }
@@ -32,9 +31,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                     className="w-full h-full object-cover"
                 />
                 {/* Rating Badge */}
-                <div className="absolute top-2 right-2 bg-primary text-white px-2 py-1 rounded-full text-sm font-semibold">
+                {/* <div className="absolute top-2 right-2 bg-primary text-white px-2 py-1 rounded-full text-sm font-semibold">
                     ⭐ {product.rating}
-                </div>
+                </div> */}
             </div>
 
             {/* Product Details */}

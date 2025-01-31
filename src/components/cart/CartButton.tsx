@@ -1,13 +1,11 @@
 import { Badge, Button, Drawer, Empty } from "antd";
 import { ShoppingCart } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { currentUser, TUser } from "../../redux/features/auth/authSlice";
 import { removeFromCart, updateQuantity, useCurrentCartProduct } from "../../redux/features/cart/cartSlice";
-import { useCreateOrderMutation } from "../../redux/features/orders/order.api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
-import { processCart } from "../../utils/CartGenerator";
 import CustomButton from "../buttons/CustomButton";
 import CustomButtonS from "../buttons/SecondaryBtn";
 import CartItem from "./Cart";
@@ -18,51 +16,49 @@ const CartButton: React.FC = () => {
     const user = useAppSelector(currentUser) as TUser;
     const dispatch = useAppDispatch();
     const navigate = useNavigate()
-    const [createOrder, { isLoading, isSuccess, data, isError, error }] = useCreateOrderMutation()
+    // const [createOrder, { isLoading, isSuccess, data, isError, error }] = useCreateOrderMutation()
 
     const [isOpen, setIsOpen] = useState(false);
 
+    const toastId = 'cart'
+
     const handleUpdateQuantity = (id: string, quantity: number) => {
         dispatch(updateQuantity({ id, quantity }));
+        toast.success('Product added to cart!', { id: toastId })
     };
 
     const handleRemoveItem = (id: string) => {
         dispatch(removeFromCart(id));
+        toast.error('Product removed from cart!', { id: toastId })
     };
 
-    const confirmOrder = async () => {
-        console.log("Order confirmed!", cart);
-        const data = await processCart(cart, user?.email)
-        const res = await createOrder({ products: data })
-        console.log(res);
-    };
+
     const handleOpenCheckout = () => {
         if (user && user?.email) {
             setIsOpen(false)
             navigate('/checkout')
         }
         else {
-            toast.error('You need to login first!')
+            toast.error('You need to login first!', { id: toastId })
             setIsOpen(false)
             navigate('/login')
         }
     }
 
-    const toastId = 'cart'
-    useEffect(() => {
-        if (isLoading) toast.loading("Processing...", { id: toastId })
-        if (isSuccess) {
+    // useEffect(() => {
+    //     if (isLoading) toast.loading("Processing...", { id: toastId })
+    //     if (isSuccess) {
 
 
-            if (data?.data) {
-                setTimeout(() => {
+    //         if (data?.data) {
+    //             setTimeout(() => {
 
-                    window.location.href = data.data
-                }, 1000)
-            }
-        }
-        if (isError) toast.error(JSON.stringify(error), { id: toastId })
-    }, [data?.data, data?.message, error, isError, isLoading, isSuccess])
+    //                 window.location.href = data.data
+    //             }, 1000)
+    //         }
+    //     }
+    //     if (isError) toast.error(JSON.stringify(error), { id: toastId })
+    // }, [data?.data, data?.message, error, isError, isLoading, isSuccess])
 
     // Calculate subtotal
     const subtotal = cart.reduce((total, item) => total + item.price * item.orderQuantity, 0);
@@ -90,7 +86,7 @@ const CartButton: React.FC = () => {
                 {cart.length > 0 ? (
                     <div className="flex flex-col gap-4">
                         <div className="max-h-80 overflow-y-auto space-y-4">
-                            {cart.map((item) => (
+                            {cart?.map((item) => (
                                 <CartItem
                                     key={item._id}
                                     item={item}
@@ -111,7 +107,7 @@ const CartButton: React.FC = () => {
                         <div className="flex flex-col gap-4  mt-4">
 
 
-                            <CustomButton text="CHECKOUT" onClick={handleOpenCheckout} loading={isLoading} disabled={cart.length === 0} />
+                            <CustomButton text="CHECKOUT" onClick={handleOpenCheckout} disabled={cart.length === 0} />
                             <CustomButtonS text="CONTINUE SHOPPING" onClick={() => navigate("/products")} type="default" />
                         </div>
                     </div>

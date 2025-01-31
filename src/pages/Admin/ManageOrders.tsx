@@ -1,10 +1,7 @@
+import { Skeleton, Table } from 'antd';
 import React from 'react';
-import { Table, Space, Modal, message } from 'antd';
-import { IoTrashBinSharp } from 'react-icons/io5';
-import CustomButtonSM from '../../components/buttons/CustomButtonSM';
-import { useGetOrdersQuery } from '../../redux/features/orders/order.api';
-import { useGetAllProductsQuery, useGetProductByIdQuery } from '../../redux/features/products/products.api';
 import ServiceHeader from '../../components/ServiceHeader';
+import { useGetOrdersQuery } from '../../redux/features/orders/order.api';
 
 // Define types for the order data
 interface Product {
@@ -43,7 +40,7 @@ const ManageOrders: React.FC = () => {
       key: '_id',
       render: (text: string) => <span style={{ wordBreak: 'break-word' }}>{text}</span>,
     },
- 
+
     {
       title: 'Status',
       dataIndex: 'status',
@@ -90,24 +87,33 @@ const ManageOrders: React.FC = () => {
   ];
 
   // Event handlers for actions
-  const handleEdit = (record: Order) => {
-    alert(`Editing order: ${record._id}`);
-    // Add logic to edit the order here
-  };
+  // const handleEdit = (record: Order) => {
+  //   alert(`Editing order: ${record._id}`);
+  //   // Add logic to edit the order here
+  // };
 
-  const handleDelete = (id: string) => {
-    Modal.confirm({
-      title: 'Are you sure you want to delete this order?',
-      onOk: () => {
-        // Add logic to delete the order from backend here
-        message.success('Order deleted successfully');
-      },
-    });
-  };
+  // const handleDelete = (id: string) => {
+  //   Modal.confirm({
+  //     title: 'Are you sure you want to delete this order?',
+  //     onOk: () => {
+  //       // Add logic to delete the order from backend here
+  //       message.success('Order deleted successfully');
+  //     },
+  //   });
+  // };
+  if (isLoading) {
+    return (
+        <div style={{ padding: '20px' }}>
+            <ServiceHeader title="Manage Users" text="Discover more about this book and make it yours today." />
+            <Skeleton active paragraph={{ rows: 5 }} />
+        </div>
+    );
+}
+
 
   return (
     <div style={{ padding: '20px' }}>
-         <ServiceHeader title="Order History" text="Discover more about this book and make it yours today." />
+      <ServiceHeader title="Order History" text="Discover more about this book and make it yours today." />
       <Table
         columns={columns}
         dataSource={orderData?.data} // Ensure this is the correct property that contains the orders

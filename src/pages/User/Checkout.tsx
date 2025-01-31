@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Card, Checkbox, Divider, Form, Typography } from "antd";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -14,7 +15,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { processCart } from "../../utils/CartGenerator";
 
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 const CheckoutPage: React.FC = () => {
   const cart = useAppSelector(useCurrentCartProduct);

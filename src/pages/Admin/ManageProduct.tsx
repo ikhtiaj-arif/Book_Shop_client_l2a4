@@ -1,5 +1,5 @@
 import { UploadOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Col, Form, Modal, Row, Select, Space, Table, Upload, UploadFile, UploadProps } from 'antd';
+import { Button, Checkbox, Col, Form, Modal, Row, Select, Skeleton, Space, Table, Upload, UploadFile, UploadProps } from 'antd';
 import { RcFile } from 'antd/es/upload';
 import { useEffect, useState } from 'react';
 import { IoTrashBinSharp } from "react-icons/io5";
@@ -30,7 +30,7 @@ const ManageProduct = () => {
     // Mutations
     const [addProduct, { isLoading: isAdding }] = useAddProductMutation();
     const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
-    const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation();
+    const [deleteProduct] = useDeleteProductMutation();
 
     useEffect(() => {
         if (allProductData?.data) {
@@ -53,7 +53,7 @@ const ManageProduct = () => {
 
             // Upload new image if a file is selected
             if (fileList.length > 0) {
-                imageUrl = await handleImageUpload(fileList[0].originFileObj as RcFile);
+                imageUrl = await handleImageUpload(fileList[0].originFileObj as RcFile) as string;
                 if (!imageUrl) throw new Error("Image upload failed");
             }
 
@@ -145,7 +145,7 @@ const ManageProduct = () => {
         {
             title: "Actions",
             key: "actions",
-            render: (_, record: Product) => (
+            render: (record: Product) => (
                 <Space>
                     <CustomButtonSM text="Edit" onClick={() => handleEdit(record)} />
                     <IoTrashBinSharp className="text-red-500 cursor-pointer" size={20} onClick={() => handleDelete(record._id)} />
@@ -156,7 +156,12 @@ const ManageProduct = () => {
     const categories = ['Fiction', 'Science', 'SelfDevelopment', 'Poetry', 'Religious'];
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return (
+            <div style={{ padding: '20px' }}>
+                <ServiceHeader title="Manage Users" text="Discover more about this book and make it yours today." />
+                <Skeleton active paragraph={{ rows: 5 }} />
+            </div>
+        );
     }
 
     return (
@@ -235,20 +240,20 @@ const ManageProduct = () => {
                             </Form.Item>
                         </Col>
                         <Col xs={24} md={12}>
-                        
+
                             <Form.Item name="image" label="" className='' valuePropName="fileList" getValueFromEvent={(e) => e?.fileList}>
-                        
+
 
                                 <Upload
                                     beforeUpload={() => false}
-                                  
+
                                     listType="picture"
                                     fileList={fileList}
                                     onChange={handleFileChange}
-                                    >
+                                >
                                     <Button className='h-12' icon={<UploadOutlined />}>Upload Image</Button>
                                 </Upload>
-                                 
+
                             </Form.Item>
                         </Col>
                     </Row>
@@ -256,7 +261,7 @@ const ManageProduct = () => {
 
                     <Form.Item>
                         <div className="max-w-[20rem] mx-auto">
-                            <CustomButton type="primary" htmlType="submit" block text={editingProduct ? 'Update Product' : 'Add Product'} />
+                            <CustomButton disabled={isAdding || isUpdating} type="primary" htmlType="submit" block text={editingProduct ? 'Update Product' : 'Add Product'} />
                         </div>
                     </Form.Item>
                 </Form>

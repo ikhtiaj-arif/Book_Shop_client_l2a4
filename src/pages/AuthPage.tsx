@@ -3,16 +3,14 @@ import { useState } from 'react';
 import { FieldValues } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
-import CustomButton from '../components/buttons/CustomButtonLogin';
-import BSInput from '../components/form/BSInputLogin';
+import CustomButtonLogin from '../components/buttons/CustomButtonLogin';
+import { default as BSInput, default as BSInputLogin } from '../components/form/BSInputLogin';
 import PHForm from '../components/form/PHForm';
 import loginIllustration from '../img/Bookshop-pana.png';
 import { useLoginMutation, useRegistrationMutation } from '../redux/features/auth/authApi';
 import { setUser, TUser } from '../redux/features/auth/authSlice';
 import { useAppDispatch } from '../redux/hooks';
 import { verifyToken } from '../utils/verifyToken';
-import BSInputLogin from '../components/form/BSInputLogin';
-import CustomButtonLogin from '../components/buttons/CustomButtonLogin';
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true); // Toggle state
@@ -47,7 +45,7 @@ const AuthPage = () => {
       navigate(`/`);
       toast.success('Logged in', { id: toastId });
     } catch (err) {
-      toast.error(`${err.data?.message || 'Something went wrong'}`, { id: toastId });
+      toast.error(`Something went wrong`, { id: toastId });
       console.log(err);
     }
   };
@@ -64,7 +62,7 @@ const AuthPage = () => {
       toast.success(`${res?.message}`, { id: toastId });
       setIsLogin(true); // Switch to login after successful registration
     } catch (err) {
-      toast.error(`${err.data?.message || 'Something went wrong'}`, { id: toastId });
+      toast.error(` Something went wrong`, { id: toastId });
       console.log(err);
     }
   };

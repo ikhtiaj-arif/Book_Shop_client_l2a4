@@ -10,7 +10,7 @@ import AuthPage from "../pages/AuthPage"
 import Home from "../pages/Home"
 import AllProducts from "../pages/Products/AllProducts"
 import ProductDetails from "../pages/Products/ProductDetails"
-import Register from "../pages/Register"
+
 import CheckoutPage from "../pages/User/Checkout"
 import UserDashboard from "../pages/User/UserDashboard"
 import VerifyOrder from "../pages/User/VerifyOrder"
@@ -34,10 +34,7 @@ const router = createBrowserRouter([
                 path: '/login',
                 element: <AuthPage />
             },
-            {
-                path: '/register',
-                element: <Register />
-            },
+        
             {
                 path: '/about',
                 element: <About />
