@@ -22,7 +22,7 @@ const FeaturedProducts = () => {
   }
 
   return (
-    <div className="featured-products bg-background py-16 rounded-lg px-4"  >
+    <div className="featured-products bg-background py-16 rounded-lg px-4 mb-5"  >
       <Title level={2} style={{ textAlign: 'center', color: '#333', marginBottom: '30px' }}>
         Featured Products
       </Title>

@@ -73,20 +73,20 @@ const ManageOrders: React.FC = () => {
       key: 'createdAt',
       render: (text: string) => new Date(text).toLocaleString(), // Format date
     },
-    {
-      title: 'Actions',
-      key: 'actions',
-      render: (_, record: Order) => (
-        <Space>
-          <CustomButtonSM text="Edit" onClick={() => handleEdit(record)} />
-          <IoTrashBinSharp
-            className="text-red-500 cursor-pointer"
-            size={20}
-            onClick={() => handleDelete(record._id)}
-          />
-        </Space>
-      ),
-    },
+    // {
+    //   title: 'Actions',
+    //   key: 'actions',
+    //   render: (_, record: Order) => (
+    //     <Space>
+    //       <CustomButtonSM text="Edit" onClick={() => handleEdit(record)} />
+    //       <IoTrashBinSharp
+    //         className="text-red-500 cursor-pointer"
+    //         size={20}
+    //         onClick={() => handleDelete(record._id)}
+    //       />
+    //     </Space>
+    //   ),
+    // },
   ];
 
   // Event handlers for actions
@@ -107,7 +107,7 @@ const ManageOrders: React.FC = () => {
 
   return (
     <div style={{ padding: '20px' }}>
-         <ServiceHeader title="Manage Orders" text="Discover more about this book and make it yours today." />
+         <ServiceHeader title="Order History" text="Discover more about this book and make it yours today." />
       <Table
         columns={columns}
         dataSource={orderData?.data} // Ensure this is the correct property that contains the orders

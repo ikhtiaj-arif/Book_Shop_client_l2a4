@@ -15,6 +15,7 @@ import CheckoutPage from "../pages/User/Checkout"
 import UserDashboard from "../pages/User/UserDashboard"
 import VerifyOrder from "../pages/User/VerifyOrder"
 import ViewOrders from "../pages/Orders/ViewOrders"
+import NotFoundPage from "../pages/NotFound"
 
 const router = createBrowserRouter([
     {
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
             {
                 path: '/',
                 element: <Home />
+            },
+            {
+                path: '*',
+                element: <NotFoundPage  />
             },
             {
                 path: '/login',
