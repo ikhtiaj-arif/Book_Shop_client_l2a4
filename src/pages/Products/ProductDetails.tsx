@@ -1,4 +1,4 @@
-import { Card, Col, Divider, Input, Row, Tabs, Typography } from 'antd';
+import { Card, Col, Divider, Row, Typography } from 'antd';
 import CryptoJS from 'crypto-js';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -11,6 +11,7 @@ import { addToCart } from '../../redux/features/cart/cartSlice';
 import { useGetProductByIdQuery } from '../../redux/features/products/products.api';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import ProductSkeleton from './ProductScelleton';
+import BookStoreFooter from '../Footer';
 
 const { Text } = Typography;
 
@@ -22,9 +23,9 @@ const ProductDetails = () => {
   const cart = useAppSelector((state) => state.cart.items);
 
   const [selectedQuantity, setSelectedQuantity] = useState<number>(1);
-  const [activeTab, setActiveTab] = useState("details");
-  const [reviews, setReviews] = useState<string[]>([]);
-  const [newReview, setNewReview] = useState("");
+  // const [activeTab, setActiveTab] = useState("details");
+  // const [reviews, setReviews] = useState<string[]>([]);
+  // const [newReview, setNewReview] = useState("");
 
   const { data: productData, isLoading, isError } = useGetProductByIdQuery(id);
   const product = productData?.data;
@@ -36,8 +37,7 @@ const ProductDetails = () => {
     if (currentCartItem) setSelectedQuantity(currentCartItem?.orderQuantity as number)
   }, [currentCartItem?.orderQuantity, currentCartItem])
 
-  if (isLoading) return <p>Loading...</p>;
-  if (isError || !product) return <p>Product not found.</p>;
+
 
   const handleBuyNow = () => {
     // Add the product to the cart with selected quantity
@@ -66,16 +66,18 @@ const ProductDetails = () => {
     }));
   };
 
-  const handleAddReview = () => {
-    if (newReview.trim()) {
-      setReviews([...reviews, newReview]);
-      setNewReview("");
-    }
-  };
+  // const handleAddReview = () => {
+  //   if (newReview.trim()) {
+  //     setReviews([...reviews, newReview]);
+  //     setNewReview("");
+  //   }
+  // };
 
   if (isLoading) return <ProductSkeleton />;
+  if (isError || !product) return <p>Product not found.</p>;
 
   return (
+    <div className="bg-background">
     <div className="bg-background rounded-lg p-2 md:p-4 mx-auto">
       {/* Heading Section */}
       <ServiceHeader title="Product Details" text="Discover more about this book and make it yours today." />
@@ -163,6 +165,42 @@ const ProductDetails = () => {
 
       {/* Tabs Section */}
       <div className="mt-8 max-w-6xl mx-auto h-[70vh]">
+        {/* Product Details Section */}
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold mb-4">Product Details</h2>
+          <p className="text-lg text-text">
+            {product.description || "No details available for this product."}
+          </p>
+        </div>
+
+        {/* Reviews Section */}
+        <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold mb-4">Reviews</h2>
+    
+            <p className="text-lg text-text">No reviews yet. Be the first to review!</p>
+        
+
+          {/* Review Input Section */}
+          {/* <div className="mt-6">
+            <textarea
+              rows={3}
+              placeholder="Write your review..."
+              value={newReview}
+              onChange={(e) => setNewReview(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-lg mb-4"
+            />
+            <div className="w-[18rem] mx-auto">
+              <button
+                onClick={handleAddReview}
+                className="w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-200"
+              >
+                Submit Review
+              </button>
+            </div>
+          </div> */}
+        </div>
+      </div>
+      {/* <div className="mt-8 max-w-6xl mx-auto h-[70vh]">
         <Tabs
           activeKey={activeTab}
           onChange={setActiveTab}
@@ -173,6 +211,7 @@ const ProductDetails = () => {
           <Tabs.TabPane tab="Details" key="details">
             <p className="text-lg text-text">{product.description || "No details available for this product."}</p>
           </Tabs.TabPane>
+
 
           <Tabs.TabPane tab="Reviews" key="reviews">
             {reviews.length > 0 ? (
@@ -187,7 +226,6 @@ const ProductDetails = () => {
               <p className="text-2xl text-text">No reviews yet. Be the first to review!</p>
             )}
 
-            {/* Add Review Section */}
             <div className="mt-6">
               <Input.TextArea
                 rows={3}
@@ -201,9 +239,12 @@ const ProductDetails = () => {
               </div>
             </div>
           </Tabs.TabPane>
+          
         </Tabs>
 
-      </div>
+      </div> */}
+    </div>
+    <BookStoreFooter />
     </div>
 
 

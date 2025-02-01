@@ -2,6 +2,7 @@ import { Table } from 'antd';
 import { useParams } from 'react-router-dom';
 import ServiceHeader from '../../components/ServiceHeader';
 import { useViewOrdersQuery } from '../../redux/features/orders/order.api';
+import BookStoreFooter from '../Footer';
 
 const ViewOrders = () => {
     const { id } = useParams()
@@ -29,9 +30,10 @@ const ViewOrders = () => {
     ]
 
     return (
-        <div style={{ padding: '20px' }}>
+        <div style={{ padding: '20px', height: 'screen' }}>
             <ServiceHeader title="My Orders" text="Discover more about this book and make it yours today." />
             <Table
+                className='min-h-[60vh]'
                 columns={columns}
                 dataSource={orders}
                 rowKey="_id" // Use the `_id` field as the unique key for rows
@@ -40,6 +42,8 @@ const ViewOrders = () => {
                 }}
                 bordered
             />
+
+            <BookStoreFooter />
         </div>
     );
 };

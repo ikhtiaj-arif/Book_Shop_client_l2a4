@@ -9,11 +9,26 @@ type TInputProps = {
     placeholder?: string;
     rules?: object[];
     min?: number;
+    labelPosition?: "top" | "side"; // Add labelPosition prop
 };
 
-const BSInput = ({ type, name, label, placeholder, rules, min }: TInputProps) => {
+const BSInput = ({
+    type,
+    name,
+    label,
+    placeholder,
+    rules,
+    min,
+    labelPosition = "side", // Default to side-by-side layout
+}: TInputProps) => {
     return (
-        <Form.Item name={name} label={label} rules={rules}>
+        <Form.Item
+            name={name}
+            label={label}
+            rules={rules}
+            labelCol={labelPosition === "top" ? { span: 24 } : undefined} // Full width for top label
+            wrapperCol={labelPosition === "top" ? { span: 24 } : undefined} // Full width for input
+        >
             {type === "number" ? (
                 <InputNumber
                     min={min}
@@ -27,7 +42,11 @@ const BSInput = ({ type, name, label, placeholder, rules, min }: TInputProps) =>
                     rows={1}
                 />
             ) : (
-                <Input type={type} placeholder={placeholder} className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:outline-none" />
+                <Input
+                    type={type}
+                    placeholder={placeholder}
+                    className="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:outline-none"
+                />
             )}
         </Form.Item>
     );

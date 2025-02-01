@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import ServiceHeader from '../../components/ServiceHeader';
 import { useGetAllProductsQuery } from '../../redux/features/products/products.api';
 import { IProduct } from '../../types/types';
+import BookStoreFooter from '../Footer';
 import ProductCard from './ProductCard';
 
 
@@ -67,63 +68,66 @@ const AllProducts: React.FC = () => {
     }
 
     return (
-        <div className="bg-background rounded-lg p-2 md:p-4 min-h-screen ">
-            {/* Header Section */}
-            <ServiceHeader title="All Products" text="Discover and filter the books you love." />
+        <div className="bg-background">
+            <div className="bg-background rounded-lg p-2 md:p-4 min-h-screen ">
+                {/* Header Section */}
+                <ServiceHeader title="All Products" text="Discover and filter the books you love." />
 
-            {/* Search and Filters */}
-            <div className="max-w-6xl  mx-auto grid gap-4 grid-cols-1 md:grid-cols-4 mb-8">
-                <Search
-                    placeholder="Search by title, author, or category"
-                    allowClear
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="col-span-1 shadow-md bg-white rounded-md px-3 py-2 text-text"
-                />
-                <Select
-                    placeholder="Filter by category"
-                    allowClear
-                    onChange={(value) => setSelectedCategory(value)}
-                    className="shadow-md bg-white rounded-md px-3 py-2 h-12 text-text w-full" /* Added h-12 */
-                >
-                    {categories.map((category) => (
-                        <Option key={category} value={category}>
-                            {category}
-                        </Option>
-                    ))}
-                </Select>
-                <Select
-                    placeholder="Filter by author"
-                    allowClear
-                    onChange={(value) => setSelectedAuthor(value)}
-                    className="shadow-md bg-white rounded-md px-3 py-2 h-12 text-text w-full"
-                >
-                    {authors.map((author) => (
-                        <Option key={author} value={author}>
-                            {author}
-                        </Option>
-                    ))}
-                </Select>
-                <div className="col-span-1 flex items-center gap-4 bg-white rounded-md shadow-md px-3 py-2 h-12">
-                    <label className="text-text font-medium text-sm">Price:</label>
-                    <span className="text-sm text-text-accent font-medium">${priceRange[0]}</span>
-                    <Slider
-                        range
-                        max={200}
-                        defaultValue={[0, 200]}
-                        onChange={(value) => setPriceRange(value as [number, number])}
-                        className="w-full custom-slider"
+                {/* Search and Filters */}
+                <div className="max-w-6xl  mx-auto grid gap-4 grid-cols-1 md:grid-cols-4 mb-8">
+                    <Search
+                        placeholder="Search by title, author, or category"
+                        allowClear
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="col-span-1 shadow-md bg-white rounded-md px-3 py-2 text-text"
                     />
-                    <span className="text-sm text-text-accent font-medium">${priceRange[1]}</span>
+                    <Select
+                        placeholder="Filter by category"
+                        allowClear
+                        onChange={(value) => setSelectedCategory(value)}
+                        className="shadow-md bg-white rounded-md px-3 py-2 h-12 text-text w-full" /* Added h-12 */
+                    >
+                        {categories.map((category) => (
+                            <Option key={category} value={category}>
+                                {category}
+                            </Option>
+                        ))}
+                    </Select>
+                    <Select
+                        placeholder="Filter by author"
+                        allowClear
+                        onChange={(value) => setSelectedAuthor(value)}
+                        className="shadow-md bg-white rounded-md px-3 py-2 h-12 text-text w-full"
+                    >
+                        {authors.map((author) => (
+                            <Option key={author} value={author}>
+                                {author}
+                            </Option>
+                        ))}
+                    </Select>
+                    <div className="col-span-1 flex items-center gap-4 bg-white rounded-md shadow-md px-3 py-2 h-12">
+                        <label className="text-text font-medium text-sm">Price:</label>
+                        <span className="text-sm text-text-accent font-medium">${priceRange[0]}</span>
+                        <Slider
+                            range
+                            max={200}
+                            defaultValue={[0, 200]}
+                            onChange={(value) => setPriceRange(value as [number, number])}
+                            className="w-full custom-slider"
+                        />
+                        <span className="text-sm text-text-accent font-medium">${priceRange[1]}</span>
+                    </div>
+                </div>
+
+
+                {/* Product Cards */}
+                <div className="max-w-6xl  mx-auto pb-24 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {filteredProducts.map((product) => (
+                        <ProductCard key={product._id} product={product} />
+                    ))}
                 </div>
             </div>
-
-
-            {/* Product Cards */}
-            <div className="max-w-6xl  mx-auto pb-24 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {filteredProducts.map((product) => (
-                    <ProductCard key={product._id} product={product} />
-                ))}
-            </div>
+            <BookStoreFooter />
         </div>
     );
 };
