@@ -10,6 +10,7 @@ import CustomButtonSM from '../../components/buttons/CustomButtonSM';
 import BSInput from '../../components/form/BSInput';
 import { useAddProductMutation, useDeleteProductMutation, useGetAllProductsQuery, useUpdateProductMutation } from '../../redux/features/products/products.api';
 import { handleImageUpload } from '../../utils/imageUrlGenerator';
+import BookStoreFooter from '../Footer';
 
 // Define product type
 interface Product {
@@ -165,109 +166,113 @@ const ManageProduct = () => {
     }
 
     return (
-        <div style={{ padding: '20px' }}>
-            <ServiceHeader title="Manage Products" text="Discover more about this book and make it yours today." />
-            <div className='w-full md:w-[12rem] mb-8'>
+        <div className="bg-background">
+            <div style={{ padding: '20px' }}>
+                <ServiceHeader title="Manage Products" text="Discover more about this book and make it yours today." />
+                <div className='w-full md:w-[12rem] mb-8'>
 
 
-                <CustomButton text={'Add New Product'} onClick={handleAddNew} />
-            </div>
+                    <CustomButton text={'Add New Product'} onClick={handleAddNew} />
+                </div>
 
 
-            <Table
-                columns={columns}
-                dataSource={products}
-                rowKey="_id"
-                pagination={{ pageSize: 5 }}
-                bordered
-            />
+                <Table
+                    className='min-h-[60vh]'
+                    columns={columns}
+                    dataSource={products}
+                    rowKey="_id"
+                    pagination={{ pageSize: 5 }}
+                    bordered
+                />
 
-            {/* Modal for Add/Edit Product */}
-            <Modal
-                title={editingProduct ? 'Edit Product' : 'Add New Product'}
-                visible={isModalVisible}
-                onCancel={() => setIsModalVisible(false)}
-                footer={null}
-            >
-                <Form
-                    layout="vertical"
-                    onFinish={handleFormSubmit}
-                    initialValues={editingProduct || {
-                        title: '',
-                        author: '',
-                        price: 0,
-                        category: '',
-                        description: '',
-                        quantity: 0,
-                        inStock: false,
-                    }}
-                    key={editingProduct?._id}
+                {/* Modal for Add/Edit Product */}
+                <Modal
+                    title={editingProduct ? 'Edit Product' : 'Add New Product'}
+                    visible={isModalVisible}
+                    onCancel={() => setIsModalVisible(false)}
+                    footer={null}
                 >
-                    <Row gutter={[24, 0]}>
-                        {/* Left Column */}
-                        <Col xs={24} md={12}>
-                            <BSInput type="text" name="title" label="Title" placeholder="Enter product title" rules={[{ required: true, message: 'Please enter the product title' }]} />
-                        </Col>
-                        <Col xs={24} md={12}>
-                            <BSInput type="text" name="author" label="Author" placeholder="Enter author name" rules={[{ required: true, message: 'Please enter the author' }]} />
-                        </Col>
+                    <Form
+                        layout="vertical"
+                        onFinish={handleFormSubmit}
+                        initialValues={editingProduct || {
+                            title: '',
+                            author: '',
+                            price: 0,
+                            category: '',
+                            description: '',
+                            quantity: 0,
+                            inStock: false,
+                        }}
+                        key={editingProduct?._id}
+                    >
+                        <Row gutter={[24, 0]}>
+                            {/* Left Column */}
+                            <Col xs={24} md={12}>
+                                <BSInput type="text" name="title" label="Title" placeholder="Enter product title" rules={[{ required: true, message: 'Please enter the product title' }]} />
+                            </Col>
+                            <Col xs={24} md={12}>
+                                <BSInput type="text" name="author" label="Author" placeholder="Enter author name" rules={[{ required: true, message: 'Please enter the author' }]} />
+                            </Col>
 
-                        <Col xs={24} md={12}>
-                            <BSInput type="number" name="price" label="Price" min={0} placeholder="Enter price" rules={[{ required: true, message: 'Please enter the price' }]} />
-                        </Col>
-                        <Col xs={24} md={12}>
-                            <Form.Item name="category" label="Category" rules={[{ required: true, message: 'Please select a category' }]}>
-                                <Select placeholder="Select category" className="w-full h-12 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:outline-none">
-                                    {categories.map((cat) => (
-                                        <Select.Option key={cat} value={cat}>
-                                            {cat}
-                                        </Select.Option>
-                                    ))}
-                                </Select>
-                            </Form.Item>
-                        </Col>
+                            <Col xs={24} md={12}>
+                                <BSInput type="number" name="price" label="Price" min={0} placeholder="Enter price" rules={[{ required: true, message: 'Please enter the price' }]} />
+                            </Col>
+                            <Col xs={24} md={12}>
+                                <Form.Item name="category" label="Category" rules={[{ required: true, message: 'Please select a category' }]}>
+                                    <Select placeholder="Select category" className="w-full h-12 rounded-lg border border-gray-300 focus:ring-2 focus:ring-primary focus:outline-none">
+                                        {categories.map((cat) => (
+                                            <Select.Option key={cat} value={cat}>
+                                                {cat}
+                                            </Select.Option>
+                                        ))}
+                                    </Select>
+                                </Form.Item>
+                            </Col>
 
-                        <Col xs={24} md={12}>
-                            <BSInput type="textarea" name="description" label="Description" placeholder="Enter description" rules={[{ required: true, message: 'Please enter the description' }]} />
-                        </Col>
-                        <Col xs={24} md={12}>
-                            <BSInput type="number" name="quantity" label="Quantity" min={0} placeholder="Enter quantity" rules={[{ required: true, message: 'Please enter the quantity' }]} />
-                        </Col>
+                            <Col xs={24} md={12}>
+                                <BSInput type="textarea" name="description" label="Description" placeholder="Enter description" rules={[{ required: true, message: 'Please enter the description' }]} />
+                            </Col>
+                            <Col xs={24} md={12}>
+                                <BSInput type="number" name="quantity" label="Quantity" min={0} placeholder="Enter quantity" rules={[{ required: true, message: 'Please enter the quantity' }]} />
+                            </Col>
 
-                        <Col xs={24} md={12}>
-                            <Form.Item name="inStock" valuePropName="checked">
-                                <Checkbox>In Stock</Checkbox>
-                            </Form.Item>
-                        </Col>
-                        <Col xs={24} md={12}>
+                            <Col xs={24} md={12}>
+                                <Form.Item name="inStock" valuePropName="checked">
+                                    <Checkbox>In Stock</Checkbox>
+                                </Form.Item>
+                            </Col>
+                            <Col xs={24} md={12}>
 
-                            <Form.Item name="image" label="" className='' valuePropName="fileList" getValueFromEvent={(e) => e?.fileList}>
-
-
-                                <Upload
-                                    beforeUpload={() => false}
-
-                                    listType="picture"
-                                    fileList={fileList}
-                                    onChange={handleFileChange}
-                                >
-                                    <Button className='h-12' icon={<UploadOutlined />}>Upload Image</Button>
-                                </Upload>
-
-                            </Form.Item>
-                        </Col>
-                    </Row>
-
-
-                    <Form.Item>
-                        <div className="max-w-[20rem] mx-auto">
-                            <CustomButton disabled={isAdding || isUpdating} type="primary" htmlType="submit" block text={editingProduct ? 'Update Product' : 'Add Product'} />
-                        </div>
-                    </Form.Item>
-                </Form>
+                                <Form.Item name="image" label="" className='' valuePropName="fileList" getValueFromEvent={(e) => e?.fileList}>
 
 
-            </Modal>
+                                    <Upload
+                                        beforeUpload={() => false}
+
+                                        listType="picture"
+                                        fileList={fileList}
+                                        onChange={handleFileChange}
+                                    >
+                                        <Button className='h-12' icon={<UploadOutlined />}>Upload Image</Button>
+                                    </Upload>
+
+                                </Form.Item>
+                            </Col>
+                        </Row>
+
+
+                        <Form.Item>
+                            <div className="max-w-[20rem] mx-auto">
+                                <CustomButton disabled={isAdding || isUpdating} type="primary" htmlType="submit" block text={editingProduct ? 'Update Product' : 'Add Product'} />
+                            </div>
+                        </Form.Item>
+                    </Form>
+
+
+                </Modal>
+            </div>
+            <BookStoreFooter />
         </div>
     );
 };

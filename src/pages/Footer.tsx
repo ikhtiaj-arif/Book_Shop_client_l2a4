@@ -1,18 +1,21 @@
 import { FacebookFilled, InstagramOutlined, LinkedinFilled, TwitterOutlined } from "@ant-design/icons";
 import { Col, Layout, Row, Space, Typography } from "antd";
+import logo from '../img/logo.png'
 
 const { Footer } = Layout;
 const { Title, Text } = Typography;
 
 const BookStoreFooter = () => {
   return (
-    <Footer className="bg-gradient-to-r from-primary-dark to-primary text-white rounded-lg shadow-md p-10 " style={{}}>
+    <Footer className="bg-gradient-to-r from-primary-dark to-primary text-white rounded-lg shadow-md p-10" style={{}}>
       <div className="container mx-auto px-6">
         <Row gutter={[32, 32]} justify="center">
 
           {/* Company Info */}
           <Col xs={24} sm={12} md={8} lg={6}>
-            <Title level={4} style={{ color: "#fff" }}>📚 Book Haven</Title>
+            <Title level={4} style={{ color: "#fff" }}>
+              <img className="w-6 object-cover" src={logo} alt="" />
+               Book Haven</Title>
             <Text style={{ color: "#fafafa" }}>
               Your one-stop online bookstore. Discover new worlds, one page at a time.
             </Text>

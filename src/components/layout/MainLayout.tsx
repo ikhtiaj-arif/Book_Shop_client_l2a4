@@ -26,6 +26,7 @@ const MainLayout: React.FC = () => {
 
 
   return (
+    <>
     <Layout className="h-[100vh] overflow-hidden">
       {/* Header */}
       <Header
@@ -179,7 +180,11 @@ const MainLayout: React.FC = () => {
           </Content>
         </Layout>
       </Content>
+     
     </Layout>
+      {/* <BookStoreFooter /> */}
+      
+      </>
   );
 };
 

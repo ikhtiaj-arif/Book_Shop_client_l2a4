@@ -13,6 +13,7 @@ import { removeFromCart, updateQuantity, useCurrentCartProduct } from "../../red
 import { useCreateOrderMutation } from "../../redux/features/orders/order.api";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { processCart } from "../../utils/CartGenerator";
+import BookStoreFooter from "../Footer";
 
 
 const { Text } = Typography;
@@ -62,50 +63,53 @@ const CheckoutPage: React.FC = () => {
   const subtotal = cart.reduce((total, item) => total + item.price * item.orderQuantity, 0);
 
   return (
-    <div className="bg-background rounded-lg p-2 md:p-4 min-h-screen ">
-      {/* Header Section */}
-      <ServiceHeader title="Checkout" text="Discover more about this book and make it yours today." />
+    <div className="bg-background">
+      <div className="bg-background rounded-lg p-2 md:p-4 min-h-screen ">
+        {/* Header Section */}
+        <ServiceHeader title="Checkout" text="Discover more about this book and make it yours today." />
 
 
-      <Divider />
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 max-w-6xl mx-auto">
-        <Card title="Billing Address" className="shadow-sm">
-          <Form form={form} layout="vertical" onFinish={handleConfirmOrder}>
-            <BSInput type="text" name="address" label="Address" placeholder="123 Main St" />
-            <BSInput type="text" name="city" label="City" placeholder="New York" />
-            <BSInput type="text" name="state" label="State" placeholder="NY" />
-            <BSInput type="text" name="zipCode" label="Zip Code" placeholder="10001" />
-            <BSInput type="text" name="country" label="Country" placeholder="USA" />
-            <Form.Item>
-              <Checkbox checked={agreeToTerms} onChange={(e) => setAgreeToTerms(e.target.checked)}>
-                I agree to the <a href="/terms" target="_blank" rel="noopener noreferrer">terms and conditions</a>.
-              </Checkbox>
-            </Form.Item>
-          </Form>
-        </Card>
-        <Card title="Order Summary" className="shadow-sm mx-10">
-          <div className="space-y-4">
-            {cart.map((item) => (
-              <CartItem
-                key={item._id}
+        <Divider />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 p-6 max-w-6xl mx-auto">
+          <Card title="Billing Address" className="shadow-sm">
+            <Form form={form} layout="vertical" onFinish={handleConfirmOrder}>
+              <BSInput type="text" name="address" label="Address" placeholder="123 Main St" />
+              <BSInput type="text" name="city" label="City" placeholder="New York" />
+              <BSInput type="text" name="state" label="State" placeholder="NY" />
+              <BSInput type="text" name="zipCode" label="Zip Code" placeholder="10001" />
+              <BSInput type="text" name="country" label="Country" placeholder="USA" />
+              <Form.Item>
+                <Checkbox checked={agreeToTerms} onChange={(e) => setAgreeToTerms(e.target.checked)}>
+                  I agree to the <a href="/terms" target="_blank" rel="noopener noreferrer">terms and conditions</a>.
+                </Checkbox>
+              </Form.Item>
+            </Form>
+          </Card>
+          <Card title="Order Summary" className="shadow-sm mx-10">
+            <div className="space-y-4">
+              {cart.map((item) => (
+                <CartItem
+                  key={item._id}
 
-                item={item}
-                onUpdateQuantity={handleUpdateQuantity}
-                onRemove={handleRemoveItem} />
-            ))}
-          </div>
-          <Divider />
-          <div className="flex justify-between items-center text-lg font-semibold mb-4">
-            <Text>Subtotal</Text>
-            <Text>${subtotal.toFixed(2)}</Text>
-          </div>
-          <div className="flex flex-col gap-4">
+                  item={item}
+                  onUpdateQuantity={handleUpdateQuantity}
+                  onRemove={handleRemoveItem} />
+              ))}
+            </div>
+            <Divider />
+            <div className="flex justify-between items-center text-lg font-semibold mb-4">
+              <Text>Subtotal</Text>
+              <Text>${subtotal.toFixed(2)}</Text>
+            </div>
+            <div className="flex flex-col gap-4">
 
-            <CustomButton text="Confirm Order" onClick={() => form.submit()} loading={isLoading} disabled={cart.length === 0 || !agreeToTerms} />
-            <CustomButtonS text="Continue Shopping" onClick={() => navigate("/products")} type="default" />
-          </div>
-        </Card>
+              <CustomButton text="Confirm Order" onClick={() => form.submit()} loading={isLoading} disabled={cart.length === 0 || !agreeToTerms} />
+              <CustomButtonS text="Continue Shopping" onClick={() => navigate("/products")} type="default" />
+            </div>
+          </Card>
+        </div>
       </div>
+      <BookStoreFooter />
     </div>
   );
 };

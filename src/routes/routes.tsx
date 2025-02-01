@@ -16,6 +16,8 @@ import UserDashboard from "../pages/User/UserDashboard"
 import VerifyOrder from "../pages/User/VerifyOrder"
 import ViewOrders from "../pages/Orders/ViewOrders"
 import NotFoundPage from "../pages/NotFound"
+import Contact from "../pages/Contact"
+import Profile from "../pages/User/Profile"
 
 const router = createBrowserRouter([
     {
@@ -40,6 +42,10 @@ const router = createBrowserRouter([
                 element: <About />
             },
             {
+                path: '/contact',
+                element: <Contact />
+            },
+            {
                 path: '/products',
                 element: <AllProducts />
             },
@@ -51,6 +57,9 @@ const router = createBrowserRouter([
             },
             {
                 path: "/orders/:id", element: <ViewOrders />
+            },
+            {
+                path: "/user/profile/:id", element: <Profile />
             },
 
             {

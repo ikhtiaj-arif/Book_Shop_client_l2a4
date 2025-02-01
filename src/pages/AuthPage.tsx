@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Card, Col, Row } from 'antd';
 import { useState } from 'react';
 import { FieldValues } from 'react-hook-form';
@@ -44,8 +45,8 @@ const AuthPage = () => {
       dispatch(setUser({ user: user, token: res.data.accessToken }));
       navigate(`/`);
       toast.success('Logged in', { id: toastId });
-    } catch (err) {
-      toast.error(`Something went wrong`, { id: toastId });
+    } catch (err :any) {
+      toast.error(`${err.data.message}`, { id: toastId });
       console.log(err);
     }
   };

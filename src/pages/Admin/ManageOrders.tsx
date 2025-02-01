@@ -2,6 +2,7 @@ import { Skeleton, Table } from 'antd';
 import React from 'react';
 import ServiceHeader from '../../components/ServiceHeader';
 import { useGetOrdersQuery } from '../../redux/features/orders/order.api';
+import BookStoreFooter from '../Footer';
 
 // Define types for the order data
 interface Product {
@@ -27,6 +28,7 @@ interface Order {
 const ManageOrders: React.FC = () => {
   const { data: orderData, isLoading } = useGetOrdersQuery(undefined);
   // const{data:allProducts} = useGetAllProductsQuery()
+  console.log(orderData);
 
   if (isLoading) {
     return <>Loading...</>;
@@ -42,7 +44,7 @@ const ManageOrders: React.FC = () => {
     },
 
     {
-      title: 'Status',
+      title: 'Payment Status',
       dataIndex: 'status',
       key: 'status',
       render: (text: string) => <span>{text}</span>,
@@ -112,9 +114,11 @@ const ManageOrders: React.FC = () => {
 
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div className="bg-background">
+    <div  style={{ padding: '20px' }}>
       <ServiceHeader title="Order History" text="Discover more about this book and make it yours today." />
       <Table
+      className='min-h-[60vh]'
         columns={columns}
         dataSource={orderData?.data} // Ensure this is the correct property that contains the orders
         rowKey="_id" // Use the `_id` field as the unique key for rows
@@ -123,6 +127,8 @@ const ManageOrders: React.FC = () => {
         }}
         bordered
       />
+    </div>
+    <BookStoreFooter />
     </div>
   );
 };

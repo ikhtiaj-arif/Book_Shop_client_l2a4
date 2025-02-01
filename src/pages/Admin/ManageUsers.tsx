@@ -8,6 +8,7 @@ import ServiceHeader from '../../components/ServiceHeader';
 import { currentUser } from '../../redux/features/auth/authSlice';
 import { useBlockUserMutation, useGetAllUsersQuery, useUnblockUserMutation } from '../../redux/features/user/userApi';
 import { useAppSelector } from '../../redux/hooks';
+import BookStoreFooter from '../Footer';
 
 // Define a TypeScript interface for User
 interface User {
@@ -114,15 +115,19 @@ const ManageUsers: React.FC = () => {
     ];
 
     return (
+        <div className="bg-background">
         <div style={{ padding: '20px' }}>
             <ServiceHeader title="Manage Users" text="Discover more about this book and make it yours today." />
             <Table
+             className='min-h-[60vh]'
                 columns={columns}
                 dataSource={userData}
                 rowKey="_id"
                 pagination={{ pageSize: 5 }}
                 bordered
             />
+        </div>
+        <BookStoreFooter />
         </div>
     );
 };
