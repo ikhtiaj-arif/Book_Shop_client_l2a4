@@ -30,13 +30,13 @@ const router = createBrowserRouter([
             },
             {
                 path: '*',
-                element: <NotFoundPage  />
+                element: <NotFoundPage />
             },
             {
                 path: '/login',
                 element: <AuthPage />
             },
-        
+
             {
                 path: '/about',
                 element: <About />
@@ -53,21 +53,21 @@ const router = createBrowserRouter([
                 path: "/products/:id", element: <ProductDetails />
             },
             {
-                path: "/checkout", element: 
-                <RouteProtector>
+                path: "/checkout", element:
+                    <RouteProtector>
 
-                <CheckoutPage />
-                </RouteProtector>
+                        <CheckoutPage />
+                    </RouteProtector>
             },
             {
                 path: "/orders/:id", element:
-                <RouteProtector>
+                    <RouteProtector>
 
-                <ViewOrders />
-                </RouteProtector>
+                        <ViewOrders />
+                    </RouteProtector>
             },
             {
-                path: "/user/profile/:id", element:<RouteProtector>
+                path: "/user/profile/:id", element: <RouteProtector>
 
                     <Profile />
                 </RouteProtector>
@@ -76,7 +76,7 @@ const router = createBrowserRouter([
             {
                 path: '/order/verify',
                 element: <RouteProtector>
-                    < VerifyOrder/>
+                    < VerifyOrder />
                 </RouteProtector>,
             },
             {
@@ -112,7 +112,7 @@ const router = createBrowserRouter([
                             <ManageOrders />
                         </RouteProtector>,
                     },
-                
+
                     {
                         path: 'products',
                         element: <RouteProtector>
