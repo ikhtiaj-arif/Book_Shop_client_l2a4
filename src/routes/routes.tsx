@@ -62,7 +62,6 @@ const router = createBrowserRouter([
             {
                 path: "/orders/:id", element:
                     <RouteProtector>
-
                         <ViewOrders />
                     </RouteProtector>
             },
@@ -89,33 +88,33 @@ const router = createBrowserRouter([
             {
                 path: '/admin',
                 element:
-                    <RouteProtector>
+                    <RouteProtector adminOnly={true}>
                         <AdminDashboard />
                     </RouteProtector>,
                 children: [
                     {
 
                         index: true,
-                        element: <RouteProtector>
+                        element: <RouteProtector adminOnly={true}>
                             <AdminDashboard />
                         </RouteProtector>,
                     },
                     {
                         path: 'manage-users',
-                        element: <RouteProtector>
+                        element: <RouteProtector adminOnly={true}>
                             <ManageUsers />
                         </RouteProtector>,
                     },
                     {
                         path: 'manage-orders',
-                        element: <RouteProtector>
+                        element: <RouteProtector adminOnly={true}>
                             <ManageOrders />
                         </RouteProtector>,
                     },
 
                     {
                         path: 'products',
-                        element: <RouteProtector>
+                        element: <RouteProtector adminOnly={true}>
                             <ManageProduct />
                         </RouteProtector>,
                     },
