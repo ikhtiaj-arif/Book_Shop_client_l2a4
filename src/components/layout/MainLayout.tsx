@@ -134,20 +134,20 @@ const MainLayout: React.FC = () => {
           <Menu mode="vertical" className="bg-background border-0">
             {/* Search Bar */}
             <Menu.Item key="1" style={{ padding: '8px 16px' }}> {/* Add padding for better alignment */}
-              <div style={{ display: 'flex', justifyContent: 'center' }}> {/* Center the search bar */}
-
-              </div>
+            <Link to="/" onClick={() => setDrawerVisible(false)} style={{ color: '#595959', textDecoration: 'none' }}>
+                Home
+              </Link>
             </Menu.Item>
 
             {/* Menu Items */}
             <Menu.Item key="2" style={{ padding: '8px 16px' }}> {/* Consistent padding */}
-              <Link to="/" onClick={() => setDrawerVisible(false)} style={{ color: '#595959', textDecoration: 'none' }}>
-                Home
+            <Link to="/about" onClick={() => setDrawerVisible(false)} style={{ color: '#595959', textDecoration: 'none' }}>
+                About
               </Link>
             </Menu.Item>
             <Menu.Item key="3" style={{ padding: '8px 16px' }}>
-              <Link to="/about" onClick={() => setDrawerVisible(false)} style={{ color: '#595959', textDecoration: 'none' }}>
-                About
+              <Link to="/contact" onClick={() => setDrawerVisible(false)} style={{ color: '#595959', textDecoration: 'none' }}>
+                Contact
               </Link>
             </Menu.Item>
             {!user && (

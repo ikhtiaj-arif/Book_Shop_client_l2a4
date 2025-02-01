@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { clearCart } from "../../redux/features/cart/cartSlice";
 import { useVerifyOrderQuery } from "../../redux/features/orders/order.api";
 import { useAppDispatch } from "../../redux/hooks";
@@ -25,7 +25,7 @@ const VerifyOrder = () => {
   return (
     <div className="p-6 max-w-4xl mx-auto bg-white shadow-lg rounded-lg mt-10">
       {/* Page Heading */}
-      
+
       <h1 className="text-3xl font-bold text-text mb-6 text-center">
         Verify Your Order
       </h1>
@@ -70,11 +70,10 @@ const VerifyOrder = () => {
             <p className="text-text-accent">
               <strong>Status:</strong>{" "}
               <span
-                className={`font-semibold ${
-                  order?.bank_status === "Success"
+                className={`font-semibold ${order?.bank_status === "Success"
                     ? "text-green-600"
                     : "text-red-600"
-                }`}
+                  }`}
               >
                 {order?.bank_status}
               </span>
@@ -89,10 +88,12 @@ const VerifyOrder = () => {
           Thank you for your purchase! Your order has been successfully verified.
         </p>
         <button
-          onClick={() => window.location.reload()} // Example action
+          // onClick={() => window.location.reload()} // Example action
           className="bg-primary text-white py-2 px-6 rounded-lg hover:bg-primary-dark transition duration-200"
         >
-          Back to Home
+          <Link to="/">
+            Back to Home
+          </Link>
         </button>
       </div>
     </div>

@@ -183,6 +183,7 @@ const ManageProduct = () => {
                     rowKey="_id"
                     pagination={{ pageSize: 5 }}
                     bordered
+                    scroll={{ x: true }}
                 />
 
                 {/* Modal for Add/Edit Product */}

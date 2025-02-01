@@ -125,6 +125,7 @@ const ManageUsers: React.FC = () => {
                     rowKey="_id"
                     pagination={{ pageSize: 5 }}
                     bordered
+                    scroll={{ x: true }}
                 />
             </div>
             <BookStoreFooter />

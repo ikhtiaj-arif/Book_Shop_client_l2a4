@@ -122,6 +122,7 @@ const ManageOrders: React.FC = () => {
           pageSize: 5, // Set number of rows per page
         }}
         bordered
+        scroll={{ x: true }}
       />
     </div>
     <BookStoreFooter />
