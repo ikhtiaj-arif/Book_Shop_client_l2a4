@@ -5,9 +5,7 @@ import React from 'react';
 import CustomButtonSM from '../../components/buttons/CustomButtonSM';
 import SecondaryBtnSM from '../../components/buttons/SecondaryBtnSm';
 import ServiceHeader from '../../components/ServiceHeader';
-import { currentUser } from '../../redux/features/auth/authSlice';
 import { useBlockUserMutation, useGetAllUsersQuery, useUnblockUserMutation } from '../../redux/features/user/userApi';
-import { useAppSelector } from '../../redux/hooks';
 import BookStoreFooter from '../Footer';
 
 // Define a TypeScript interface for User
@@ -23,7 +21,7 @@ const ManageUsers: React.FC = () => {
     const { data, isLoading } = useGetAllUsersQuery(undefined);
     const [blockUser, { isLoading: isBlocking }] = useBlockUserMutation();
     const [unblockUser, { isLoading: isUnblocking }] = useUnblockUserMutation();
-    const user = useAppSelector(currentUser);
+    // const user = useAppSelector(currentUser);
 
     const userData: User[] = data?.data || [];
 
@@ -98,7 +96,7 @@ const ManageUsers: React.FC = () => {
                         <CustomButtonSM
                             text="Block"
                             type="default"
-                            disabled={user?.role === 'admin' || isBlocking}
+                            disabled={record.role === 'admin' || isBlocking}
                             onClick={() => handleBlockUnblock(record._id, false)}
                         />
                     ) : (
