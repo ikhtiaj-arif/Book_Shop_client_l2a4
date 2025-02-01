@@ -38,7 +38,7 @@ const ViewOrders = () => {
                 dataSource={orders}
                 rowKey="_id" // Use the `_id` field as the unique key for rows
                 pagination={{
-                    pageSize: 5, // Set number of rows per page
+                    pageSize: 8, // Set number of rows per page
                 }}
                 bordered
                 scroll={{ x: true }}

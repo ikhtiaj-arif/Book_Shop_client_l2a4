@@ -177,7 +177,7 @@ const ManageProduct = () => {
                     columns={columns}
                     dataSource={products}
                     rowKey="_id"
-                    pagination={{ pageSize: 5 }}
+                    pagination={{ pageSize: 8 }}
                     bordered
                     scroll={{ x: true }}
                 />
