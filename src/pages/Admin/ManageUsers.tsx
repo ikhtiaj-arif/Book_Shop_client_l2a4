@@ -121,7 +121,7 @@ const ManageUsers: React.FC = () => {
                     columns={columns}
                     dataSource={userData}
                     rowKey="_id"
-                    pagination={{ pageSize: 5 }}
+                    pagination={{ pageSize: 8 }}
                     bordered
                     scroll={{ x: true }}
                 />
