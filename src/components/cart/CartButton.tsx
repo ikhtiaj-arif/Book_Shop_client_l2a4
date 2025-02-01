@@ -115,7 +115,7 @@ const CartButton: React.FC = () => {
                     <div className="flex flex-col justify-center items-center h-32">
                         <Empty description="Your cart is empty" />
                         <Link to="/all-products" className="mt-4">
-                            <Button type="primary">Continue Shopping</Button>
+                            <CustomButtonS text="CONTINUE SHOPPING" onClick={() => navigate("/products")} type="default" />
                         </Link>
                     </div>
                 )}

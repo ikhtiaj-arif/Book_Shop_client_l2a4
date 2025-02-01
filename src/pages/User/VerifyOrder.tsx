@@ -31,7 +31,7 @@ const VerifyOrder = () => {
       </h1>
 
       {/* Order Details Card */}
-      <div className="bg-primary-fade p-6 rounded-lg shadow-sm">
+      <div className="bg-background p-6 rounded-lg shadow-sm">
         {/* Product Details */}
         <div className="mb-6">
           <h2 className="text-xl font-semibold text-text mb-4">
@@ -39,8 +39,9 @@ const VerifyOrder = () => {
           </h2>
           <div className="space-y-2">
             <p className="text-text-accent">
-              <strong>Price per unit:</strong> {order?.currency}
-              {order?.amount}
+              <strong>Price per unit:</strong>
+              {/* {order?.currency} */}
+              ${order?.amount}
             </p>
           </div>
         </div>
@@ -54,8 +55,8 @@ const VerifyOrder = () => {
             <p className="text-text-accent">
               <strong>Total Price:</strong>{" "}
               <span className="text-primary-dark font-semibold">
-                {order?.currency}
-                {order?.payable_amount}
+                {/* {order?.currency} */}
+                $ {order?.payable_amount}
               </span>
             </p>
           </div>
@@ -71,8 +72,8 @@ const VerifyOrder = () => {
               <strong>Status:</strong>{" "}
               <span
                 className={`font-semibold ${order?.bank_status === "Success"
-                    ? "text-green-600"
-                    : "text-red-600"
+                  ? "text-green-600"
+                  : "text-red-600"
                   }`}
               >
                 {order?.bank_status}
