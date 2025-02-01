@@ -98,7 +98,7 @@ const ManageUsers: React.FC = () => {
                         <CustomButtonSM
                             text="Block"
                             type="default"
-                            disabled={user?.role === 'admin' || isBlocking}
+                            disabled={record.role === 'admin' || isBlocking}
                             onClick={() => handleBlockUnblock(record._id, false)}
                         />
                     ) : (
