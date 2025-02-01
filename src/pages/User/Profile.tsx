@@ -3,7 +3,9 @@ import { Button, Col, Form, Row, Typography } from "antd";
 import { toast } from "sonner";
 import ServiceHeader from "../../components/ServiceHeader";
 import BSInput from "../../components/form/BSInput";
+import { logOut } from "../../redux/features/auth/authSlice";
 import { useChangeUserPasswordMutation } from "../../redux/features/user/userApi";
+import { useAppDispatch } from "../../redux/hooks";
 import BookStoreFooter from "../Footer";
 const { Title } = Typography
 
@@ -15,11 +17,11 @@ type Tvalues = {
 
 const Profile = () => {
     const [changePassword] = useChangeUserPasswordMutation()
+    const dispatch = useAppDispatch()
 
     const [passwordForm] = Form.useForm();
 
     const toastId = 'pass'
-
 
 
 
@@ -37,7 +39,7 @@ const Profile = () => {
             const response = await changePassword(data).unwrap();
             console.log(response);
             toast.success("Password changed successfully!", { id: toastId });
-
+            dispatch(logOut())
             passwordForm.resetFields(); // Reset form on success
         } catch (error: any) {
 
