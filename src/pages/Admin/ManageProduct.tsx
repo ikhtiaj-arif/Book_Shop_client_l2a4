@@ -166,8 +166,8 @@ const ManageProduct = () => {
     }
 
     return (
-        <div className="bg-background">
-            <div style={{ padding: '20px' }}>
+        <div className="bg-white">
+    <div className='bg-background m-3 md:m-5 rounded-lg' >
                 <ServiceHeader title="Manage Products" text="Discover more about this book and make it yours today." />
                 <div className='w-full md:w-[12rem] mb-8'>
 
