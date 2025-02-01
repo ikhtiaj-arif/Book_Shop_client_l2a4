@@ -35,7 +35,7 @@ const ManageProduct = () => {
 
     useEffect(() => {
         if (allProductData?.data) {
-            setProducts(allProductData.data); // Set products from API response
+            setProducts([...allProductData.data]?.reverse()); // Set products from API response
         }
     }, [allProductData]);
 
@@ -170,12 +170,8 @@ const ManageProduct = () => {
     <div className='bg-background m-3 md:m-5 rounded-lg' >
                 <ServiceHeader title="Manage Products" text="Discover more about this book and make it yours today." />
                 <div className='w-full md:w-[12rem] mb-8'>
-
-
                     <CustomButton text={'Add New Product'} onClick={handleAddNew} />
                 </div>
-
-
                 <Table
                     className='min-h-[60vh]'
                     columns={columns}
