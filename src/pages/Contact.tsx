@@ -10,9 +10,8 @@ const { Title, Text } = Typography
 
 const Contact = () => {
     return (
-
-        <>
-            <div className="bg-background rounded-lg p-2 md:p-4  mx-auto">
+        <div className="bg-white">
+            <div className='bg-background m-3 md:m-5 rounded-lg h-screen' >
                 {/* Heading Section */}
                 <ServiceHeader title="Contact Us" text="  Have questions or need assistance? We're here to help!" />
 
@@ -172,7 +171,8 @@ const Contact = () => {
 
             <BookStoreFooter />
 
-        </>
+        </div >
+
 
     );
 };

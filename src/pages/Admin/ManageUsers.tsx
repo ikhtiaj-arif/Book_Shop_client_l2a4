@@ -53,7 +53,7 @@ const ManageUsers: React.FC = () => {
                     }
                 } catch (error) {
                     message.error(`Failed to ${isBlocked ? 'unblock' : 'block'} user.`);
-                 
+
                 }
             },
         });
@@ -115,19 +115,20 @@ const ManageUsers: React.FC = () => {
     ];
 
     return (
-        <div className="bg-background">
-        <div style={{ padding: '20px' }}>
-            <ServiceHeader title="Manage Users" text="Discover more about this book and make it yours today." />
-            <Table
-             className='min-h-[60vh]'
-                columns={columns}
-                dataSource={userData}
-                rowKey="_id"
-                pagination={{ pageSize: 5 }}
-                bordered
-            />
-        </div>
-        <BookStoreFooter />
+        <div className="bg-white">
+            <div className='bg-background m-3 md:m-5 rounded-lg' >
+                <ServiceHeader title="Manage Users" text="Discover more about this book and make it yours today." />
+                <Table
+                    className='min-h-[60vh]'
+                    columns={columns}
+                    dataSource={userData}
+                    rowKey="_id"
+                    pagination={{ pageSize: 5 }}
+                    bordered
+                    scroll={{ x: true }}
+                />
+            </div>
+            <BookStoreFooter />
         </div>
     );
 };

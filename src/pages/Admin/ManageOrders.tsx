@@ -27,12 +27,8 @@ interface Order {
 
 const ManageOrders: React.FC = () => {
   const { data: orderData, isLoading } = useGetOrdersQuery(undefined);
-  // const{data:allProducts} = useGetAllProductsQuery()
-  console.log(orderData);
 
-  if (isLoading) {
-    return <>Loading...</>;
-  }
+
 
   // Define table columns
   const columns = [
@@ -114,8 +110,8 @@ const ManageOrders: React.FC = () => {
 
 
   return (
-    <div className="bg-background">
-    <div  style={{ padding: '20px' }}>
+    <div className="bg-white">
+    <div className='bg-background m-3 md:m-5 rounded-lg' >
       <ServiceHeader title="Order History" text="Discover more about this book and make it yours today." />
       <Table
       className='min-h-[60vh]'
@@ -126,6 +122,7 @@ const ManageOrders: React.FC = () => {
           pageSize: 5, // Set number of rows per page
         }}
         bordered
+        scroll={{ x: true }}
       />
     </div>
     <BookStoreFooter />

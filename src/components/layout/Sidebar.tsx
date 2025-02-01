@@ -1,4 +1,4 @@
-import { LogoutOutlined, UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
+import { LogoutOutlined, ProfileOutlined, ShoppingCartOutlined, TeamOutlined, UnorderedListOutlined, UserOutlined } from '@ant-design/icons';
 import { Layout } from 'antd';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'; // Add useLocation
@@ -31,20 +31,48 @@ const Sidebar: React.FC<React.PropsWithChildren<SidebarProps>> = ({ collapsed, s
   const sidebarItems = [
     ...(user.role === userRole.ADMIN
       ? [
-        // { key: '1', label: 'Admin ', icon: <UserOutlined />, path: '/admin/products' },
-        { key: '2', label: 'Manage Products', icon: <VideoCameraOutlined />, path: '/admin/products' },
-        { key: '3', label: 'Manage Orders', icon: <UploadOutlined />, path: '/admin/manage-orders' },
-        { key: '4', label: 'Manage Users', icon: <UserOutlined />, path: '/admin/manage-users' },
+        {
+          key: "2",
+          label: "Manage Products",
+          icon: <ShoppingCartOutlined />, // Represents managing products
+          path: "/admin/products",
+        },
+        {
+          key: "3",
+          label: "Manage Orders",
+          icon: <UnorderedListOutlined />, // Represents managing orders
+          path: "/admin/manage-orders",
+        },
+        {
+          key: "4",
+          label: "Manage Users",
+          icon: <TeamOutlined />, // Represents managing users
+          path: "/admin/manage-users",
+        },
       ]
       : [
-        // { key: '1', label: 'User ', icon: <UserOutlined />, path: `/user/profile/${user?.id}` },
-        { key: '2', label: 'Profile', icon: <VideoCameraOutlined />, path: `/user/profile/${user?.id}` },
-        // { key: '3', label: 'Orders', icon: <UploadOutlined />, path: '/user/orders' },
+        {
+          key: "2",
+          label: "Profile",
+          icon: <UserOutlined />, // Represents user profile
+          path: `/user/profile/${user?.id}`,
+        },
       ]),
 
-    { key: '5', label: 'My Orders', icon: <UploadOutlined />, path: `/orders/${user?.id}` },
-    { key: '6', label: 'Logout', icon: <LogoutOutlined />, onClick: () => dispatch(logOut()) || navigate('/login') }, // Logout option
-  ];
+    {
+      key: "5",
+      label: "My Orders",
+      icon: <ProfileOutlined />, // Represents viewing orders
+      path: `/orders/${user?.id}`,
+    },
+    {
+      key: "6",
+      label: "Logout",
+      icon: <LogoutOutlined />, // Represents logout
+      onClick: () => dispatch(logOut()) || navigate("/login"),
+    },
+  ];// Logout option
+
 
   return (
     <Sider
@@ -65,7 +93,7 @@ const Sidebar: React.FC<React.PropsWithChildren<SidebarProps>> = ({ collapsed, s
       }}
     >
       {/* Custom Menu */}
-      <ul className="flex flex-col gap-2 p-2">
+      <ul className="flex flex-col gap-2 p-1 md:p-2">
         {sidebarItems.map((item) => {
           const isActive = location.pathname === item.path;
           return (

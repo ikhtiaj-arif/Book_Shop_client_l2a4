@@ -41,6 +41,7 @@ const ViewOrders = () => {
                     pageSize: 5, // Set number of rows per page
                 }}
                 bordered
+                scroll={{ x: true }}
             />
 
             <BookStoreFooter />
