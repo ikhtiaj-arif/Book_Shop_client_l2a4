@@ -89,6 +89,6 @@ This project is open-source and available under the **MIT License**.
 
 ---
 🔗 **Stay Connected**  
-💻 GitHub: [your-username](https://github.com/your-username)  
-📧 Email: your-email@example.com  
+💻 GitHub: [ikhtiaj-arif](https://github.com/ikhtiaj-arif)  
+📧 Email: your- ikhtiaj.arif@example.com  
 
