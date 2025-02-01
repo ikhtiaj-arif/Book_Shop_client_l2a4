@@ -53,13 +53,24 @@ const router = createBrowserRouter([
                 path: "/products/:id", element: <ProductDetails />
             },
             {
-                path: "/checkout", element: <CheckoutPage />
+                path: "/checkout", element: 
+                <RouteProtector>
+
+                <CheckoutPage />
+                </RouteProtector>
             },
             {
-                path: "/orders/:id", element: <ViewOrders />
+                path: "/orders/:id", element:
+                <RouteProtector>
+
+                <ViewOrders />
+                </RouteProtector>
             },
             {
-                path: "/user/profile/:id", element: <Profile />
+                path: "/user/profile/:id", element:<RouteProtector>
+
+                    <Profile />
+                </RouteProtector>
             },
 
             {
