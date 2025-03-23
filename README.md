@@ -90,5 +90,5 @@ This project is open-source and available under the **MIT License**.
 ---
 🔗 **Stay Connected**  
 💻 GitHub: [ikhtiaj-arif](https://github.com/ikhtiaj-arif)  
-📧 Email: your- ikhtiaj.arif@example.com  
+📧 Email: your- md.ikhtiajarif@gmail.com  
 
