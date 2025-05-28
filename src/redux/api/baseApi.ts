@@ -45,19 +45,74 @@
 //   endpoints: () => ({}),
 // });
 
+// import {
+//   createApi,
+//   DefinitionType,
+//   fetchBaseQuery,
+//   type BaseQueryApi,
+//   type BaseQueryFn,
+//   type FetchArgs,
+// } from "@reduxjs/toolkit/query";
+// import { toast } from "sonner";
+
+// const baseQuery = fetchBaseQuery({
+//   baseUrl: "http://localhost:5000/api",
+
+//   // baseUrl: "https://book-shop-server-l2a4.vercel.app/api",
+//   credentials: "include",
+//   prepareHeaders: (headers) => {
+//     // Retrieve access token from localStorage
+//     const token = localStorage.getItem("accessToken");
+//     if (token) {
+//       headers.set("authorization", `${token}`);
+//     }
+
+//     // Retrieve cart data from localStorage and send it as a header
+//     const cart = localStorage.getItem("cart");
+//     if (cart) {
+//       headers.set("x-cart-data", encodeURIComponent(cart)); // Encode JSON to avoid issues
+//     }
+
+//     return headers;
+//   },
+// });
+
+// const baseQueryWithRefreshToken: BaseQueryFn<
+//   FetchArgs,
+//   BaseQueryApi,
+//   DefinitionType
+// > = async (args, api, extraOptions): Promise<any> => {
+//   const result = await baseQuery(args, api, extraOptions);
+
+//   if (result?.error?.status === 404) {
+//     const errorMessage = (result.error.data as { message: string })?.message;
+//     if (errorMessage) {
+//       toast.error(errorMessage);
+//     }
+//     // toast.error(result.error.data as {message:string}).message;
+//   }
+
+//   return result;
+// };
+
+// export const baseApi = createApi({
+//   reducerPath: "baseApi",
+//   baseQuery: baseQueryWithRefreshToken,
+//   tagTypes: ["product"],
+//   endpoints: () => ({}),
+// });
 import {
   createApi,
-  DefinitionType,
   fetchBaseQuery,
   type BaseQueryApi,
   type BaseQueryFn,
+  type DefinitionType,
   type FetchArgs,
-} from "@reduxjs/toolkit/query";
+} from "@reduxjs/toolkit/query/react";
 import { toast } from "sonner";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: "http://localhost:5000/api",
-
   // baseUrl: "https://book-shop-server-l2a4.vercel.app/api",
   credentials: "include",
   prepareHeaders: (headers) => {
@@ -89,7 +144,6 @@ const baseQueryWithRefreshToken: BaseQueryFn<
     if (errorMessage) {
       toast.error(errorMessage);
     }
-    // toast.error(result.error.data as {message:string}).message;
   }
 
   return result;
@@ -98,6 +152,6 @@ const baseQueryWithRefreshToken: BaseQueryFn<
 export const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery: baseQueryWithRefreshToken,
-  tagTypes: ["product"],
+  tagTypes: ["product", "user", "order", "cart"],
   endpoints: () => ({}),
 });

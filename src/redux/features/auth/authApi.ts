@@ -1,6 +1,8 @@
 import { baseApi } from "../../api/baseApi";
 
+
 const authApi = baseApi.injectEndpoints({
+
   endpoints: (builder) => ({
     registration: builder.mutation({
       query: (userInfo) => ({
@@ -9,6 +11,7 @@ const authApi = baseApi.injectEndpoints({
         body: userInfo,
       }),
     }),
+    
     login: builder.mutation({
       query: (userInfo) => ({
         url: "/auth/login",
@@ -16,6 +19,7 @@ const authApi = baseApi.injectEndpoints({
         body: userInfo,
       }),
     }),
+
     getAllUsers: builder.query({
       query: () => ({
         url: "/users",
@@ -23,6 +27,7 @@ const authApi = baseApi.injectEndpoints({
       }),
     }),
   }),
+
 });
 
 export const {
