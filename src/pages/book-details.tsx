@@ -1,13 +1,13 @@
 "use client"
 
+import { ArrowLeft, Heart, RotateCcw, Share2, Shield, ShoppingCart, Star, Truck } from "lucide-react"
 import { useState } from "react"
-import { useParams, Link } from "react-router-dom"
-import { Star, Heart, Share2, ShoppingCart, Truck, Shield, RotateCcw, ArrowLeft } from "lucide-react"
+import { Link, useParams } from "react-router-dom"
+import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar"
+import { Badge } from "../components/ui/badge"
 import { Button } from "../components/ui/button"
 import { Card, CardContent } from "../components/ui/card"
-import { Badge } from "../components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
-import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar"
 
 // Mock data - replace with API call later
 const bookData = {
@@ -128,9 +128,8 @@ export default function BookDetailPage() {
               <button
                 key={index}
                 onClick={() => setSelectedImage(index)}
-                className={`aspect-[3/4] w-20 overflow-hidden rounded-md border-2 ${
-                  selectedImage === index ? "border-primary" : "border-transparent"
-                }`}
+                className={`aspect-[3/4] w-20 overflow-hidden rounded-md border-2 ${selectedImage === index ? "border-primary" : "border-transparent"
+                  }`}
               >
                 <img src={image || "/placeholder.svg"} alt="" className="w-full h-full object-cover" />
               </button>
@@ -153,9 +152,8 @@ export default function BookDetailPage() {
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`h-5 w-5 ${
-                        i < Math.floor(bookData.rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-                      }`}
+                      className={`h-5 w-5 ${i < Math.floor(bookData.rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                        }`}
                     />
                   ))}
                 </div>
@@ -287,9 +285,8 @@ export default function BookDetailPage() {
                             {[...Array(5)].map((_, i) => (
                               <Star
                                 key={i}
-                                className={`h-4 w-4 ${
-                                  i < review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-                                }`}
+                                className={`h-4 w-4 ${i < review.rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                                  }`}
                               />
                             ))}
                           </div>

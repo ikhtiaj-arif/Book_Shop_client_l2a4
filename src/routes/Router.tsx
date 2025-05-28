@@ -141,7 +141,9 @@ import DashboardLayout from '../layouts/DashboardLayout';
 import MainLayout from '../layouts/MainLayout';
 import RouteProtector from '../layouts/RouteProtector';
 import AboutPage from '../pages/about';
+import AdminDashboard from '../pages/admin/AdminDashboard';
 import AuthPage from '../pages/auth';
+import BookDetailPage from '../pages/book-details';
 import BooksPage from '../pages/books';
 import CategoriesPage from '../pages/categories';
 import ContactPage from '../pages/contact';
@@ -150,6 +152,7 @@ import CheckoutPage from '../pages/user/CheckoutPage';
 import UserDashboard from '../pages/user/UserDashboard';
 import VerifyOrder from '../pages/user/VerifyOrder';
 import ViewOrders from '../pages/user/ViewOrders';
+import ManageBooks from '../pages/admin/books/ManageBooks';
 // import DashboardLayout from '../components/layout/DashboardLayout';
 // import MainLayout from '../components/layout/MainLayout';
 // import RouteProtector from '../components/layout/RouteProtector';
@@ -184,10 +187,10 @@ const router = createBrowserRouter([
             { path: '/contact', element: <ContactPage /> },
             { path: '/categories', element: <CategoriesPage /> },
             { path: '/books', element: <BooksPage /> },
+            { path: '/books/:id', element: <BookDetailPage /> },
             { path: '/login', element: <AuthPage /> },
             // { path: '/books/:id', element: <ProductDetails /> },
             //     { path: '/products', element: <AllProducts /> },
-            //     { path: '/products/:id', element: <ProductDetails /> },
             //     { path: '*', element: <NotFoundPage /> },
         ],
     },
@@ -214,11 +217,11 @@ const router = createBrowserRouter([
             </RouteProtector>
         ),
         children: [
-            // { index: true, element: <AdminDashboard /> },
-            // { path: 'dashboard', element: <AdminDashboard /> },
+            { index: true, element: <AdminDashboard /> },
+            { path: 'dashboard', element: <AdminDashboard /> },
+            { path: 'manage-books', element: <ManageBooks /> },
             // { path: 'manage-users', element: <ManageUsers /> },
             // { path: 'manage-orders', element: <ManageOrders /> },
-            // { path: 'products', element: <ManageProduct /> },
         ],
     },
 ]);

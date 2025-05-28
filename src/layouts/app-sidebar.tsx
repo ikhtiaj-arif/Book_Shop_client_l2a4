@@ -46,8 +46,8 @@ export function AppSidebar() {
                     icon: Home,
                 },
                 {
-                    title: "Manage Products",
-                    url: "/admin/products",
+                    title: "Manage Books",
+                    url: "/admin/manage-books",
                     icon: Package,
                 },
                 {
