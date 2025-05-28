@@ -2,11 +2,12 @@
 
 import type React from "react"
 
-import { MenuIcon, ShoppingCart, User } from "lucide-react"
+import { LogOut, MenuIcon, ShoppingCart, User } from "lucide-react"
 import { useState } from "react"
 import { Link, Outlet, useNavigate } from "react-router-dom"
 import logo from "../img/logo.png"
 
+import { ModeToggle } from "../components/mode-toggle"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../components/ui/accordion"
 import { Avatar, AvatarFallback } from "../components/ui/avatar"
 import { Badge } from "../components/ui/badge"
@@ -23,9 +24,8 @@ import {
 } from "../components/ui/navigation-menu"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../components/ui/sheet"
 import { cn } from "../lib/utils"
-import { currentUser } from "../redux/features/auth/authSlice"
-import { useAppSelector } from "../redux/hooks"
-import { ModeToggle } from "../components/mode-toggle"
+import { currentUser, logOut } from "../redux/features/auth/authSlice"
+import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import Footer from "./footer"
 
 
@@ -205,10 +205,15 @@ const CartButton = () => {
 export default function MainLayout() {
     const user = useAppSelector(currentUser)
     const navigate = useNavigate()
+    const dispatch = useAppDispatch()
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
     const handleNavigate = (path: string) => {
         navigate(path)
+    }
+    const handleLogout = () => {
+        dispatch(logOut())
+        navigate("/login")
     }
 
     return (
@@ -253,6 +258,12 @@ export default function MainLayout() {
                                     <DropdownMenuItem onClick={() => handleNavigate(`/${user?.role}/dashboard`)}>
                                         Dashboard
                                     </DropdownMenuItem>
+                                    <DropdownMenuItem className='border-t text-destructive mt-2' onClick={handleLogout}>
+
+                                        <LogOut className="size-4 text-destructive ml-2" />
+                                        <span>Logout</span>
+
+                                    </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         ) : (
@@ -281,6 +292,12 @@ export default function MainLayout() {
                                     <DropdownMenuItem onClick={() => handleNavigate(`/${user?.role}/profile`)}>Profile</DropdownMenuItem>
                                     <DropdownMenuItem onClick={() => handleNavigate(`/${user?.role}/dashboard`)}>
                                         Dashboard
+                                    </DropdownMenuItem>
+                                    <DropdownMenuItem className='border-t text-destructive mt-2' onClick={handleLogout}>
+
+                                        <LogOut className="size-4 text-destructive ml-2" />
+                                        <span>Logout</span>
+
                                     </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
