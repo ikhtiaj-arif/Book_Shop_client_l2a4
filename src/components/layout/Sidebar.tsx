@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom'; // Add useLocation
 import { currentUser, logOut } from '../../redux/features/auth/authSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
+import { Home } from 'lucide-react';
 
 const { Sider } = Layout;
 interface SidebarProps {
@@ -67,6 +68,12 @@ const Sidebar: React.FC<React.PropsWithChildren<SidebarProps>> = ({ collapsed, s
     },
     {
       key: "6",
+      label: "Back To Home",
+      icon: <Home />, // Represents logout
+      onClick: () => navigate("/"),
+    },
+    {
+      key: "7",
       label: "Logout",
       icon: <LogoutOutlined />, // Represents logout
       onClick: () => dispatch(logOut()) || navigate("/login"),
@@ -76,7 +83,7 @@ const Sidebar: React.FC<React.PropsWithChildren<SidebarProps>> = ({ collapsed, s
 
   return (
     <Sider
-      className="bg-background border rounded-md"
+      className="bg-background border "
       width={190}
       collapsedWidth={collapsedWidth}
       style={{
