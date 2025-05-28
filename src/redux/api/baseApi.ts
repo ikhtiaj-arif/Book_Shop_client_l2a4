@@ -46,13 +46,13 @@
 // });
 
 import {
-  BaseQueryApi,
-  BaseQueryFn,
   createApi,
   DefinitionType,
-  FetchArgs,
   fetchBaseQuery,
-} from "@reduxjs/toolkit/query/react";
+  type BaseQueryApi,
+  type BaseQueryFn,
+  type FetchArgs,
+} from "@reduxjs/toolkit/query";
 import { toast } from "sonner";
 
 const baseQuery = fetchBaseQuery({

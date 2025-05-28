@@ -1,21 +1,14 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import path from "path"
+import tailwindcss from "@tailwindcss/vite"
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react-swc'
 
+// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
-  css: {
-    preprocessorOptions: {
-      less: {
-        modifyVars: {
-          // Map your CSS variables to Ant Design tokens
-          '@primary-color': 'var(--primary-color)',
-          '@text-color': 'var(--text-color)',
-          '@body-background': 'var(--background-color)',
-          '@link-color': 'var(--secondary-color)',
-          '@success-color': 'var(--accent-color)',
-        },
-        javascriptEnabled: true,
-      },
+ plugins: [react(), tailwindcss()],
+  resolve: {
+   alias: {
+      "@": path.resolve(__dirname, "./src"), // <--- this line adds @ as src
     },
   },
-});
+})
