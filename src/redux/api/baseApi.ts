@@ -56,9 +56,9 @@ import {
 import { toast } from "sonner";
 
 const baseQuery = fetchBaseQuery({
-  // baseUrl: "http://localhost:5000/api",
+  baseUrl: "http://localhost:5000/api",
 
-  baseUrl: "https://book-shop-server-l2a4.vercel.app/api",
+  // baseUrl: "https://book-shop-server-l2a4.vercel.app/api",
   credentials: "include",
   prepareHeaders: (headers) => {
     // Retrieve access token from localStorage
