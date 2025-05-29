@@ -174,7 +174,7 @@ export function CreateBookForm({ onSubmit }: CreateBookFormProps) {
                         <div>
                             <Label htmlFor="description">Description *</Label>
                             <Textarea
-                            className="mt-1"
+                                className="mt-1"
                                 id="description"
                                 value={formData.description}
                                 onChange={(e) => handleInputChange("description", e.target.value)}
@@ -230,7 +230,7 @@ export function CreateBookForm({ onSubmit }: CreateBookFormProps) {
 
                         <div>
                             <Label htmlFor="category" className="mb-1">Category *</Label>
-                            <Select className="mt-1" value={formData.category} onValueChange={(value) => handleInputChange("category", value)}>
+                            <Select value={formData.category} onValueChange={(value) => handleInputChange("category", value)}>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select category" />
                                 </SelectTrigger>
@@ -390,135 +390,135 @@ export function CreateBookForm({ onSubmit }: CreateBookFormProps) {
                         </div>
                     </CardContent>
                 </Card>
-                 {/* Additional Information */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>Additional Information</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <div>
-                        <Label htmlFor="images">Upload Image</Label>
-                        <Input
-                            className="mt-1"
-                            id="images"
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                if (file) {
-                                    handleInputChange("images", file);
-                                }
-                            }}
-                        />
-                    </div>
-
-
-                    <div>
-                        <Label htmlFor="rating">Initial Rating</Label>
-                        <Input
-                            className="mt-1"
-                            id="rating"
-                            type="number"
-                            step="0.1"
-                            value={formData.rating}
-                            onChange={(e) => handleInputChange("rating", Number.parseFloat(e.target.value) || 0)}
-                            placeholder="4.5"
-                            min="0"
-                            max="5"
-                        />
-                    </div>
-
-                    <div>
-                        <Label htmlFor="reviewCount">Review Count</Label>
-                        <Input
-                            className="mt-1"
-                            id="reviewCount"
-                            type="number"
-                            value={formData.reviewCount}
-                            onChange={(e) => handleInputChange("reviewCount", Number.parseInt(e.target.value) || 0)}
-                            placeholder="150"
-                            min="0"
-                        />
-                    </div>
-
-                    <div>
-                        <Label htmlFor="tags">Tags</Label>
-                        <div className="flex gap-2 items-center mb-2">
+                {/* Additional Information */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Additional Information</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div>
+                            <Label htmlFor="images">Upload Image</Label>
                             <Input
                                 className="mt-1"
-                                id="tags"
-                                value={currentTag}
-                                onChange={(e) => setCurrentTag(e.target.value)}
-                                placeholder="Add a tag"
-                                onKeyPress={(e) => {
-                                    if (e.key === "Enter") {
-                                        e.preventDefault()
-                                        addTag()
+                                id="images"
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) {
+                                        handleInputChange("images", file);
                                     }
                                 }}
                             />
-                            <Button type="button" className="mt-1" onClick={addTag} variant="outline">
-                                Add
-                            </Button>
                         </div>
-                        <div className="flex flex-wrap items-center gap-2">
-                            {formData.tags?.map((tag, index) => (
-                                <Badge key={index} variant="secondary" className="flex items-center gap-1">
-                                    {tag}
-                                    <X className="h-3 w-3 cursor-pointer" onClick={() => removeTag(tag)} />
-                                </Badge>
-                            ))}
+
+
+                        <div>
+                            <Label htmlFor="rating">Initial Rating</Label>
+                            <Input
+                                className="mt-1"
+                                id="rating"
+                                type="number"
+                                step="0.1"
+                                value={formData.rating}
+                                onChange={(e) => handleInputChange("rating", Number.parseFloat(e.target.value) || 0)}
+                                placeholder="4.5"
+                                min="0"
+                                max="5"
+                            />
                         </div>
-                    </div>
-                </CardContent>
-            </Card>
 
-            {/* Status Toggles */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>Status & Features</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <div className="flex items-center justify-between">
-                        <Label htmlFor="inStock">In Stock</Label>
-                        <Switch
-                            id="inStock"
-                            checked={formData.inStock}
-                            onCheckedChange={(checked) => handleInputChange("inStock", checked)}
-                        />
-                    </div>
+                        <div>
+                            <Label htmlFor="reviewCount">Review Count</Label>
+                            <Input
+                                className="mt-1"
+                                id="reviewCount"
+                                type="number"
+                                value={formData.reviewCount}
+                                onChange={(e) => handleInputChange("reviewCount", Number.parseInt(e.target.value) || 0)}
+                                placeholder="150"
+                                min="0"
+                            />
+                        </div>
 
-                    <div className="flex items-center justify-between">
-                        <Label htmlFor="featured">Featured</Label>
-                        <Switch
-                            id="featured"
-                            checked={formData.featured}
-                            onCheckedChange={(checked) => handleInputChange("featured", checked)}
-                        />
-                    </div>
+                        <div>
+                            <Label htmlFor="tags">Tags</Label>
+                            <div className="flex gap-2 items-center mb-2">
+                                <Input
+                                    className="mt-1"
+                                    id="tags"
+                                    value={currentTag}
+                                    onChange={(e) => setCurrentTag(e.target.value)}
+                                    placeholder="Add a tag"
+                                    onKeyPress={(e) => {
+                                        if (e.key === "Enter") {
+                                            e.preventDefault()
+                                            addTag()
+                                        }
+                                    }}
+                                />
+                                <Button type="button" className="mt-1" onClick={addTag} variant="outline">
+                                    Add
+                                </Button>
+                            </div>
+                            <div className="flex flex-wrap items-center gap-2">
+                                {formData.tags?.map((tag, index) => (
+                                    <Badge key={index} variant="secondary" className="flex items-center gap-1">
+                                        {tag}
+                                        <X className="h-3 w-3 cursor-pointer" onClick={() => removeTag(tag)} />
+                                    </Badge>
+                                ))}
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
 
-                    <div className="flex items-center justify-between">
-                        <Label htmlFor="bestseller">Bestseller</Label>
-                        <Switch
-                            id="bestseller"
-                            checked={formData.bestseller}
-                            onCheckedChange={(checked) => handleInputChange("bestseller", checked)}
-                        />
-                    </div>
+                {/* Status Toggles */}
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Status & Features</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor="inStock">In Stock</Label>
+                            <Switch
+                                id="inStock"
+                                checked={formData.inStock}
+                                onCheckedChange={(checked) => handleInputChange("inStock", checked)}
+                            />
+                        </div>
 
-                    <div className="flex items-center justify-between">
-                        <Label htmlFor="newArrival">New Arrival</Label>
-                        <Switch
-                            id="newArrival"
-                            checked={formData.newArrival}
-                            onCheckedChange={(checked) => handleInputChange("newArrival", checked)}
-                        />
-                    </div>
-                </CardContent>
-            </Card>
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor="featured">Featured</Label>
+                            <Switch
+                                id="featured"
+                                checked={formData.featured}
+                                onCheckedChange={(checked) => handleInputChange("featured", checked)}
+                            />
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor="bestseller">Bestseller</Label>
+                            <Switch
+                                id="bestseller"
+                                checked={formData.bestseller}
+                                onCheckedChange={(checked) => handleInputChange("bestseller", checked)}
+                            />
+                        </div>
+
+                        <div className="flex items-center justify-between">
+                            <Label htmlFor="newArrival">New Arrival</Label>
+                            <Switch
+                                id="newArrival"
+                                checked={formData.newArrival}
+                                onCheckedChange={(checked) => handleInputChange("newArrival", checked)}
+                            />
+                        </div>
+                    </CardContent>
+                </Card>
             </div>
 
-           
+
 
             {/* Submit Button */}
             <div className="flex justify-end gap-4">

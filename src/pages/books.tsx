@@ -1,70 +1,97 @@
 "use client"
 
+import { useGetAllCategoryQuery } from "@/redux/features/category/category.api"
+import { useGetAllProductsQuery } from "@/redux/features/products/products.api"
+import { Filter, Grid, Heart, List, Search, Star } from "lucide-react"
 import { useState } from "react"
 import { Link } from "react-router-dom"
-import { Search, Filter, Grid, List, Star, Heart } from "lucide-react"
+import { Badge } from "../components/ui/badge"
 import { Button } from "../components/ui/button"
 import { Card, CardContent } from "../components/ui/card"
-import { Input } from "../components/ui/input"
-import { Badge } from "../components/ui/badge"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select"
 import { Checkbox } from "../components/ui/checkbox"
+import { Input } from "../components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select"
 import { Slider } from "../components/ui/slider"
 
 // Mock data - replace with API calls later
-const books = [
-  {
-    id: 1,
-    title: "The Midnight Library",
-    author: "Matt Haig",
-    price: 24.99,
-    originalPrice: 29.99,
-    rating: 4.8,
-    reviews: 1247,
-    image: "/placeholder.svg?height=300&width=200",
-    category: "Fiction",
-    publishYear: 2020,
-    inStock: true,
-  },
-  {
-    id: 2,
-    title: "Atomic Habits",
-    author: "James Clear",
-    price: 19.99,
-    originalPrice: 24.99,
-    rating: 4.9,
-    reviews: 2156,
-    image: "/placeholder.svg?height=300&width=200",
-    category: "Self-Help",
-    publishYear: 2018,
-    inStock: true,
-  },
-  // Add more books...
-]
+// const books = [
+//   {
+//     id: 1,
+//     title: "The Midnight Library",
+//     author: "Matt Haig",
+//     price: 24.99,
+//     originalPrice: 29.99,
+//     rating: 4.8,
+//     reviews: 1247,
+//     image: "/placeholder.svg?height=300&width=200",
+//     category: "Fiction",
+//     publishYear: 2020,
+//     inStock: true,
+//   },
+//   {
+//     id: 2,
+//     title: "Atomic Habits",
+//     author: "James Clear",
+//     price: 19.99,
+//     originalPrice: 24.99,
+//     rating: 4.9,
+//     reviews: 2156,
+//     image: "/placeholder.svg?height=300&width=200",
+//     category: "Self-Help",
+//     publishYear: 2018,
+//     inStock: true,
+//   },
+//   // Add more books...
+// ]
 
-const categories = ["All", "Fiction", "Non-Fiction", "Mystery", "Romance", "Science Fiction", "Self-Help"]
+// const categories = ["All", "Fiction", "Non-Fiction", "Mystery", "Romance", "Science Fiction", "Self-Help"]
 const authors = ["All", "Matt Haig", "James Clear", "Taylor Jenkins Reid", "Frank Herbert"]
 
 export default function BooksPage() {
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("All")
   const [selectedAuthor, setSelectedAuthor] = useState("All")
+  const [searchTerm, setSearchTerm] = useState("")
+  const [selectedCategory, setSelectedCategory] = useState("")
   const [priceRange, setPriceRange] = useState([0, 100])
   const [sortBy, setSortBy] = useState("popularity")
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
   const [showFilters, setShowFilters] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
 
-  const filteredBooks = books.filter((book) => {
-    const matchesSearch =
-      book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      book.author.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === "All" || book.category === selectedCategory
-    const matchesAuthor = selectedAuthor === "All" || book.author === selectedAuthor
-    const matchesPrice = book.price >= priceRange[0] && book.price <= priceRange[1]
+  // API queries
+  const {
+    data: booksData,
+    isLoading: isBooksLoading,
+    error: booksError,
+  } = useGetAllProductsQuery(undefined)
+  // } = useGetAllProductsQuery({
+  //   page: currentPage,
+  //   limit: 12,
+  //   category: selectedCategory || undefined,
+  //   search: searchTerm || undefined,
+  //   sort: sortBy,
+  //   minPrice: priceRange[0],
+  //   maxPrice: priceRange[1],
+  // })
 
-    return matchesSearch && matchesCategory && matchesAuthor && matchesPrice
-  })
+  const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoryQuery(undefined)
 
+  const books = booksData?.data || []
+  const categories = categoriesData?.data || []
+
+  const filteredBooks = books
+  //!filter for books
+  // const filteredBooks = books.filter((book) => {
+  //   const matchesSearch =
+  //     book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  //     book.author.toLowerCase().includes(searchTerm.toLowerCase())
+  //   const matchesCategory = selectedCategory === "All" || book.category === selectedCategory
+  //   const matchesAuthor = selectedAuthor === "All" || book.author === selectedAuthor
+  //   const matchesPrice = book.price >= priceRange[0] && book.price <= priceRange[1]
+
+  //   return matchesSearch && matchesCategory && matchesAuthor && matchesPrice
+  // })
+
+  console.log(filteredBooks);
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Header */}
@@ -192,7 +219,7 @@ export default function BooksPage() {
       {/* Results */}
       <div className="mb-4 flex justify-between items-center">
         <p className="text-muted-foreground">
-          Showing {filteredBooks.length} of {books.length} books
+          Showing {filteredBooks?.length} of {books?.length} books
         </p>
       </div>
 
@@ -202,17 +229,16 @@ export default function BooksPage() {
           viewMode === "grid" ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" : "space-y-4"
         }
       >
-        {filteredBooks.map((book) => (
-          <Card key={book.id} className="group hover:shadow-lg transition-all duration-300">
+        {filteredBooks?.map((book) => (
+          <Card key={book._id} className="group hover:shadow-lg transition-all duration-300">
             <CardContent className={viewMode === "grid" ? "p-4" : "p-4 flex gap-4"}>
               <div className={viewMode === "grid" ? "space-y-4" : "flex-shrink-0"}>
                 <div className="relative">
                   <img
-                    src={book.image || "/placeholder.svg"}
-                    alt={book.title}
-                    className={`object-cover rounded-md group-hover:scale-105 transition-transform duration-300 ${
-                      viewMode === "grid" ? "w-full h-64" : "w-24 h-32"
-                    }`}
+                    src={book?.images || "/placeholder.svg"}
+                    alt={book?.title}
+                    className={`object-cover rounded-md group-hover:scale-105 transition-transform duration-300 ${viewMode === "grid" ? "w-full h-64" : "w-24 h-32"
+                      }`}
                   />
                   <Button
                     size="icon"
@@ -226,19 +252,19 @@ export default function BooksPage() {
               <div className={`space-y-2 ${viewMode === "list" ? "flex-1" : ""}`}>
                 <div>
                   <h3 className="font-semibold line-clamp-2 group-hover:text-primary transition-colors">
-                    <Link to={`/books/${book.id}`}>{book.title}</Link>
+                    <Link to={`/books/${book?._id}`}>{book?.title}</Link>
                   </h3>
-                  <p className="text-sm text-muted-foreground">{book.author}</p>
+                  <p className="text-sm text-muted-foreground">{book?.author}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-1">
                     <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                    <span className="text-sm">{book.rating}</span>
+                    <span className="text-sm">{book?.rating}</span>
                   </div>
-                  <span className="text-sm text-muted-foreground">({book.reviews})</span>
+                  <span className="text-sm text-muted-foreground">({book?.reviews})</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Badge variant="secondary">{book.category}</Badge>
+                  <Badge variant="secondary">{book?.category?.title}</Badge>
                   {book.inStock && <Badge variant="outline">In Stock</Badge>}
                 </div>
                 <div className="flex items-center justify-between">
@@ -249,7 +275,7 @@ export default function BooksPage() {
                     )}
                   </div>
                   <Button size="sm" asChild>
-                    <Link to={`/books/${book.id}`}>View Details</Link>
+                    <Link to={`/books/${book._id}`}>View Details</Link>
                   </Button>
                 </div>
               </div>

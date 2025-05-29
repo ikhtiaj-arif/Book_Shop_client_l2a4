@@ -1,14 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
-import { useState } from "react"
-import { Plus, Search, Edit, Trash2, Eye, BookOpen } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
 import {
   Pagination,
   PaginationContent,
@@ -17,6 +14,10 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { BookOpen, Edit, Eye, Plus, Search, Trash2 } from "lucide-react"
+import { useState } from "react"
 import { CreateBookForm } from "./create-book-from"
 
 interface IBook {
@@ -196,7 +197,7 @@ const categories = ["All", "Fiction", "Science Fiction", "Business & Finance", "
 const formats = ["All", "Paperback", "Hardcover", "Ebook", "Audiobook"]
 
 export default function AdminManageBooks() {
-  const [books, setBooks] = useState<IBook[]>(dummyBooks)
+  const [books] = useState<IBook[]>(dummyBooks)
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("All")
   const [selectedFormat, setSelectedFormat] = useState("All")
@@ -367,7 +368,7 @@ export default function AdminManageBooks() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {paginatedBooks.map((book, index) => (
+                {paginatedBooks.map((book) => (
                   <TableRow key={book.isbn}>
                     <TableCell>
                       <div className="flex items-center gap-3">

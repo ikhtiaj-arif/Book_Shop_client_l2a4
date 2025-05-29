@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./features/auth/authSlice";
+import cartReducer from "./features/cart/cartSlice";
 
 import {
   FLUSH,
@@ -19,20 +20,20 @@ const persistAuthConfig = {
   key: "auth",
   storage,
 };
-// const persistCartConfig = {
-//   key: "cart",
-//   storage,
-// };
+const persistCartConfig = {
+  key: "cart",
+  storage,
+};
 
 const persistedAuthReducer = persistReducer(persistAuthConfig, authReducer);
-// const persistedCartReducer = persistReducer(persistCartConfig, cartReducer);
+const persistedCartReducer = persistReducer(persistCartConfig, cartReducer);
 // const persistedCartReducer = persistReducer(persistConfig, cartReducer);
 
 export const store = configureStore({
   reducer: {
     [baseApi.reducerPath]: baseApi.reducer,
     auth: persistedAuthReducer,
-    // cart: persistedCartReducer,
+    cart: persistedCartReducer,
   },
   middleware: (getDefaultMiddlewares) =>
     getDefaultMiddlewares({

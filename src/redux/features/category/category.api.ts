@@ -5,11 +5,11 @@ export type TQueryParam = {
 };
 const productManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    getAllProducts: builder.query({
+    getAllCategory: builder.query({
       query: (args) => {
         const params = new URLSearchParams();
         if (args) {
-          args.forEach((element: TQueryParam) => {
+          args.forEach((element:TQueryParam) => {
             params.append(element.name, element.value as string);
           });
         }
@@ -19,26 +19,17 @@ const productManagementApi = baseApi.injectEndpoints({
           params: params,
         };
       },
+
       providesTags: ["product"],
     }),
 
-    getProductById: builder.query({
-      query: (id: string) => {
-        console.log("Fetching product with ID:", id); // 👈 log the id here
-        return {
-          url: `/products/${id}`,
-          method: "GET",
-        };
-      },
-    }),
-       getBookById: builder.query({
+    getCategoryById: builder.query({
       query: (id) => ({
         url: `/products/${id}`,
         method: "GET",
       }),
     }),
-
-    addProduct: builder.mutation({
+    addCategory: builder.mutation({
       query: (data) => ({
         url: "/products",
         method: "POST",
@@ -46,7 +37,7 @@ const productManagementApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["product"],
     }),
-    updateProduct: builder.mutation({
+    updateCategory: builder.mutation({
       query: ({ id, data }) => ({
         url: `/products/${id}`,
         method: "PUT",
@@ -54,7 +45,7 @@ const productManagementApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["product"],
     }),
-    deleteProduct: builder.mutation({
+    deleteCategory: builder.mutation({
       query: (id) => ({
         url: `/products/${id}`,
         method: "DELETE",
@@ -65,10 +56,6 @@ const productManagementApi = baseApi.injectEndpoints({
 });
 
 export const {
-  useGetAllProductsQuery,
-  useGetProductByIdQuery,
-  useAddProductMutation,
-  useUpdateProductMutation,
-  useDeleteProductMutation,
-  useGetBookByIdQuery
+useGetAllCategoryQuery,useGetCategoryByIdQuery, useAddCategoryMutation
+
 } = productManagementApi;

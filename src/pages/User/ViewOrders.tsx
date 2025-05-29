@@ -1,10 +1,9 @@
-import React from 'react';
 
 const ViewOrders = () => {
     return (
         <div>
             ViewOrders
-ViewOrders
+            ViewOrders
         </div>
     );
 };

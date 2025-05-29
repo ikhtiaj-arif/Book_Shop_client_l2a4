@@ -1,8 +1,9 @@
-import { RcFile } from "antd/es/upload";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 const uploadURL = import.meta.env.IMG_BB_UPLOAD_URL;
 
 export const handleImageUpload = async (
-  file: RcFile
+  file: any
 ): Promise<string | null> => {
   try {
     const formData = new FormData();

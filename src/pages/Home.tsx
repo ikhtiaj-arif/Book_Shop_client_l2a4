@@ -1,12 +1,14 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useGetAllCategoryQuery } from "@/redux/features/category/category.api"
+import { useGetAllProductsQuery } from "@/redux/features/products/products.api"
+import { ArrowRight, Award, BookOpen, HeartHandshake, Shield, Star, Truck, Users } from "lucide-react"
+import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { Star, ArrowRight, BookOpen, Users, Award, Truck, Shield, HeartHandshake } from "lucide-react"
+import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar"
+import { Badge } from "../components/ui/badge"
 import { Button } from "../components/ui/button"
 import { Card, CardContent } from "../components/ui/card"
-import { Badge } from "../components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar"
 
 // Mock data - replace with API calls later
 const featuredBooks = [
@@ -56,14 +58,14 @@ const featuredBooks = [
   },
 ]
 
-const categories = [
-  { name: "Fiction", count: 1250, image: "/placeholder.svg?height=200&width=300" },
-  { name: "Non-Fiction", count: 890, image: "/placeholder.svg?height=200&width=300" },
-  { name: "Mystery & Thriller", count: 567, image: "/placeholder.svg?height=200&width=300" },
-  { name: "Romance", count: 432, image: "/placeholder.svg?height=200&width=300" },
-  { name: "Science Fiction", count: 321, image: "/placeholder.svg?height=200&width=300" },
-  { name: "Children's Books", count: 678, image: "/placeholder.svg?height=200&width=300" },
-]
+// const categories = [
+//   { name: "Fiction", count: 1250, image: "/placeholder.svg?height=200&width=300" },
+//   { name: "Non-Fiction", count: 890, image: "/placeholder.svg?height=200&width=300" },
+//   { name: "Mystery & Thriller", count: 567, image: "/placeholder.svg?height=200&width=300" },
+//   { name: "Romance", count: 432, image: "/placeholder.svg?height=200&width=300" },
+//   { name: "Science Fiction", count: 321, image: "/placeholder.svg?height=200&width=300" },
+//   { name: "Children's Books", count: 678, image: "/placeholder.svg?height=200&width=300" },
+// ]
 
 const customerReviews = [
   {
@@ -120,6 +122,19 @@ const features = [
 export default function HomePage() {
   const [currentReview, setCurrentReview] = useState(0)
 
+  // API queries
+  // const { data: featuredBooksData } = useGetAllProductsQuery({
+  //   limit: 4,
+  //   featured: true,
+  // })
+  const { data: featuredBooksData } = useGetAllProductsQuery(undefined)
+  const { data: categoriesData } = useGetAllCategoryQuery(undefined)
+
+  const featuredBooks = featuredBooksData?.data || []
+  const categories = categoriesData?.data || []
+
+  console.log(featuredBooks);
+
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentReview((prev) => (prev + 1) % customerReviews.length)
@@ -173,13 +188,12 @@ export default function HomePage() {
                 {featuredBooks.slice(0, 4).map((book, index) => (
                   <Card
                     key={book.id}
-                    className={`transform transition-all duration-300 hover:scale-105 ${
-                      index % 2 === 0 ? "translate-y-4" : "-translate-y-4"
-                    }`}
+                    className={`transform transition-all duration-300 hover:scale-105 ${index % 2 === 0 ? "translate-y-4" : "-translate-y-4"
+                      }`}
                   >
                     <CardContent className="p-4">
                       <img
-                        src={book.image || "/placeholder.svg"}
+                        src={book.images || "/placeholder.svg"}
                         alt={book.title}
                         className="w-full h-32 object-cover rounded-md mb-2"
                       />
@@ -319,9 +333,8 @@ export default function HomePage() {
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`h-6 w-6 ${
-                        i < customerReviews[currentReview].rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-                      }`}
+                      className={`h-6 w-6 ${i < customerReviews[currentReview].rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                        }`}
                     />
                   ))}
                 </div>
@@ -343,9 +356,8 @@ export default function HomePage() {
                 <button
                   key={index}
                   onClick={() => setCurrentReview(index)}
-                  className={`w-3 h-3 rounded-full transition-colors ${
-                    index === currentReview ? "bg-primary" : "bg-gray-300"
-                  }`}
+                  className={`w-3 h-3 rounded-full transition-colors ${index === currentReview ? "bg-primary" : "bg-gray-300"
+                    }`}
                 />
               ))}
             </div>
