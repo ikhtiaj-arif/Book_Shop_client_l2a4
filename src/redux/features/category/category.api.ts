@@ -9,12 +9,12 @@ const productManagementApi = baseApi.injectEndpoints({
       query: (args) => {
         const params = new URLSearchParams();
         if (args) {
-          args.forEach((element:TQueryParam) => {
+          args.forEach((element: TQueryParam) => {
             params.append(element.name, element.value as string);
           });
         }
         return {
-          url: "/products",
+          url: "/category",
           method: "GET",
           params: params,
         };
@@ -25,13 +25,13 @@ const productManagementApi = baseApi.injectEndpoints({
 
     getCategoryById: builder.query({
       query: (id) => ({
-        url: `/products/${id}`,
+        url: `/category/${id}`,
         method: "GET",
       }),
     }),
     addCategory: builder.mutation({
       query: (data) => ({
-        url: "/products",
+        url: "/category",
         method: "POST",
         body: data,
       }),
@@ -39,7 +39,7 @@ const productManagementApi = baseApi.injectEndpoints({
     }),
     updateCategory: builder.mutation({
       query: ({ id, data }) => ({
-        url: `/products/${id}`,
+        url: `/categories/${id}`,
         method: "PUT",
         body: data,
       }),
@@ -47,7 +47,7 @@ const productManagementApi = baseApi.injectEndpoints({
     }),
     deleteCategory: builder.mutation({
       query: (id) => ({
-        url: `/products/${id}`,
+        url: `/categories/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["product"],
@@ -56,6 +56,7 @@ const productManagementApi = baseApi.injectEndpoints({
 });
 
 export const {
-useGetAllCategoryQuery,useGetCategoryByIdQuery, useAddCategoryMutation
-
+  useGetAllCategoryQuery,
+  useGetCategoryByIdQuery,
+  useAddCategoryMutation,
 } = productManagementApi;

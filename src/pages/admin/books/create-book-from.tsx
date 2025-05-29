@@ -12,9 +12,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import { X } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useGetAllCategoryQuery } from "@/redux/features/category/category.api"
+import { handleImageUpload } from "@/utils/imageUrlGenerator"
+
 
 interface IBook {
+    _id?: string
     title: string
     author: string
     description: string
@@ -39,37 +43,22 @@ interface IBook {
     bestseller: boolean
     newArrival: boolean
     discount?: number
-    createdAt: string
-    updatedAt: string
+    createdAt?: string
+    updatedAt?: string
+    __v?: number
 }
 
 interface CreateBookFormProps {
+    editData?: IBook | null
     onSubmit: (bookData: Partial<IBook>) => void
+    onCancel?: () => void
+    isLoading?: boolean
 }
-
-const categories = [
-    "Fiction",
-    "Non-Fiction",
-    "Science Fiction",
-    "Fantasy",
-    "Mystery",
-    "Romance",
-    "Thriller",
-    "Biography",
-    "History",
-    "Business & Finance",
-    "Self-Help",
-    "Health & Fitness",
-    "Technology",
-    "Travel",
-    "Cooking",
-    "Art & Design",
-]
 
 const formats = ["Paperback", "Hardcover", "Ebook", "Audiobook"]
 const languages = ["English", "Spanish", "French", "German", "Italian", "Portuguese", "Chinese", "Japanese"]
 
-export function CreateBookForm({ onSubmit }: CreateBookFormProps) {
+export function CreateBookForm({ editData, onSubmit, onCancel, isLoading }: CreateBookFormProps) {
     const [formData, setFormData] = useState<Partial<IBook>>({
         title: "",
         author: "",
@@ -98,12 +87,34 @@ export function CreateBookForm({ onSubmit }: CreateBookFormProps) {
     })
 
     const [currentTag, setCurrentTag] = useState("")
+    const [selectedFile, setSelectedFile] = useState<File | null>(null)
+    const [isUploading, setIsUploading] = useState(false)
+    const { data: categoriesData } = useGetAllCategoryQuery(undefined)
+    const categories = categoriesData?.data || []
+
+    // Set form data when editData is provided
+    useEffect(() => {
+        if (editData) {
+            setFormData({
+                ...editData,
+                // Convert publishedDate to YYYY-MM-DD format for date input
+                publishedDate: editData.publishedDate ? new Date(editData.publishedDate).toISOString().split("T")[0] : "",
+            })
+        }
+    }, [editData])
 
     const handleInputChange = (field: keyof IBook, value: any) => {
         setFormData((prev) => ({
             ...prev,
             [field]: value,
         }))
+    }
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0]
+        if (file) {
+            setSelectedFile(file)
+        }
     }
 
     const addTag = () => {
@@ -123,23 +134,58 @@ export function CreateBookForm({ onSubmit }: CreateBookFormProps) {
         }))
     }
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+        setIsUploading(true)
 
-        // Add timestamps
-        const now = new Date().toISOString()
-        const bookData = {
-            ...formData,
-            createdAt: now,
-            updatedAt: now,
+        try {
+            let imageUrl = formData.images || "" // Keep existing image if not changed
+
+            // Upload new image if a file is selected
+            if (selectedFile) {
+                const uploadedImageUrl = await handleImageUpload(selectedFile)
+                if (!uploadedImageUrl) {
+                    throw new Error("Image upload failed")
+                }
+                imageUrl = uploadedImageUrl
+            }
+
+            let bookData: Partial<IBook>
+
+            if (editData) {
+                // For editing, include the ID and update timestamp
+                bookData = {
+                    ...formData,
+                    _id: editData._id,
+                    images: imageUrl,
+                    updatedAt: new Date().toISOString(),
+                }
+            } else {
+                // For creating, add timestamps
+                const now = new Date().toISOString()
+                bookData = {
+                    ...formData,
+                    images: imageUrl,
+                    createdAt: now,
+                    updatedAt: now,
+                }
+            }
+
+            onSubmit(bookData)
+        } catch (error) {
+            console.error("Error submitting form:", error)
+            // You might want to show an error toast here
+        } finally {
+            setIsUploading(false)
         }
-
-        onSubmit(bookData)
     }
 
+    const isEditing = !!editData
+    const isSubmitting = isLoading || isUploading
+
     return (
-        <form onSubmit={handleSubmit} className="space-y-6 ">
-            <div className="grid grid-cols-1  md:grid-cols-2 gap-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Basic Information */}
                 <Card>
                     <CardHeader>
@@ -155,7 +201,6 @@ export function CreateBookForm({ onSubmit }: CreateBookFormProps) {
                                 onChange={(e) => handleInputChange("title", e.target.value)}
                                 placeholder="Enter book title"
                                 required
-
                             />
                         </div>
 
@@ -229,15 +274,17 @@ export function CreateBookForm({ onSubmit }: CreateBookFormProps) {
                         </div>
 
                         <div>
-                            <Label htmlFor="category" className="mb-1">Category *</Label>
+                            <Label htmlFor="category" className="mb-1">
+                                Category *
+                            </Label>
                             <Select value={formData.category} onValueChange={(value) => handleInputChange("category", value)}>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select category" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {categories.map((category) => (
-                                        <SelectItem key={category} value={category}>
-                                            {category}
+                                    {categories.map((category: any) => (
+                                        <SelectItem key={category._id} value={category._id}>
+                                            {category.name}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
@@ -245,7 +292,9 @@ export function CreateBookForm({ onSubmit }: CreateBookFormProps) {
                         </div>
 
                         <div>
-                            <Label htmlFor="language" className="mb-1">Language *</Label>
+                            <Label htmlFor="language" className="mb-1">
+                                Language *
+                            </Label>
                             <Select value={formData.language} onValueChange={(value) => handleInputChange("language", value)}>
                                 <SelectTrigger>
                                     <SelectValue placeholder="Select language" />
@@ -390,6 +439,7 @@ export function CreateBookForm({ onSubmit }: CreateBookFormProps) {
                         </div>
                     </CardContent>
                 </Card>
+
                 {/* Additional Information */}
                 <Card>
                     <CardHeader>
@@ -397,21 +447,20 @@ export function CreateBookForm({ onSubmit }: CreateBookFormProps) {
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div>
-                            <Label htmlFor="images">Upload Image</Label>
-                            <Input
-                                className="mt-1"
-                                id="images"
-                                type="file"
-                                accept="image/*"
-                                onChange={(e) => {
-                                    const file = e.target.files?.[0];
-                                    if (file) {
-                                        handleInputChange("images", file);
-                                    }
-                                }}
-                            />
+                            <Label htmlFor="images">{isEditing ? "Update Image" : "Upload Image"}</Label>
+                            <Input className="mt-1" id="images" type="file" accept="image/*" onChange={handleFileChange} />
+                            {isEditing && formData.images && !selectedFile && (
+                                <div className="mt-2">
+                                    <p className="text-sm text-muted-foreground mb-2">Current image:</p>
+                                    <img
+                                        src={formData.images || "/placeholder.svg"}
+                                        alt="Current book cover"
+                                        className="w-20 h-28 object-cover rounded border"
+                                    />
+                                </div>
+                            )}
+                            {selectedFile && <p className="text-sm text-green-600 mt-1">New image selected: {selectedFile.name}</p>}
                         </div>
-
 
                         <div>
                             <Label htmlFor="rating">Initial Rating</Label>
@@ -518,14 +567,22 @@ export function CreateBookForm({ onSubmit }: CreateBookFormProps) {
                 </Card>
             </div>
 
-
-
             {/* Submit Button */}
             <div className="flex justify-end gap-4">
-                <Button type="button" variant="outline">
+                <Button type="button" variant="outline" onClick={onCancel} disabled={isSubmitting}>
                     Cancel
                 </Button>
-                <Button type="submit">Create Book</Button>
+                <Button type="submit" disabled={isSubmitting}>
+                    {isUploading
+                        ? "Uploading image..."
+                        : isLoading
+                            ? isEditing
+                                ? "Updating..."
+                                : "Creating..."
+                            : isEditing
+                                ? "Update Book"
+                                : "Create Book"}
+                </Button>
             </div>
         </form>
     )

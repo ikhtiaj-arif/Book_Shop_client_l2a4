@@ -198,9 +198,9 @@ export default function BookDetailPage() {
           <div className="space-y-4">
             <div className="aspect-[3/4] overflow-hidden rounded-lg">
               <img
-                src={book.images[selectedImage] || "/placeholder.svg"}
+                src={book.images || "/placeholder.svg"}
                 alt={book.title}
-                className="w-full h-full object-cover"
+                className="w-full h-[70vh] object-cover"
               />
             </div>
             {/* <div className="flex gap-2">
