@@ -1,3 +1,4 @@
+import { TProductQueryParams } from "@/types/types";
 import { baseApi } from "../../api/baseApi";
 export type TQueryParam = {
   name: string;
@@ -5,18 +6,40 @@ export type TQueryParam = {
 };
 const productManagementApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    // getAllProducts: builder.query({
+    //   query: (args) => {
+    //     const params = new URLSearchParams();
+    //     if (args) {
+    //       args.forEach((element: TQueryParam) => {
+    //         params.append(element.name, element.value as string);
+    //       });
+    //     }
+    //     return {
+    //       url: "/products",
+    //       method: "GET",
+    //       params: params,
+    //     };
+    //   },
+    //   providesTags: ["product"],
+    // }),
+    // productsApi.ts
+    
     getAllProducts: builder.query({
-      query: (args) => {
+      query: (args?: TProductQueryParams) => {
         const params = new URLSearchParams();
+
         if (args) {
-          args.forEach((element: TQueryParam) => {
-            params.append(element.name, element.value as string);
+          Object.entries(args).forEach(([key, value]) => {
+            if (value !== undefined && value !== null) {
+              params.append(key, value.toString());
+            }
           });
         }
+
         return {
           url: "/products",
           method: "GET",
-          params: params,
+          params,
         };
       },
       providesTags: ["product"],
@@ -31,7 +54,7 @@ const productManagementApi = baseApi.injectEndpoints({
         };
       },
     }),
-       getBookById: builder.query({
+    getBookById: builder.query({
       query: (id) => ({
         url: `/products/${id}`,
         method: "GET",
@@ -70,5 +93,5 @@ export const {
   useAddProductMutation,
   useUpdateProductMutation,
   useDeleteProductMutation,
-  useGetBookByIdQuery
+  useGetBookByIdQuery,
 } = productManagementApi;

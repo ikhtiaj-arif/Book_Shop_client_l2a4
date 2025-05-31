@@ -23,7 +23,7 @@ const getCategoryIcon = (categoryName: string) => {
 }
 
 export default function CategoriesPage() {
-  const { data: categoriesData, isLoading: isCategoriesLoading, error: categoriesError } = useGetAllCategoryQuery()
+  const { data: categoriesData, isLoading: isCategoriesLoading, error: categoriesError } = useGetAllCategoryQuery(undefined)
 
   const categories = categoriesData?.data || []
   const featuredCategories = categories.filter((cat) => cat.featured).slice(0, 3)

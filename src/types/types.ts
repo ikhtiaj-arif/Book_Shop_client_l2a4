@@ -74,3 +74,13 @@ export interface ICartItem {
   __v?: number;
   orderQuantity: number;
 }
+
+export type TProductQueryParams = {
+  page?: number;
+  limit?: number;
+  search?: string;
+  // category?: string;
+  priceMin?: number;
+  priceMax?: number;
+  [key: string]: string | number | undefined;
+};

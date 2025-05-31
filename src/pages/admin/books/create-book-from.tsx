@@ -11,10 +11,10 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
-import { X } from "lucide-react"
-import { useEffect, useState } from "react"
 import { useGetAllCategoryQuery } from "@/redux/features/category/category.api"
 import { handleImageUpload } from "@/utils/imageUrlGenerator"
+import { X } from "lucide-react"
+import { useEffect, useState } from "react"
 
 
 interface IBook {
@@ -195,6 +195,7 @@ export function CreateBookForm({ editData, onSubmit, onCancel, isLoading }: Crea
                         <div>
                             <Label htmlFor="title">Title *</Label>
                             <Input
+                            
                                 className="mt-1"
                                 id="title"
                                 value={formData.title}
