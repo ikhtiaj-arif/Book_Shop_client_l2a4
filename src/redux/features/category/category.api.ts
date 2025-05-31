@@ -39,15 +39,15 @@ const productManagementApi = baseApi.injectEndpoints({
     }),
     updateCategory: builder.mutation({
       query: ({ id, data }) => ({
-        url: `/categories/${id}`,
-        method: "PUT",
+        url: `/category/${id}`,
+        method: "PATCH",
         body: data,
       }),
       invalidatesTags: ["product"],
     }),
     deleteCategory: builder.mutation({
       query: (id) => ({
-        url: `/categories/${id}`,
+        url: `/category/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["product"],
@@ -59,4 +59,6 @@ export const {
   useGetAllCategoryQuery,
   useGetCategoryByIdQuery,
   useAddCategoryMutation,
+  useUpdateCategoryMutation,
+  useDeleteCategoryMutation,
 } = productManagementApi;

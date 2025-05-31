@@ -17,17 +17,26 @@ import {
 } from "@/components/ui/pagination"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { BookOpen, Edit, Eye, Plus, Search, Trash2 } from "lucide-react"
+import { BookOpen, Edit, MoreVertical, Plus, Search, Trash2 } from "lucide-react"
 import { useState } from "react"
 
 import {
-  useGetAllProductsQuery,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle
+} from "@/components/ui/alert-dialog"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { useGetAllCategoryQuery } from "@/redux/features/category/category.api"
+import {
   useAddProductMutation,
-  useUpdateProductMutation,
   useDeleteProductMutation,
+  useGetAllProductsQuery,
+  useUpdateProductMutation,
 } from "@/redux/features/products/products.api"
 import { CreateBookForm } from "./create-book-from"
-import { useGetAllCategoryQuery } from "@/redux/features/category/category.api"
 
 interface IBook {
   _id?: string
@@ -63,7 +72,7 @@ interface IBook {
 const formats = ["All", "Paperback", "Hardcover", "Ebook", "Audiobook"]
 
 export default function AdminManageBooks() {
-  const { data: booksData, isLoading: booksLoading } = useGetAllProductsQuery(undefined)
+  const { data: booksData, isLoading: booksLoading, refetch } = useGetAllProductsQuery(undefined)
   const { data: categoriesData } = useGetAllCategoryQuery(undefined)
   const categories = categoriesData?.data || []
   const [addProduct, { isLoading: isCreating }] = useAddProductMutation()
@@ -134,16 +143,35 @@ export default function AdminManageBooks() {
     setIsEditDialogOpen(true)
   }
 
-  const handleDelete = async (book: IBook) => {
-    if (window.confirm(`Are you sure you want to delete "${book.title}"?`)) {
-      try {
-        await deleteProduct(book._id).unwrap()
-        // You might want to show a success toast here
-        console.log("Book deleted successfully!")
-      } catch (error) {
-        console.error("Error deleting book:", error)
-        // You might want to show an error toast here
-      }
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+  const [selectedBook, setSelectedBook] = useState<IBook | null>(null)
+
+  const handleDelete = (book: IBook) => {
+    setSelectedBook(book)
+    setIsDeleteDialogOpen(true)
+  }
+
+  const handleDeleteBook = async () => {
+    // if (window.confirm(`Are you sure you want to delete "${book.title}"?`)) {
+    //   try {
+    //     await deleteProduct(book._id).unwrap()
+    //     // You might want to show a success toast here
+    //     console.log("Book deleted successfully!")
+    //   } catch (error) {
+    //     console.error("Error deleting book:", error)
+    //     // You might want to show an error toast here
+    //   }
+    // }
+    if (!selectedBook?._id) return
+
+    try {
+      await deleteProduct(selectedBook?._id).unwrap()
+      setIsDeleteDialogOpen(false)
+      setSelectedBook(null)
+      refetch()
+      console.log("Book deleted successfully!")
+    } catch (error) {
+      console.error("Error deleting Book:", error)
     }
   }
 
@@ -211,6 +239,29 @@ export default function AdminManageBooks() {
           />
         </DialogContent>
       </Dialog>
+
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete the Book "{selectedBook?.title}". This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteBook}
+              className="bg-red-600 hover:bg-red-700"
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Deleting..." : "Delete"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -384,7 +435,7 @@ export default function AdminManageBooks() {
                         </div>
                       </TableCell>
                       <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
+                        {/* <div className="flex justify-end gap-2">
                           <Button variant="ghost" size="sm" onClick={() => handleView(book)}>
                             <Eye className="h-4 w-4" />
                           </Button>
@@ -394,7 +445,31 @@ export default function AdminManageBooks() {
                           <Button variant="ghost" size="sm" onClick={() => handleDelete(book)} disabled={isDeleting}>
                             <Trash2 className="h-4 w-4" />
                           </Button>
-                        </div>
+                        </div> */}
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm">
+                              <MoreVertical className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            {/* <DropdownMenuItem onClick={() => handleView(book)}>
+                              <Eye className="h-4 w-4 mr-2" />
+                              View
+                            </DropdownMenuItem> */}
+                            <DropdownMenuItem onClick={() => handleEdit(book)}>
+                              <Edit className="h-4 w-4 mr-2" />
+                              Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                              onClick={() => handleDelete(book)}
+                              className="text-red-600 focus:text-red-600"
+                            >
+                              <Trash2 className="h-4 w-4 mr-2" />
+                              Delete
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
                       </TableCell>
                     </TableRow>
                   ))

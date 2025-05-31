@@ -1,4 +1,4 @@
-import AdminManageBooks from './manage-books';
+import AdminManageBooks from './AdminManageBooks';
 
 const ManageBooks = () => {
     return (

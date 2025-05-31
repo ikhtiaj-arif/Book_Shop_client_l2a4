@@ -1,6 +1,6 @@
 
 
-import { ChevronRight, Home, LogOut, Package, ShoppingCart, User, Users } from "lucide-react"
+import { Book, ChevronRight, Home, LogOut, Package, ShoppingCart, User, Users } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 import { Avatar, AvatarFallback } from "../components/ui/avatar"
 import { Separator } from "../components/ui/separator"
@@ -48,6 +48,11 @@ export function AppSidebar() {
                 {
                     title: "Manage Books",
                     url: "/admin/manage-books",
+                    icon: Book,
+                },
+                {
+                    title: "Manage Categories",
+                    url: "/admin/manage-categories",
                     icon: Package,
                 },
                 {
