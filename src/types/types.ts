@@ -43,7 +43,10 @@ export interface IBook {
 export interface ICategory {
   _id: string;
   name: string;
+  description: string;
   image: string;
+  icon: React.ElementType; // or a more specific type if you use a known icon library
+  subcategories: string[];
   count: number;
   featured: boolean;
   createdAt: string;
