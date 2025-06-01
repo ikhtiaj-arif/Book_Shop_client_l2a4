@@ -188,6 +188,8 @@ const router = createBrowserRouter([
             { path: '/contact', element: <ContactPage /> },
             { path: '/categories', element: <CategoriesPage /> },
             { path: '/books', element: <BooksPage /> },
+            { path: '/books/*', element: <BooksPage /> },
+           
             { path: '/books/:id', element: <BookDetailPage /> },
             { path: '/login', element: <AuthPage /> },
             // { path: '/books/:id', element: <ProductDetails /> },

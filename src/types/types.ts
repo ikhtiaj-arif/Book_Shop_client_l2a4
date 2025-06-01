@@ -79,8 +79,11 @@ export type TProductQueryParams = {
   page?: number;
   limit?: number;
   search?: string;
-  // category?: string;
+  categoryId?: string;
+  bestseller?: string; 
+  newArrival?: string;
   priceMin?: number;
   priceMax?: number;
+
   [key: string]: string | number | undefined;
 };
