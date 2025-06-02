@@ -1,4 +1,3 @@
-"use client"
 
 import { Link } from "react-router-dom"
 import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin } from "lucide-react"
@@ -16,17 +15,16 @@ const footerLinks = {
   ],
   support: [
     { name: "Contact Us", href: "/contact" },
-    { name: "FAQ", href: "/faq" },
-    { name: "Shipping Info", href: "/shipping" },
-    { name: "Returns", href: "/returns" },
-    { name: "Track Order", href: "/track-order" },
+    { name: "FAQ", href: "/contact" },
+    // { name: "Shipping Info", href: "/" },
+    // { name: "Returns", href: "/returns" },
+    // { name: "Track Order", href: "/track-order" },
   ],
   company: [
     { name: "About Us", href: "/about" },
-    { name: "Careers", href: "/careers" },
-    { name: "Press", href: "/press" },
-    { name: "Blog", href: "/blog" },
-    { name: "Reviews", href: "/reviews" },
+    { name: "Careers", href: "/about" },
+    { name: "Press", href: "/about" },
+ 
   ],
   legal: [
     { name: "Privacy Policy", href: "/privacy" },

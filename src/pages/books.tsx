@@ -1,4 +1,5 @@
-"use client"
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 
 
 import { Badge } from "@/components/ui/badge"
@@ -72,7 +73,7 @@ export default function BooksPage() {
   // const categoryPath = location.pathname;
   const segments = categoryPath ? categoryPath.split('/') : [];
 
-  const mainCategory = segments[0] || null;
+  // const mainCategory = segments[0] || null;
   const categoryId = segments[1] || null;
   console.log(categoryId);
   // Query parameters state

@@ -1,4 +1,4 @@
-"use client"
+
 
 import { Link } from "react-router-dom"
 import { BookOpen, TrendingUp, Heart, Zap, Users, Baby, Briefcase, Lightbulb } from "lucide-react"

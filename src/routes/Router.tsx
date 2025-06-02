@@ -137,11 +137,18 @@
 
 import { createBrowserRouter } from 'react-router-dom';
 
+import ManageCategories from '@/pages/admin/categories/ManageCategories';
+import ManageOrders from '@/pages/admin/orders/ManageOrders';
+import ManageUsers from '@/pages/admin/users/ManageUsers';
+import PrivacyPolicy from '@/pages/Privecy';
+import TermsOfService from '@/pages/Terms';
+import UserProfile from '@/pages/user/UserProfile';
 import DashboardLayout from '../layouts/DashboardLayout';
 import MainLayout from '../layouts/MainLayout';
 import RouteProtector from '../layouts/RouteProtector';
 import AboutPage from '../pages/about';
 import AdminDashboard from '../pages/admin/AdminDashboard';
+import ManageBooks from '../pages/admin/books/ManageBooks';
 import AuthPage from '../pages/auth';
 import BookDetailPage from '../pages/book-details';
 import BooksPage from '../pages/books';
@@ -149,13 +156,9 @@ import CategoriesPage from '../pages/categories';
 import ContactPage from '../pages/contact';
 import HomePage from '../pages/home';
 import CheckoutPage from '../pages/user/CheckoutPage';
+import MyOrdersPage from '../pages/user/MyOrdersPage';
 import UserDashboard from '../pages/user/UserDashboard';
 import VerifyOrder from '../pages/user/VerifyOrder';
-import ViewOrders from '../pages/user/ViewOrders';
-import ManageBooks from '../pages/admin/books/ManageBooks';
-import ManageCategories from '@/pages/admin/categories/ManageCategories';
-import ManageOrders from '@/pages/admin/orders/ManageOrders';
-import ManageUsers from '@/pages/admin/users/ManageUsers';
 // import DashboardLayout from '../components/layout/DashboardLayout';
 // import MainLayout from '../components/layout/MainLayout';
 // import RouteProtector from '../components/layout/RouteProtector';
@@ -188,10 +191,12 @@ const router = createBrowserRouter([
             { path: '/', element: <HomePage /> },
             { path: '/about', element: <AboutPage /> },
             { path: '/contact', element: <ContactPage /> },
+            { path: '/terms', element: <TermsOfService /> },
+            { path: '/privacy', element: <PrivacyPolicy /> },
             { path: '/categories', element: <CategoriesPage /> },
             { path: '/books', element: <BooksPage /> },
             { path: '/books/*', element: <BooksPage /> },
-           
+
             { path: '/books/:id', element: <BookDetailPage /> },
             { path: '/login', element: <AuthPage /> },
             // { path: '/books/:id', element: <ProductDetails /> },
@@ -208,10 +213,10 @@ const router = createBrowserRouter([
         ),
         children: [
             { path: 'checkout', element: <CheckoutPage /> },
-            { path: 'orders/:id', element: <ViewOrders /> },
+            { path: 'orders/:id', element: <MyOrdersPage /> },
             { path: 'order/verify', element: <VerifyOrder /> },
             { path: 'user/dashboard', element: <UserDashboard /> },
-            // { path: 'user/profile/:id', element: <Profile /> },
+            { path: 'user/profile/:id', element: <UserProfile /> },
         ],
     },
     {

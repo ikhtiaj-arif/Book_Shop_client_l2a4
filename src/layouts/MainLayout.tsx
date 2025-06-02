@@ -1,19 +1,17 @@
-"use client"
 
-import type React from "react"
 
-import { LogOut, MenuIcon, ShoppingCart, User } from "lucide-react"
-import { useState, useMemo } from "react"
+import { LogOut, MenuIcon, User } from "lucide-react"
+import { useMemo, useState } from "react"
 import { Link, Outlet, useNavigate } from "react-router-dom"
 import logo from "../img/logo.png"
 
+import CartButton from "@/components/cart/cart-button"
 import { useGetAllCategoryQuery } from "@/redux/features/category/category.api"
 import { useGetAllProductsQuery } from "@/redux/features/products/products.api"
 import type { ICategory } from "@/types/types"
 import { ModeToggle } from "../components/mode-toggle"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../components/ui/accordion"
 import { Avatar, AvatarFallback } from "../components/ui/avatar"
-import { Badge } from "../components/ui/badge"
 import { Button } from "../components/ui/button"
 import {
   DropdownMenu,
@@ -25,17 +23,14 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
+  navigationMenuTriggerStyle
 } from "../components/ui/navigation-menu"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "../components/ui/sheet"
-import { cn } from "../lib/utils"
 import { currentUser, logOut } from "../redux/features/auth/authSlice"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import Footer from "./footer"
-import CartButton from "@/components/cart/cart-button"
 
 // Type definitions
 interface Book {
@@ -94,29 +89,29 @@ interface MegaMenuItem {
   isLoading: boolean
 }
 
-interface ListItemProps extends React.ComponentPropsWithoutRef<"a"> {
-  title: string
-  href: string
-}
+// interface ListItemProps extends React.ComponentPropsWithoutRef<"a"> {
+//   title: string
+//   href: string
+// }
 
-const ListItem = ({ className, title, href, ...props }: ListItemProps) => {
-  return (
-    <li>
-      <NavigationMenuLink asChild>
-        <Link
-          to={href}
-          className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className,
-          )}
-          {...props}
-        >
-          <div className="text-sm font-medium leading-none">{title}</div>
-        </Link>
-      </NavigationMenuLink>
-    </li>
-  )
-}
+// const ListItem = ({ className, title, href, ...props }: ListItemProps) => {
+//   return (
+//     <li>
+//       <NavigationMenuLink asChild>
+//         <Link
+//           to={href}
+//           className={cn(
+//             "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+//             className,
+//           )}
+//           {...props}
+//         >
+//           <div className="text-sm font-medium leading-none">{title}</div>
+//         </Link>
+//       </NavigationMenuLink>
+//     </li>
+//   )
+// }
 
 // const CartButton = () => {
 //   const cartCount = 3
@@ -135,34 +130,34 @@ export default function MainLayout() {
   const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoryQuery(undefined)
   const { data: bestSellerData, isLoading: isBestSellersLoading } = useGetAllProductsQuery({ bestseller: "true" })
   const { data: newArrivalData, isLoading: isNewArrivalsLoading } = useGetAllProductsQuery({ newArrival: "true" })
-  const { data: featuredData, isLoading: isFeaturedLoading } = useGetAllProductsQuery({ featured: "true" })
+  // const { data: featuredData, isLoading: isFeaturedLoading } = useGetAllProductsQuery({ featured: "true" })
   const { data: topRatedData, isLoading: isTopRatedLoading } = useGetAllProductsQuery({ rating: 4.5 })
 
   const categories: ICategory[] = categoriesData?.data || []
   const bestSellers: Book[] = bestSellerData?.data || []
   const newArrivals: Book[] = newArrivalData?.data || []
-  const featured: Book[] = featuredData?.data || []
+  // const featured: Book[] = featuredData?.data || []
   const topRated: Book[] = topRatedData?.data || []
 
   // Helper functions with proper type safety
-  const getUniqueValues = (books: Book[], key: keyof Book): string[] => {
-    const values = books
-      .map((book) => book[key])
-      .filter((value): value is string => typeof value === "string" && Boolean(value))
-    return [...new Set(values)]
-  }
+  // const getUniqueValues = (books: Book[], key: keyof Book): string[] => {
+  //   const values = books
+  //     .map((book) => book[key])
+  //     .filter((value): value is string => typeof value === "string" && Boolean(value))
+  //   return [...new Set(values)]
+  // }
 
-  const getUniqueCategories = (books: Book[]): ICategory[] => {
-    const categoryMap = new Map<string, ICategory>()
+  // const getUniqueCategories = (books: Book[]): ICategory[] => {
+  //   const categoryMap = new Map<string, ICategory>()
 
-    books.forEach((book) => {
-      if (book.category && book.category._id) {
-        categoryMap.set(book.category._id, book.category)
-      }
-    })
+  //   books.forEach((book) => {
+  //     if (book.category && book.category._id) {
+  //       categoryMap.set(book.category._id, book.category)
+  //     }
+  //   })
 
-    return Array.from(categoryMap.values())
-  }
+  //   return Array.from(categoryMap.values())
+  // }
 
   const safeSortBooks = (books: Book[], sortFn: (a: Book, b: Book) => number): Book[] => {
     return [...books].sort(sortFn)
@@ -178,12 +173,12 @@ export default function MainLayout() {
       sections: isCategoriesLoading
         ? []
         : categories.map((category: ICategory) => ({
-            title: category.name,
-            items: category.subcategories.map((sub) => ({
-              title: sub,
-              path: `/books/categoryId/${category._id}?subcategory=${encodeURIComponent(sub)}`,
-            })),
+          title: category.name,
+          items: category.subcategories.map((sub) => ({
+            title: sub,
+            path: `/books/categoryId/${category._id}?subcategory=${encodeURIComponent(sub)}`,
           })),
+        })),
       isLoading: isCategoriesLoading,
     }
 
@@ -195,17 +190,17 @@ export default function MainLayout() {
       sections: isBestSellersLoading
         ? []
         : [
-            {
-              title: "Best Selling Books",
-              items: bestSellers.slice(0, 12).map((book: Book) => ({
-                title: book.title,
-                path: `/books/${book._id}`,
-                image: book.images,
-                author: book.author,
-                price: book.price,
-              })),
-            },
-          ],
+          {
+            title: "Best Selling Books",
+            items: bestSellers.slice(0, 12).map((book: Book) => ({
+              title: book.title,
+              path: `/books/${book._id}`,
+              image: book.images,
+              author: book.author,
+              price: book.price,
+            })),
+          },
+        ],
       isLoading: isBestSellersLoading,
     }
 
@@ -217,22 +212,22 @@ export default function MainLayout() {
       sections: isNewArrivalsLoading
         ? []
         : [
-            {
-              title: "Latest Books",
-              items: safeSortBooks(
-                newArrivals,
-                (a, b) => new Date(b.createdAt || "").getTime() - new Date(a.createdAt || "").getTime(),
-              )
-                .slice(0, 12)
-                .map((book: Book) => ({
-                  title: book.title,
-                  path: `/books/${book._id}`,
-                  image: book.images,
-                  author: book.author,
-                  price: book.price,
-                })),
-            },
-          ],
+          {
+            title: "Latest Books",
+            items: safeSortBooks(
+              newArrivals,
+              (a, b) => new Date(b.createdAt || "").getTime() - new Date(a.createdAt || "").getTime(),
+            )
+              .slice(0, 12)
+              .map((book: Book) => ({
+                title: book.title,
+                path: `/books/${book._id}`,
+                image: book.images,
+                author: book.author,
+                price: book.price,
+              })),
+          },
+        ],
       isLoading: isNewArrivalsLoading,
     }
 
@@ -244,20 +239,20 @@ export default function MainLayout() {
       sections: isTopRatedLoading
         ? []
         : [
-            {
-              title: "Highest Rated Books",
-              items: safeSortBooks(topRated, (a, b) => (b.rating || 0) - (a.rating || 0))
-                .slice(0, 12)
-                .map((book: Book) => ({
-                  title: book.title,
-                  path: `/books/${book._id}`,
-                  image: book.images,
-                  author: book.author,
-                  price: book.price,
-                  rating: book.rating,
-                })),
-            },
-          ],
+          {
+            title: "Highest Rated Books",
+            items: safeSortBooks(topRated, (a, b) => (b.rating || 0) - (a.rating || 0))
+              .slice(0, 12)
+              .map((book: Book) => ({
+                title: book.title,
+                path: `/books/${book._id}`,
+                image: book.images,
+                author: book.author,
+                price: book.price,
+                rating: book.rating,
+              })),
+          },
+        ],
       isLoading: isTopRatedLoading,
     }
 
@@ -583,8 +578,8 @@ export default function MainLayout() {
                     )}
                   </NavigationMenuItem>
                 )
-              )}
-              
+                )}
+
             </NavigationMenuList>
           </NavigationMenu>
         </div>

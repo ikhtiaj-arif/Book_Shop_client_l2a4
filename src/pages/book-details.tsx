@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-"use client"
 
 import { currentUser } from "@/redux/features/auth/authSlice"
 import { addToCart } from "@/redux/features/cart/cartSlice"

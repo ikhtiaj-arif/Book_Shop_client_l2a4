@@ -1,4 +1,3 @@
-"use client"
 
 import { useGetAllCategoryQuery } from "@/redux/features/category/category.api"
 import { useGetAllProductsQuery } from "@/redux/features/products/products.api"

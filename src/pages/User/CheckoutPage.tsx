@@ -1,4 +1,4 @@
-"use client"
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import type React from "react"
 
@@ -148,9 +148,9 @@ const CheckoutPage: React.FC = () => {
         }
 
         try {
-            const processedCart = await processCart(cart, user?.email)
+            const processedCart = processCart(cart, user?.email)
             await createOrder({ products: processedCart, billingAddress })
-        } catch (error) {
+        } catch (error:any) {
             toast.error("Failed to place order. Please try again.", { id: toastId })
         }
     }
