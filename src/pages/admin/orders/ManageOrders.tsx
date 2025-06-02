@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
     Pagination,
     PaginationContent,
@@ -18,10 +19,9 @@ import {
 } from "@/components/ui/pagination"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { useGetOrdersQuery } from "@/redux/features/orders/order.api"
+import { useGetOrdersQuery, useUpdateOrderStatusMutation } from "@/redux/features/orders/order.api"
 import {
     Calendar,
-    CreditCard,
     DollarSign,
     Edit,
     Eye,
@@ -30,9 +30,10 @@ import {
     Package,
     Search,
     ShoppingCart,
-    Users,
+    Users
 } from "lucide-react"
 import { useState } from "react"
+import { toast } from "sonner"
 
 // Define types for the order data
 interface BillingAddress {
@@ -45,7 +46,7 @@ interface BillingAddress {
 
 interface Transaction {
     id: string
-    transactionStatus: string
+    bank_status: string
 }
 
 interface Product {
@@ -70,6 +71,7 @@ interface Order {
 interface OrderDetailsProps {
     order: Order
 }
+type OrderStatus = "Pending" | "Paid" | "Shipped" | "Completed" | "Cancelled"
 
 const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
     return (
@@ -121,8 +123,8 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
                         </div>
                         <div className="flex justify-between">
                             <span className="text-muted-foreground">Payment Status:</span>
-                            <Badge variant={order.transaction.transactionStatus === "Completed" ? "default" : "secondary"}>
-                                {order.transaction.transactionStatus}
+                            <Badge variant={order.transaction.bank_status === "Success" ? "default" : "secondary"}>
+                                {order.transaction.bank_status}
                             </Badge>
                         </div>
                     </CardContent>
@@ -177,13 +179,18 @@ const OrderDetails: React.FC<OrderDetailsProps> = ({ order }) => {
 }
 
 export default function ManageOrders() {
-    const { data: orderData, isLoading } = useGetOrdersQuery(undefined)
+    const { data: orderData, isLoading, refetch } = useGetOrdersQuery(undefined)
     const [searchTerm, setSearchTerm] = useState("")
     const [statusFilter, setStatusFilter] = useState("All")
     const [paymentStatusFilter, setPaymentStatusFilter] = useState("All")
     const [currentPage, setCurrentPage] = useState(1)
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null)
     const [isDetailsOpen, setIsDetailsOpen] = useState(false)
+    const [updateOrderStatus, { isLoading: isUpdating }] = useUpdateOrderStatusMutation()
+    const [isStatusUpdateOpen, setIsStatusUpdateOpen] = useState(false)
+    const [selectedOrderForUpdate, setSelectedOrderForUpdate] = useState<Order | null>(null)
+    const [newStatus, setNewStatus] = useState<OrderStatus>("Pending")
+
 
     const orders = orderData?.data || []
 
@@ -196,7 +203,7 @@ export default function ManageOrders() {
 
         const matchesStatus = statusFilter === "All" || order.status === statusFilter
         const matchesPaymentStatus =
-            paymentStatusFilter === "All" || order.transaction.transactionStatus === paymentStatusFilter
+            paymentStatusFilter === "All" || order.transaction.bank_status === paymentStatusFilter
 
         return matchesSearch && matchesStatus && matchesPaymentStatus
     })
@@ -217,10 +224,39 @@ export default function ManageOrders() {
         setIsDetailsOpen(true)
     }
 
+    const handleUpdateStatus = async () => {
+        if (!selectedOrderForUpdate) return
+
+        try {
+            await updateOrderStatus({
+                id: selectedOrderForUpdate._id,
+                status: newStatus,
+            }).unwrap()
+
+            toast.success("Order status updated successfully!")
+            setIsStatusUpdateOpen(false)
+            setSelectedOrderForUpdate(null)
+            refetch() // Refetch the orders data
+        } catch (error) {
+            toast.error("Failed to update order status")
+            console.error("Error updating order status:", error)
+        }
+    }
+
+    const handleOpenStatusUpdate = (order: Order) => {
+        setSelectedOrderForUpdate(order)
+        setNewStatus(order.status as OrderStatus)
+        setIsStatusUpdateOpen(true)
+    }
+
     const getStatusVariant = (status: string) => {
         switch (status) {
             case "Completed":
                 return "default"
+            case "Paid":
+                return "default"
+            case "Shipped":
+                return "secondary"
             case "Pending":
                 return "secondary"
             case "Cancelled":
@@ -382,8 +418,8 @@ export default function ManageOrders() {
                                                 <Badge variant={getStatusVariant(order.status)}>{order.status}</Badge>
                                             </TableCell>
                                             <TableCell>
-                                                <Badge variant={getPaymentStatusVariant(order.transaction.transactionStatus)}>
-                                                    {order.transaction.transactionStatus}
+                                                <Badge variant={getPaymentStatusVariant(order.transaction.bank_status)}>
+                                                    {order.transaction.bank_status}
                                                 </Badge>
                                             </TableCell>
                                             <TableCell>
@@ -404,14 +440,14 @@ export default function ManageOrders() {
                                                             <Eye className="h-4 w-4 mr-2" />
                                                             View Details
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem>
+                                                        <DropdownMenuItem onClick={() => handleOpenStatusUpdate(order)}>
                                                             <Edit className="h-4 w-4 mr-2" />
                                                             Update Status
                                                         </DropdownMenuItem>
-                                                        <DropdownMenuItem>
+                                                        {/* <DropdownMenuItem>
                                                             <CreditCard className="h-4 w-4 mr-2" />
                                                             View Transaction
-                                                        </DropdownMenuItem>
+                                                        </DropdownMenuItem> */}
                                                     </DropdownMenuContent>
                                                 </DropdownMenu>
                                             </TableCell>
@@ -483,6 +519,56 @@ export default function ManageOrders() {
                         <DialogTitle>Order Details</DialogTitle>
                     </DialogHeader>
                     {selectedOrder && <OrderDetails order={selectedOrder} />}
+                </DialogContent>
+            </Dialog>
+            {/* Status Update Dialog */}
+            <Dialog open={isStatusUpdateOpen} onOpenChange={setIsStatusUpdateOpen}>
+                <DialogContent className="max-w-md">
+                    <DialogHeader>
+                        <DialogTitle>Update Order Status</DialogTitle>
+                    </DialogHeader>
+                    {selectedOrderForUpdate && (
+                        <div className="space-y-4">
+                            <div>
+                                <p className="text-sm text-muted-foreground mb-2">Order ID:</p>
+                                <p className="font-mono text-sm">{selectedOrderForUpdate._id}</p>
+                            </div>
+
+                            <div>
+                                <p className="text-sm text-muted-foreground mb-2">Current Status:</p>
+                                <Badge variant={getStatusVariant(selectedOrderForUpdate.status)}>{selectedOrderForUpdate.status}</Badge>
+                            </div>
+
+                            <div>
+                                <Label htmlFor="status-select" className="mb-1">New Status:</Label>
+                                <Select value={newStatus} onValueChange={(value: OrderStatus) => setNewStatus(value)}>
+                                    <SelectTrigger id="status-select">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="Pending">Pending</SelectItem>
+                                        <SelectItem value="Paid">Paid</SelectItem>
+                                        <SelectItem value="Shipped">Shipped</SelectItem>
+                                        <SelectItem value="Completed">Completed</SelectItem>
+                                        <SelectItem value="Cancelled">Cancelled</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
+                            <div className="flex gap-2 pt-4">
+                                <Button
+                                    onClick={handleUpdateStatus}
+                                    disabled={isUpdating || newStatus === selectedOrderForUpdate.status}
+                                    className="flex-1"
+                                >
+                                    {isUpdating ? "Updating..." : "Update Status"}
+                                </Button>
+                                <Button variant="outline" onClick={() => setIsStatusUpdateOpen(false)} className="flex-1">
+                                    Cancel
+                                </Button>
+                            </div>
+                        </div>
+                    )}
                 </DialogContent>
             </Dialog>
         </div>

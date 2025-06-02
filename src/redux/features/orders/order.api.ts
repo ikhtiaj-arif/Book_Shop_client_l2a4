@@ -29,11 +29,19 @@ const orderApi = baseApi.injectEndpoints({
         method: "GET",
       }),
     }),
+    updateOrderStatus: builder.mutation({
+      query: ({ id, status }) => ({
+        url: `/orders/${id}/status`,
+        method: "PATCH",
+        body: { status },
+      }),
+    }),
   }),
 });
 export const {
   useCreateOrderMutation,
   useGetOrdersQuery,
   useVerifyOrderQuery,
-  useViewOrdersQuery
+  useViewOrdersQuery,
+  useUpdateOrderStatusMutation,
 } = orderApi;
