@@ -154,6 +154,8 @@ import VerifyOrder from '../pages/user/VerifyOrder';
 import ViewOrders from '../pages/user/ViewOrders';
 import ManageBooks from '../pages/admin/books/ManageBooks';
 import ManageCategories from '@/pages/admin/categories/ManageCategories';
+import ManageOrders from '@/pages/admin/orders/ManageOrders';
+import ManageUsers from '@/pages/admin/users/ManageUsers';
 // import DashboardLayout from '../components/layout/DashboardLayout';
 // import MainLayout from '../components/layout/MainLayout';
 // import RouteProtector from '../components/layout/RouteProtector';
@@ -224,8 +226,8 @@ const router = createBrowserRouter([
             { path: 'dashboard', element: <AdminDashboard /> },
             { path: 'manage-books', element: <ManageBooks /> },
             { path: 'manage-categories', element: <ManageCategories /> },
-            // { path: 'manage-users', element: <ManageUsers /> },
-            // { path: 'manage-orders', element: <ManageOrders /> },
+            { path: 'manage-users', element: <ManageUsers /> },
+            { path: 'manage-orders', element: <ManageOrders /> },
         ],
     },
 ]);

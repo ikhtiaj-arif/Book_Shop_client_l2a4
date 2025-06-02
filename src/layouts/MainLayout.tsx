@@ -35,6 +35,7 @@ import { cn } from "../lib/utils"
 import { currentUser, logOut } from "../redux/features/auth/authSlice"
 import { useAppDispatch, useAppSelector } from "../redux/hooks"
 import Footer from "./footer"
+import CartButton from "@/components/cart/cart-button"
 
 // Type definitions
 interface Book {
@@ -117,18 +118,18 @@ const ListItem = ({ className, title, href, ...props }: ListItemProps) => {
   )
 }
 
-const CartButton = () => {
-  const cartCount = 3
+// const CartButton = () => {
+//   const cartCount = 3
 
-  return (
-    <Button variant="ghost" size="icon" className="relative">
-      <ShoppingCart className="h-5 w-5" />
-      {cartCount > 0 && (
-        <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0">{cartCount}</Badge>
-      )}
-    </Button>
-  )
-}
+//   return (
+//     <Button variant="ghost" size="icon" className="relative">
+//       <ShoppingCart className="h-5 w-5" />
+//       {cartCount > 0 && (
+//         <Badge className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0">{cartCount}</Badge>
+//       )}
+//     </Button>
+//   )
+// }
 
 export default function MainLayout() {
   const { data: categoriesData, isLoading: isCategoriesLoading } = useGetAllCategoryQuery(undefined)

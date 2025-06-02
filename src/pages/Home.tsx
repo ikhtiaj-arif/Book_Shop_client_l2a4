@@ -240,12 +240,12 @@ export default function HomePage() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredBooks.map((book) => (
+            {featuredBooks?.map((book) => (
               <Card key={book.id} className="group hover:shadow-lg transition-all duration-300">
                 <CardContent className="p-4">
                   <div className="relative mb-4">
                     <img
-                      src={book.image || "/placeholder.svg"}
+                      src={book.images || "/placeholder.svg"}
                       alt={book.title}
                       className="w-full h-64 object-cover rounded-md group-hover:scale-105 transition-transform duration-300"
                     />
