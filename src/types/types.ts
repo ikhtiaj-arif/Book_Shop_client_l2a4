@@ -65,9 +65,9 @@ export interface ICartItem {
   title: string;
   author: string;
   price: number;
-  category: string;
+  category?: ICategory;
   description: string;
-  quantity: number;
+  quantity?: number;
   inStock: boolean;
   created_at?: string;
   updated_at?: string;

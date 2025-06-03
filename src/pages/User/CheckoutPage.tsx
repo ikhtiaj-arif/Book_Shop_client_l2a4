@@ -148,10 +148,11 @@ const CheckoutPage: React.FC = () => {
         }
 
         try {
-            const processedCart = processCart(cart, user?.email)
+            const processedCart = processCart(cart, user?.email as string)
             await createOrder({ products: processedCart, billingAddress })
-        } catch (error:any) {
+        } catch (error: any) {
             toast.error("Failed to place order. Please try again.", { id: toastId })
+            console.log(error);
         }
     }
 

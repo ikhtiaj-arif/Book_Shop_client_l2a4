@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 
 import { Link } from "react-router-dom"
 import { BookOpen, TrendingUp, Heart, Zap, Users, Baby, Briefcase, Lightbulb } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useGetAllCategoryQuery } from "@/redux/features/category/category.api"
+import { ICategory } from "@/types/types"
 
 
 // Icon mapping for categories
@@ -26,7 +28,7 @@ export default function CategoriesPage() {
   const { data: categoriesData, isLoading: isCategoriesLoading, error: categoriesError } = useGetAllCategoryQuery(undefined)
 
   const categories = categoriesData?.data || []
-  const featuredCategories = categories.filter((cat) => cat.featured).slice(0, 3)
+  const featuredCategories = categories.filter((cat:ICategory) => cat.featured).slice(0, 3)
 
   if (isCategoriesLoading) {
     return (
@@ -73,7 +75,7 @@ export default function CategoriesPage() {
         <section className="mb-16">
           <h2 className="text-2xl font-bold mb-8">Featured Categories</h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {featuredCategories.map((category) => {
+            {featuredCategories.map((category:ICategory) => {
               const IconComponent = getCategoryIcon(category.name)
               return (
                 <Card key={category._id} className="group hover:shadow-xl transition-all duration-300 overflow-hidden">
@@ -110,7 +112,7 @@ export default function CategoriesPage() {
       <section className="mb-16">
         <h2 className="text-2xl font-bold mb-8">All Categories</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {categories.map((category) => {
+          {categories.map((category:ICategory) => {
             const IconComponent = getCategoryIcon(category.name)
             return (
               <Card key={category._id} className="group hover:shadow-lg transition-all duration-300">
