@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar"
 import { Badge } from "../components/ui/badge"
 import { Button } from "../components/ui/button"
 import { Card, CardContent } from "../components/ui/card"
+import { toast } from "sonner"
 
 // Mock data - replace with API calls later
 // const featuredBooks = [
@@ -294,7 +295,7 @@ export default function HomePage() {
               Find your favorite genres and discover new ones
             </p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {categories.map((category: ICategory, index: number) => (
               <Card key={index} className="group hover:shadow-lg transition-all duration-300 cursor-pointer">
                 <CardContent className="p-0">
@@ -383,20 +384,23 @@ export default function HomePage() {
       {/* Newsletter */}
       <section className="py-20">
         <div className="container mx-auto px-4">
-          <Card className="bg-primary text-primary-foreground">
+          <Card className=" bg-gradient-to-br from-primary via-primary/40 to-primary/70 text-primary-foreground">
             <CardContent className="p-12 text-center">
               <h2 className="text-3xl font-bold mb-4">Stay Updated</h2>
               <p className="text-xl mb-8 opacity-90">
                 Get the latest book recommendations and exclusive offers delivered to your inbox
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+             
+                <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto" onSubmit={()=> toast.success('Successfully subscribed!')} action="">
                 <input
-                  type="email"
-                  placeholder="Enter your email"
-                  className="flex-1 px-4 py-2 rounded-md text-foreground"
+                required
+                type="email"
+                placeholder="Enter your email"
+                className="flex-1 px-4 py-2 rounded-md text-foreground border border-accent"
                 />
-                <Button variant="secondary">Subscribe</Button>
-              </div>
+                <Button type="submit" variant="secondary">Subscribe</Button>
+                </form>
+              
             </CardContent>
           </Card>
         </div>

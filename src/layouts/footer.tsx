@@ -4,6 +4,7 @@ import { Facebook, Twitter, Instagram, Youtube, Mail, Phone, MapPin } from "luci
 import { Button } from "../components/ui/button"
 import { Input } from "../components/ui/input"
 import { Separator } from "../components/ui/separator"
+import logo from "../img/logo.png"
 
 const footerLinks = {
   shop: [
@@ -50,7 +51,7 @@ export default function Footer() {
           {/* Brand Section */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <img src="/placeholder.svg?height=40&width=40" className="h-10 w-10" alt="Logo" />
+              <img src={logo} className="h-10 w-10" alt="Logo" />
               <h3 className="text-xl font-bold">
                 <span className="text-primary">Book</span> Shop
               </h3>

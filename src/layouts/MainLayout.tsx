@@ -308,7 +308,7 @@ export default function MainLayout() {
           <div className="flex items-center gap-2">
             <img src={logo || "/placeholder.svg"} className="h-10 w-10" alt="Logo" />
             <h1 className="text-xl md:text-2xl font-bold">
-              <span className="text-primary">Book</span> <span className="text-primary">Shop</span>
+              <span className="text-primary">Book </span>Shop
             </h1>
           </div>
 
