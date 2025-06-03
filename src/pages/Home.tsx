@@ -1,6 +1,7 @@
 
 import { useGetAllCategoryQuery } from "@/redux/features/category/category.api"
 import { useGetAllProductsQuery } from "@/redux/features/products/products.api"
+import { IBook, ICategory } from "@/types/types"
 import { ArrowRight, Award, BookOpen, HeartHandshake, Shield, Star, Truck, Users } from "lucide-react"
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
@@ -10,52 +11,52 @@ import { Button } from "../components/ui/button"
 import { Card, CardContent } from "../components/ui/card"
 
 // Mock data - replace with API calls later
-const featuredBooks = [
-  {
-    id: 1,
-    title: "The Midnight Library",
-    author: "Matt Haig",
-    price: 24.99,
-    originalPrice: 29.99,
-    rating: 4.8,
-    reviews: 1247,
-    image: "/placeholder.svg?height=300&width=200",
-    badge: "Bestseller",
-  },
-  {
-    id: 2,
-    title: "Atomic Habits",
-    author: "James Clear",
-    price: 19.99,
-    originalPrice: 24.99,
-    rating: 4.9,
-    reviews: 2156,
-    image: "/placeholder.svg?height=300&width=200",
-    badge: "Popular",
-  },
-  {
-    id: 3,
-    title: "The Seven Husbands of Evelyn Hugo",
-    author: "Taylor Jenkins Reid",
-    price: 16.99,
-    originalPrice: 21.99,
-    rating: 4.7,
-    reviews: 987,
-    image: "/placeholder.svg?height=300&width=200",
-    badge: "New Release",
-  },
-  {
-    id: 4,
-    title: "Dune",
-    author: "Frank Herbert",
-    price: 22.99,
-    originalPrice: 27.99,
-    rating: 4.6,
-    reviews: 3421,
-    image: "/placeholder.svg?height=300&width=200",
-    badge: "Classic",
-  },
-]
+// const featuredBooks = [
+//   {
+//     id: 1,
+//     title: "The Midnight Library",
+//     author: "Matt Haig",
+//     price: 24.99,
+//     originalPrice: 29.99,
+//     rating: 4.8,
+//     reviews: 1247,
+//     image: "/placeholder.svg?height=300&width=200",
+//     badge: "Bestseller",
+//   },
+//   {
+//     id: 2,
+//     title: "Atomic Habits",
+//     author: "James Clear",
+//     price: 19.99,
+//     originalPrice: 24.99,
+//     rating: 4.9,
+//     reviews: 2156,
+//     image: "/placeholder.svg?height=300&width=200",
+//     badge: "Popular",
+//   },
+//   {
+//     id: 3,
+//     title: "The Seven Husbands of Evelyn Hugo",
+//     author: "Taylor Jenkins Reid",
+//     price: 16.99,
+//     originalPrice: 21.99,
+//     rating: 4.7,
+//     reviews: 987,
+//     image: "/placeholder.svg?height=300&width=200",
+//     badge: "New Release",
+//   },
+//   {
+//     id: 4,
+//     title: "Dune",
+//     author: "Frank Herbert",
+//     price: 22.99,
+//     originalPrice: 27.99,
+//     rating: 4.6,
+//     reviews: 3421,
+//     image: "/placeholder.svg?height=300&width=200",
+//     badge: "Classic",
+//   },
+// ]
 
 // const categories = [
 //   { name: "Fiction", count: 1250, image: "/placeholder.svg?height=200&width=300" },
@@ -144,7 +145,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary/10 via-background to-secondary/10 py-20 md:py-32">
+      <section className="relative bg-gradient-to-br from-primary/30 via-background to-secondary/10 py-20 md:py-18">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
@@ -183,11 +184,11 @@ export default function HomePage() {
               </div>
             </div>
             <div className="relative">
-              <div className="grid grid-cols-2 gap-4">
-                {featuredBooks.slice(0, 4).map((book, index) => (
+              <div className="md:w-[83%] lg:w-[70%] ml-auto grid grid-cols-2 gap-4">
+                {featuredBooks.slice(0, 4).map((book: IBook, index: number) => (
                   <Card
-                    key={book.id}
-                    className={`transform transition-all duration-300 hover:scale-105 ${index % 2 === 0 ? "translate-y-4" : "-translate-y-4"
+                    key={book._id}
+                    className={`transform transition-all max-w-[240px] pt-0 pb-0 duration-300 hover:scale-105 ${index % 2 === 0 ? "translate-y-4" : "-translate-y-4"
                       }`}
                   >
                     <CardContent className="p-4">
@@ -239,8 +240,8 @@ export default function HomePage() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredBooks?.map((book) => (
-              <Card key={book.id} className="group hover:shadow-lg transition-all duration-300">
+            {featuredBooks?.map((book: IBook) => (
+              <Card key={book._id} className="group hover:shadow-lg transition-all duration-300">
                 <CardContent className="p-4">
                   <div className="relative mb-4">
                     <img
@@ -248,7 +249,7 @@ export default function HomePage() {
                       alt={book.title}
                       className="w-full h-64 object-cover rounded-md group-hover:scale-105 transition-transform duration-300"
                     />
-                    <Badge className="absolute top-2 left-2">{book.badge}</Badge>
+                    <Badge className="absolute top-2 left-2">{book.tags[0]}</Badge>
                   </div>
                   <div className="space-y-2">
                     <h3 className="font-semibold line-clamp-2">{book.title}</h3>
@@ -258,7 +259,7 @@ export default function HomePage() {
                         <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
                         <span className="text-sm">{book.rating}</span>
                       </div>
-                      <span className="text-sm text-muted-foreground">({book.reviews})</span>
+                      <span className="text-sm text-muted-foreground">({book.rating})</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
@@ -266,7 +267,7 @@ export default function HomePage() {
                         <span className="text-sm text-muted-foreground line-through">${book.originalPrice}</span>
                       </div>
                       <Button size="sm" asChild>
-                        <Link to={`/books/${book.id}`}>View</Link>
+                        <Link to={`/books/${book._id}`}>View</Link>
                       </Button>
                     </div>
                   </div>
@@ -294,7 +295,7 @@ export default function HomePage() {
             </p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-            {categories.map((category, index) => (
+            {categories.map((category: ICategory, index: number) => (
               <Card key={index} className="group hover:shadow-lg transition-all duration-300 cursor-pointer">
                 <CardContent className="p-0">
                   <div className="relative">

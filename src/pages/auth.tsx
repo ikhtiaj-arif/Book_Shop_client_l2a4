@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 import type React from "react"
 
@@ -235,6 +235,34 @@ const AuthPage = () => {
                     >
                       Remember me
                     </label>
+                  </div>
+                  <div className="flex gap-2 mb-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-1/2"
+                      onClick={() => {
+                        setLoginForm({
+                          email: "admin@gmail.com",
+                          password: "111111",
+                        })
+                      }}
+                    >
+                      Admin Login
+                    </Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="w-1/2"
+                      onClick={() => {
+                        setLoginForm({
+                          email: "user@gmail.com",
+                          password: "111111",
+                        })
+                      }}
+                    >
+                      User Login
+                    </Button>
                   </div>
                   <Button type="submit" className="w-full" disabled={isLoginLoading}>
                     {isLoginLoading ? "Signing In..." : "Sign In"}
