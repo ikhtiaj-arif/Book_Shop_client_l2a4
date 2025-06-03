@@ -1,48 +1,51 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client"
 
-import type React from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { currentUser } from "@/redux/features/auth/authSlice"
+import { useViewOrdersQuery } from "@/redux/features/orders/order.api"
+import { useGetAllProductsQuery } from "@/redux/features/products/products.api"
+import { useAppSelector } from "@/redux/hooks"
 import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  LineChart,
-  Line,
-} from "recharts"
-import {
-  ShoppingCart,
-  BookOpen,
-  Heart,
-  Star,
-  Calendar,
-  TrendingUp,
-  Clock,
   Award,
-  Target,
+  BookOpen,
+  Calendar,
+  ChevronRight,
+  Clock,
   Eye,
   Gift,
+  Heart,
   Package,
-  ChevronRight,
+  ShoppingCart,
+  Star,
+  Target,
+  TrendingUp,
 } from "lucide-react"
-import { useAppSelector } from "@/redux/hooks"
-import { currentUser } from "@/redux/features/auth/authSlice"
-import { useGetAllProductsQuery } from "@/redux/features/products/products.api"
-import { useViewOrdersQuery } from "@/redux/features/orders/order.api"
-import { useState, useMemo } from "react"
+import type React from "react"
+import { useMemo, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Cell,
+  Line,
+  LineChart,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts"
 
 // Mock API hooks for user-specific data that we don't have real endpoints for yet
-const useGetUserWishlistQuery = (userId: string) => ({
+
+const useGetUserWishlistQuery = () => ({
   data: {
     message: "Wishlist retrieved successfully",
     status: true,
@@ -74,7 +77,7 @@ const useGetUserWishlistQuery = (userId: string) => ({
   isLoading: false,
 })
 
-const useGetUserReadingStatsQuery = (userId: string) => ({
+const useGetUserReadingStatsQuery = () => ({
   data: {
     message: "Reading stats retrieved successfully",
     status: true,
@@ -179,13 +182,12 @@ interface ReadingStats {
 
 const UserDashboard: React.FC = () => {
   const user = useAppSelector(currentUser)
-  console.log(user);
   const userId = user?.id || ""
   const navigate = useNavigate()
 
   const { data: userOrdersData, isLoading: ordersLoading } = useViewOrdersQuery(userId)
-  const { data: wishlistData, isLoading: wishlistLoading } = useGetUserWishlistQuery(userId)
-  const { data: readingStatsData, isLoading: statsLoading } = useGetUserReadingStatsQuery(userId)
+  const { data: wishlistData, isLoading: wishlistLoading } = useGetUserWishlistQuery()
+  const { data: readingStatsData, isLoading: statsLoading } = useGetUserReadingStatsQuery()
   const { data: recommendedBooksData, isLoading: recommendedLoading } = useGetAllProductsQuery({ limit: 4 })
 
   const [selectedTimeframe, setSelectedTimeframe] = useState<"week" | "month" | "year">("month")
@@ -202,8 +204,8 @@ const UserDashboard: React.FC = () => {
   )
 
   const totalOrders = userOrders.length
-  const completedOrders = userOrders.filter((order: Order) => order.status === "Completed").length
-  const pendingOrders = userOrders.filter((order: Order) => order.status === "Pending").length
+  // const completedOrders = userOrders.filter((order: Order) => order.status === "Completed").length
+  // const pendingOrders = userOrders.filter((order: Order) => order.status === "Pending").length
 
   // Order status distribution
   const orderStatusData = useMemo(
@@ -290,7 +292,8 @@ const UserDashboard: React.FC = () => {
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div className="flex items-center gap-4">
           <Avatar className="h-16 w-16">
-            <AvatarImage src={user?.avatar || "/placeholder.svg"} />
+            <AvatarImage src={"/placeholder.svg"} />
+            {/* <AvatarImage src={user?.avatar || "/placeholder.svg"} /> */}
             <AvatarFallback className="text-lg">
               {user?.name
                 ?.split(" ")

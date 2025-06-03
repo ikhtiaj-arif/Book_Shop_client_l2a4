@@ -1,13 +1,12 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
 
-import { currentUser } from "@/redux/features/auth/authSlice"
 import { addToCart } from "@/redux/features/cart/cartSlice"
 import { useGetBookByIdQuery } from "@/redux/features/products/products.api"
 import { useAppDispatch, useAppSelector } from "@/redux/hooks"
 import QuantitySelector from "@/utils/QuantitySelector"
 import { ArrowLeft, Heart, RotateCcw, Share2, Shield, ShoppingCart, Star, Truck } from "lucide-react"
 import { useEffect, useState } from "react"
-import { Link, useNavigate, useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar"
 import { Badge } from "../components/ui/badge"
 import { Button } from "../components/ui/button"
@@ -15,35 +14,6 @@ import { Card, CardContent } from "../components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../components/ui/tabs"
 
 // Mock data - replace with API call later
-const book = {
-  id: 1,
-  title: "The Midnight Library",
-  author: "Matt Haig",
-  price: 24.99,
-  originalPrice: 29.99,
-  rating: 4.8,
-  reviews: 1247,
-  images: [
-    "/placeholder.svg?height=600&width=400",
-    "/placeholder.svg?height=600&width=400",
-    "/placeholder.svg?height=600&width=400",
-  ],
-  category: "Fiction",
-  publishYear: 2020,
-  pages: 288,
-  language: "English",
-  isbn: "978-0525559474",
-  publisher: "Viking",
-  inStock: true,
-  stockCount: 15,
-  description: `Between life and death there is a library, and within that library, the shelves go on forever. Every book provides a chance to try another life you could have lived. To see how things would be if you had made other choices... Would you have done anything different, if you had the chance to undo your regrets?`,
-  features: [
-    "New York Times Bestseller",
-    "Over 1 million copies sold",
-    "Translated into 35 languages",
-    "Winner of the Goodreads Choice Award",
-  ],
-}
 
 const relatedBooks = [
   {
@@ -87,28 +57,20 @@ const reviews = [
 
 export default function BookDetailPage() {
   const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
+
   const dispatch = useAppDispatch()
-  const user = useAppSelector(currentUser)
   // Local state
-  const [selectedImage, setSelectedImage] = useState(0)
+
 
   const [selectedQuantity, setSelectedQuantity] = useState<number>(1);
-  const [quantity, setQuantity] = useState(1)
-  const [isInWishlist, setIsInWishlist] = useState(false)
-  const [reviewForm, setReviewForm] = useState({
-    rating: 5,
-    title: "",
-    comment: "",
-  })
 
   // API queries
-  const { data: bookData, isLoading: isBookLoading, error: bookError } = useGetBookByIdQuery(id!, { skip: !id })
+  const { data: bookData, isLoading: isBookLoading } = useGetBookByIdQuery(id!, { skip: !id })
 
   const book = bookData?.data
 
   // const book = book?.data
-  console.log("BOok", id, bookData);
+
   //!for future updates
   //   const {
   //   data: reviewsData,
@@ -127,7 +89,6 @@ export default function BookDetailPage() {
   const cart = useAppSelector((state) => state.cart.items);
   const currentCartItem = cart.find(item => item._id === book?._id)
 
-  console.log("currentCartItem", currentCartItem);
 
   useEffect(() => {
     if (currentCartItem) setSelectedQuantity(currentCartItem?.orderQuantity as number)

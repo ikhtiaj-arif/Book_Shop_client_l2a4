@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 
 import type React from "react"
@@ -89,7 +90,7 @@ const UserProfile: React.FC = () => {
     }
   }
 
-  const handleProfileUpdate = async (values: ProfileFormValues) => {
+  const handleProfileUpdate = async () => {
     toast.loading("Updating profile...", { id: toastId })
 
     // This would be your profile update API call
@@ -98,6 +99,7 @@ const UserProfile: React.FC = () => {
       toast.success("Profile updated successfully!", { id: toastId })
     } catch (error: any) {
       toast.error("Failed to update profile. Please try again.", { id: toastId })
+      console.log(error);
     }
   }
 
@@ -136,7 +138,7 @@ const UserProfile: React.FC = () => {
                 {/* Avatar Section */}
                 <div className="flex flex-col items-center space-y-4">
                   <Avatar className="h-24 w-24">
-                    <AvatarImage src={user.avatar || "/placeholder.svg"} />
+                    <AvatarImage src={ "/placeholder.svg"} />
                     <AvatarFallback className="text-2xl">
                       {user.name
                         ?.split(" ")

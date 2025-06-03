@@ -352,19 +352,19 @@ export default function BooksPage() {
                 <h4 className="font-semibold mb-3">Availability</h4>
                 <div className="space-y-2">
                   <div className="flex items-center space-x-2">
-                    <Checkbox id="in-stock" checked={inStockOnly} onCheckedChange={setInStockOnly} />
+                    <Checkbox id="in-stock" checked={inStockOnly} onCheckedChange={()=>setInStockOnly} />
                     <label htmlFor="in-stock" className="text-sm cursor-pointer">
                       In Stock Only
                     </label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Checkbox id="on-sale" checked={onSaleOnly} onCheckedChange={setOnSaleOnly} />
+                    <Checkbox id="on-sale" checked={onSaleOnly} onCheckedChange={()=>setOnSaleOnly} />
                     <label htmlFor="on-sale" className="text-sm cursor-pointer">
                       On Sale
                     </label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Checkbox id="featured" checked={featuredOnly} onCheckedChange={setFeaturedOnly} />
+                    <Checkbox id="featured" checked={featuredOnly} onCheckedChange={()=>setFeaturedOnly} />
                     <label htmlFor="featured" className="text-sm cursor-pointer">
                       Featured Books
                     </label>

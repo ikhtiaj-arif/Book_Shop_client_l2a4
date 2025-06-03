@@ -8,11 +8,16 @@ export type TUser = {
   name: string;
   iat: number;
   exp: number;
+    createdAt?: string
+  updatedAt?: string
+  isBlocked?: boolean
 };
 
 export type TAuthState = {
   user: null | TUser;
   token: null | object;
+  createdAt?: string
+  updatedAt?: string
 };
 
 const initialState: TAuthState = {
