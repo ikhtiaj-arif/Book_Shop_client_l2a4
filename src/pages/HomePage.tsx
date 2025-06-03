@@ -134,7 +134,6 @@ export default function HomePage() {
   const featuredBooks = featuredBooksData?.data || []
   const categories = categoriesData?.data || []
 
-  console.log(featuredBooks);
 
   useEffect(() => {
     const timer = setInterval(() => {
