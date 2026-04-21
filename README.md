@@ -1,4 +1,4 @@
-# 📚 BookStore - Modern E-commerce Platform
+# 📚 BookShop - Modern E-commerce Platform
 
 A full-featured online bookstore built with React, TypeScript, and modern web technologies. This platform provides a complete e-commerce solution for book retailers with admin management capabilities and user-friendly shopping experience.
 
